@@ -4,7 +4,6 @@ from requests_oauthlib import OAuth2Session
 from flask import request, session, redirect
 
 
-
 class DiscordOAuth2Session(object):
 
     def __init__(self, client_id, client_secret, redirect_uri):
