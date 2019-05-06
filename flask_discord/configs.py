@@ -4,4 +4,11 @@ AUTHORIZATION_BASE_URL = API_BASE_URL + "/oauth2/authorize"
 TOKEN_URL = API_BASE_URL + "/oauth2/token"
 
 
-DEFAULT_SCOPES = "identify email connections guilds guilds.join"
+ALL_SCOPES = [
+    "bot", "connections", "email", "identify", "guilds", "guilds.join",
+    "gdm.join", "messages.read", "rpc", "rpc.api", "rpc.notifications.read", "webhook.incoming",
+]
+
+DEFAULT_SCOPES = [
+    "bot", "identify", "email", "guilds", "guilds.join"
+]

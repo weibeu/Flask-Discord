@@ -34,7 +34,7 @@ class DiscordOAuth2Session(object):
             token_updater=self.__token_updater)
 
     def make_session(self):
-        scope = request.args.get("scope", configs.DEFAULT_SCOPES).split()
+        scope = request.args.get("scope", str()).split() or configs.DEFAULT_SCOPES
         discord_session = self.__make_session(scope=scope)
         authorization_url, state = discord_session.authorization_url(configs.AUTHORIZATION_BASE_URL)
         session["oauth2_state"] = state
