@@ -16,7 +16,7 @@ class DiscordOAuth2Session(object):
     def __token_updater(token):
         session["oauth2_token"] = token
 
-    def __make_session(self, token=None, state=None, scope=None)
+    def __make_session(self, token=None, state=None, scope=None):
         return OAuth2Session(
             client_id=self.client_id,
             token=token,
