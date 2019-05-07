@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for
-from flask_discord import DiscordOAuth2Session, configs
+from flask_discord import DiscordOAuth2Session
 
 OAUTH2_CLIENT_ID = 490732332240863233
 OAUTH2_CLIENT_SECRET = "GjKMenfebgLrOYQ_A_X7ouaWv9IhWdbI"
@@ -13,7 +13,7 @@ discord = DiscordOAuth2Session(OAUTH2_CLIENT_ID, OAUTH2_CLIENT_SECRET, OAUTH2_RE
 
 @app.route("/")
 def index():
-    return discord.create_session(configs.ALL_SCOPES)
+    return discord.create_session()
 
 
 @app.route("/callback")
@@ -24,7 +24,17 @@ def callback():
 
 @app.route("/me")
 def me():
-    return discord.get_json()
+    user = discord.user
+    return f"""
+<html>
+<head>
+<title>{user.name}</title>
+</head>
+<body><img src='{user.avatar_url}' />
+</body>
+</html>
+
+"""
 
 
 if __name__ == "__main__":
