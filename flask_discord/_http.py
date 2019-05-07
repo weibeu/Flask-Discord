@@ -33,6 +33,9 @@ class DiscordOAuth2HttpClient(object):
             auto_refresh_url=configs.TOKEN_URL,
             token_updater=self._token_updater)
 
+    def get(self, route):
+        return self._make_session().get(configs.API_BASE_URL + route)
+
     def get_json(self):
         discord_session = self._make_session(token=session.get("oauth2_token"))
         user = discord_session.get(configs.API_BASE_URL + '/users/@me').json()
