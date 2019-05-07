@@ -22,7 +22,7 @@ class DiscordOAuth2HttpClient(object):
     def _make_session(self, token=None, state=None, scope=None):
         return OAuth2Session(
             client_id=self.client_id,
-            token=token,
+            token=token or session.get("oauth2_token"),
             state=state,
             scope=scope,
             redirect_uri=self.redirect_uri,
