@@ -1,4 +1,4 @@
-from . import configs, _http
+from . import configs, _http, models
 
 from flask import request, session, redirect
 
@@ -22,3 +22,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             authorization_response=request.url
         )
         session["oauth2_token"] = token
+
+    def fetch_guilds(self):
+        guilds_payload = self.get("/users/@me/guilds")
+        return [models.Guild(payload) for payload in guilds_payload]
