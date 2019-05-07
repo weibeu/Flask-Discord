@@ -5,8 +5,8 @@ from flask import request, session, redirect
 
 class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
-    def make_session(self):
-        scope = request.args.get("scope", str()).split() or configs.DEFAULT_SCOPES
+    def make_session(self, scope=None):
+        scope = scope or request.args.get("scope", str()).split() or configs.DEFAULT_SCOPES
         discord_session = self._make_session(scope=scope)
         authorization_url, state = discord_session.authorization_url(configs.AUTHORIZATION_BASE_URL)
         session["oauth2_state"] = state
