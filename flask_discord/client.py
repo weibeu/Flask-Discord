@@ -23,6 +23,14 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         )
         session["oauth2_token"] = token
 
+    @property
+    def user(self):
+        return models.User(self.get("/users/@me"))
+
+    @property
+    def connections(self):
+        return models.UserConnection(self.get("/users/@me/connections"))
+
     def fetch_guilds(self):
         guilds_payload = self.get("/users/@me/guilds")
         return [models.Guild(payload) for payload in guilds_payload]
