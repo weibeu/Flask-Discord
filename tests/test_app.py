@@ -13,7 +13,7 @@ discord = DiscordOAuth2Session(OAUTH2_CLIENT_ID, OAUTH2_CLIENT_SECRET, OAUTH2_RE
 
 @app.route("/")
 def index():
-    return discord.make_session(configs.ALL_SCOPES)
+    return discord.create_session(configs.ALL_SCOPES)
 
 
 @app.route("/callback")
