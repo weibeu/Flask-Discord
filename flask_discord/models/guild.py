@@ -8,7 +8,7 @@ class Guild(object):
         self.id = self._payload["id"]
         self.name = self._payload["name"]
         self.icon_hash = self._payload.get("icon")
-        self.is_owner = self._payload.get["owner"]
+        self.is_owner = self._payload.get("owner")
         self.permissions_value = self._payload.get("permissions")
 
     def __str__(self):
