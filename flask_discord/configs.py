@@ -10,7 +10,7 @@ ALL_SCOPES = [
 ]
 
 DEFAULT_SCOPES = [
-    "bot", "identify", "email", "guilds", "guilds.join"
+    "identify", "email", "guilds", "guilds.join"
 ]
 
 
