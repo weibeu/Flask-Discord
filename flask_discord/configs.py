@@ -12,3 +12,8 @@ ALL_SCOPES = [
 DEFAULT_SCOPES = [
     "bot", "identify", "email", "guilds", "guilds.join"
 ]
+
+
+IMAGE_BASE_URL = "https://cdn.discordapp.com/"
+
+USER_AVATAR_BASE_URL = IMAGE_BASE_URL + "avatars/{user_id}/{avatar_hash}.png"
