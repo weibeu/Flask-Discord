@@ -12,7 +12,7 @@ from setuptools import setup
 
 
 def __get_version():
-    with open("image_processor_client/__init__.py") as package_init_file:
+    with open("flask_discord/__init__.py") as package_init_file:
         return re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', package_init_file.read(), re.MULTILINE).group(1)
 
 
@@ -36,7 +36,7 @@ extra_requirements = {
 
 setup(
     name='Flask-Discord',
-    version='0.0.1',
+    version=__get_version(),
     url='https://github.com/thec0sm0s/Flask-Discord',
     license='MIT',
     author='□ | The Cosmos',
