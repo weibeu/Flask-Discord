@@ -36,7 +36,7 @@ extra_requirements = {
 setup(
     name='Flask-Discord',
     version='0.0.1',
-    url='',
+    url='https://github.com/thec0sm0s/Flask-Discord',
     license='BSD',
     author='□ | The Cosmos',
     author_email='deepakrajko14@gmail.com',
