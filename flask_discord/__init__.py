@@ -1,3 +1,4 @@
+from . import configs, _http, models
 from .client import DiscordOAuth2Session
 
 
@@ -6,4 +7,4 @@ __all__ = [
 ]
 
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
