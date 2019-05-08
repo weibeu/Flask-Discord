@@ -48,14 +48,11 @@ def me():
 			<img src='{user.avatar_url}' />
 		</body>
 		</html>
-	
-	"""
-
+		"""
 
 
 if __name__ == "__main__":
 	app.run()
-
 ```
 
 
@@ -65,4 +62,7 @@ if __name__ == "__main__":
 
 
 ### Documentation
+Head over to [documentation] for full API reference. 
 
+
+[documentation]: https://flask-discord.readthedocs.io/en/latest/

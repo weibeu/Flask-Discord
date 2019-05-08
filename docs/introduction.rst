@@ -79,10 +79,7 @@ in exchange for fetching user's details and display them on web page.
 				<img src='{user.avatar_url}' />
 			</body>
 			</html>
-
-		"""
-
-
+			"""
 
 	if __name__ == "__main__":
 		app.run()
