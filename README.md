@@ -1,4 +1,6 @@
 # Flask-Discord
+[![Documentation Status](https://readthedocs.org/projects/flask-discord/badge/?version=latest)](https://flask-discord.readthedocs.io/en/latest/?badge=latest)
+
 Discord OAuth2 extension for Flask.
 
 
