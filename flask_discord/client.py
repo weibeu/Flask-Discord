@@ -7,7 +7,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
     """Main client class representing hypothetical OAuth2 session with discord.
     It uses Flask `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_ local proxy object
     to save state, authorization token and keeps record of users sessions across different requests.
-    This class inherits flask_discord._http.DiscordOAuth2HttpClient class which
+    This class inherits :py:class:`flask_discord._http.DiscordOAuth2HttpClient` class.
 
     Parameters
     ----------

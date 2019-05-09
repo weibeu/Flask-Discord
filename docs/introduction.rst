@@ -14,11 +14,11 @@ permissions.
 Requirements
 ------------
 
-This extensions requires ``Flask`` installed. Python version can be chosen
-as per ``Flask`` requirements.
+- **Flask**
+    This is an Flask extension.
 
-It also requires another library ``requests_oauthlib`` to create OAuth2 sessions
-to discord.
+- **requests_oauthlib**
+    It also requires requests_oauthlib to make OAuth2 sessions with discord.
 
 Installing
 ----------
@@ -26,12 +26,12 @@ Installing
 You can install Flask-Discord directly from PyPI using PIP and following command
 in shell or command prompt: ::
 
-	python3 -m pip install -U Flask-Discord
+    python3 -m pip install -U Flask-Discord
 
 You can also install the latest development version (**maybe unstable/broken**) by
 using following command: ::
 
-	python3 -m pip install -U git+https://github.com/thec0sm0s/Flask-Discord.git
+    python3 -m pip install -U git+https://github.com/thec0sm0s/Flask-Discord.git@dev
 
 
 Basic Usage
@@ -42,44 +42,44 @@ in exchange for fetching user's details and display them on web page.
 
 .. code-block:: python3
 
-	from flask import Flask, redirect, url_for
-	from flask_discord import DiscordOAuth2Session
+    from flask import Flask, redirect, url_for
+    from flask_discord import DiscordOAuth2Session
 
-	CONFIGS = {
-		"client_id": 9999999999,
-		"client_secret": "your client secret",
-		"redirect_uri": "default redirect uri",
-	}
+    CONFIGS = {
+        "client_id": 9999999999,
+        "client_secret": "your client secret",
+        "redirect_uri": "default redirect uri",
+    }
 
-	app = Flask(__name__)
-	app.secret_key = "random bytes representing flask secret key"
-	discord = DiscordOAuth2Session(**CONFIGS)
-
-
-	@app.route("/login")
-	def login():
-		return discord.create_session()
+    app = Flask(__name__)
+    app.secret_key = "random bytes representing flask secret key"
+    discord = DiscordOAuth2Session(**CONFIGS)
 
 
-	@app.route("/callback")
-	def callback():
-		discord.callback()
-		return redirect(url_for(".me"))
+    @app.route("/login")
+    def login():
+        return discord.create_session()
 
 
-	@app.route("/me")
-	def me():
-		user = discord.fetch_user()
-		return f"""
-			<html>
-			<head>
-				<title>{user.name}</title>
-			</head>
-			<body>
-				<img src='{user.avatar_url}' />
-			</body>
-			</html>
-			"""
+    @app.route("/callback")
+    def callback():
+        discord.callback()
+        return redirect(url_for(".me"))
 
-	if __name__ == "__main__":
-		app.run()
+
+    @app.route("/me")
+    def me():
+        user = discord.fetch_user()
+        return f"""
+        <html>
+            <head>
+                <title>{user.name}</title>
+            </head>
+            <body>
+                <img src='{user.avatar_url}' />
+            </body>
+        </html>"""
+
+
+    if __name__ == "__main__":
+        app.run()

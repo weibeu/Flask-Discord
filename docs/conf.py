@@ -39,6 +39,9 @@ release = ver
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.coverage',
+    'sphinx.ext.viewcode',
     'pallets_sphinx_themes',
 ]
 

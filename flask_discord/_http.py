@@ -9,7 +9,8 @@ from requests_oauthlib import OAuth2Session
 
 class DiscordOAuth2HttpClient(abc.ABC):
     """An OAuth2 http abstract base class providing some factory methods.
-    This class is meant to be overridden by flask_discord.DiscordOAuth2Session class.
+    This class is meant to be overridden by :py:class:`flask_discord.DiscordOAuth2Session`
+     and should not be used directly.
 
     Attributes
     ----------
@@ -75,8 +76,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         Parameters
         ----------
         route : str
-            Route or endpoint URL to send HTTP GET request to.
-            Example: ``/users/@me``
+            Route or endpoint URL to send HTTP GET request to. Example: ``/users/@me``
 
         Returns
         -------
