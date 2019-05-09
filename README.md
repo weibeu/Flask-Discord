@@ -42,15 +42,14 @@ def callback():
 def me():
     user = discord.fetch_user()
     return f"""
-        <html>
+    <html>
         <head>
             <title>{user.name}</title>
         </head>
         <body>
             <img src='{user.avatar_url}' />
         </body>
-        </html>
-        """
+    </html>"""
 
 
 if __name__ == "__main__":
