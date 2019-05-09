@@ -66,4 +66,5 @@ if __name__ == "__main__":
 ### Documentation
 Head over to [documentation] for full API reference. 
 
+
 [documentation]: https://flask-discord.readthedocs.io/en/latest/
