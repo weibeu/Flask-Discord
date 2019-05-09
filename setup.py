@@ -8,7 +8,7 @@ An Discord OAuth2 flask extension.
 import re
 import os
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def __get_version():
@@ -43,7 +43,7 @@ setup(
     author_email='deepakrajko14@gmail.com',
     description='Discord OAuth2 extension for Flask.',
     long_description=__doc__,
-    packages=['flask_discord'],
+    packages=find_packages(),
     zip_safe=False,
     include_package_data=True,
     platforms='any',
@@ -52,7 +52,7 @@ setup(
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
