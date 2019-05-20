@@ -16,13 +16,13 @@ def index():
     return discord.create_session()
 
 
-@app.route("/callback")
+@app.route("/callback/")
 def callback():
     discord.callback()
     return redirect(url_for(".me"))
 
 
-@app.route("/me")
+@app.route("/me/")
 def me():
     user = discord.fetch_user()
     return f"""
@@ -35,6 +35,12 @@ def me():
 </html>
 
 """
+
+
+@app.route("/logout/")
+def logout():
+    discord.revoke()
+    return redirect(url_for(".index"))
 
 
 if __name__ == "__main__":
