@@ -23,6 +23,11 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
     """
 
+    SESSION_KEYS = [
+        "discord_oauth2_state",
+        "discord_oauth2_token",
+    ]
+
     def __init__(self, client_id, client_secret, redirect_uri):
         self.client_id = client_id
         self.client_secret = client_secret
