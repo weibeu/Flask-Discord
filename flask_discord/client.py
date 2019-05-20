@@ -53,7 +53,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         fetch_user : bool, optional
             If this parameter is set to True, it caches :py:class:`flask_discord.models.User` to flask
             `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_ object with ``discord_user`` key
-            and ``None`` if False.
+            and ``None`` if False. Defaults to True.
 
         """
         if request.values.get("error"):
