@@ -85,7 +85,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         return self._make_session().authorized
 
     def fetch_user(self) -> models.User:
-        """This method requests user data from discord, caches native :py:class:`flask_discord.models.User`
+        """This method requests current user data from discord, caches native :py:class:`flask_discord.models.User`
         to flask `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_ object.
 
         Returns
@@ -95,6 +95,24 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         """
         session["discord_user"] = models.User(self.get("/users/@me"))
         return session["discord_user"]
+
+    @property
+    def user(self) -> models.User:
+        """A property which returns cached current :py:class:`flask_discord.models.User` from flask
+        `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_ object.
+
+        Note
+        ----
+        If user is not present in flask `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_
+        object, it requests user data from discord, caches user to session and then returns user object.
+
+        Returns
+        -------
+        flask_discord.models.User
+            Cached discord user object form flask `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_.
+
+        """
+        return session.get("discord_user") or self.fetch_user()
 
     def fetch_connections(self) -> models.UserConnection:
         """Requests and returns connections of current user from discord.
