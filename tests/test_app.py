@@ -24,7 +24,7 @@ def callback():
 
 @app.route("/me/")
 def me():
-    user = discord.user
+    user = discord.fetch_user()
     return f"""
 <html>
 <head>
