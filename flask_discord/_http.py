@@ -24,6 +24,8 @@ class DiscordOAuth2HttpClient(abc.ABC):
     """
 
     SESSION_KEYS = [
+        "discord_user",
+
         "discord_oauth2_state",
         "discord_oauth2_token",
     ]

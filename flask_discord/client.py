@@ -42,11 +42,18 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         session["discord_oauth2_state"] = state
         return redirect(authorization_url)
 
-    def callback(self):
+    def callback(self, fetch_user: bool = True):
         """A method which should be always called after completing authorization code grant process
         usually in callback view.
         It fetches the authorization token and saves it flask
         `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_ object.
+
+        Parameters
+        ----------
+        fetch_user : bool, optional
+            If this parameter is set to True, it caches :py:class:`flask_discord.models.User` to flask
+            `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_ object with ``discord_user`` key
+            and ``None`` if False.
 
         """
         if request.values.get("error"):
@@ -58,6 +65,10 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             authorization_response=request.url
         )
         session["discord_oauth2_token"] = token
+        if fetch_user:
+            session["discord_user"] = self.fetch_user()
+        else:
+            session["discord_user"] = None
 
     def revoke(self):
         """This method clears current discord token, state and all session data from flask
@@ -73,12 +84,36 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         """A boolean indicating whether current session has authorization token or not."""
         return self._make_session().authorized
 
-    def fetch_user(self):
-        return models.User(self.get("/users/@me"))
+    def fetch_user(self) -> models.User:
+        """This method requests user data from discord, caches native :py:class:`flask_discord.models.User`
+        to flask `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_ object.
 
-    def fetch_connections(self):
+        Returns
+        -------
+        flask_discord.models.User
+
+        """
+        session["discord_user"] = models.User(self.get("/users/@me"))
+        return session["discord_user"]
+
+    def fetch_connections(self) -> models.UserConnection:
+        """Requests and returns connections of current user from discord.
+
+        Returns
+        -------
+        flask_discord.models.UserConnection
+
+        """
         return models.UserConnection(self.get("/users/@me/connections"))
 
-    def fetch_guilds(self):
+    def fetch_guilds(self) -> list:
+        """Requests and returns guilds of current user from discord.
+
+        Returns
+        -------
+        list
+            List of :py:class:`flask_discord.models.Guild` objects.
+
+        """
         guilds_payload = self.get("/users/@me/guilds")
         return [models.Guild(payload) for payload in guilds_payload]
