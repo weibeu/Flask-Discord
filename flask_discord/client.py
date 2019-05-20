@@ -61,12 +61,17 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
     def revoke(self):
         """This method clears current discord token, state and all session data from flask
-        session <http://flask.pocoo.org/docs/1.0/api/#flask.session>. Which means user will have
+        `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_. Which means user will have
         to go through discord authorization token grant flow again.
 
         """
         for session_key in self.SESSION_KEYS:
             session.pop(session_key)
+
+    @property
+    def authorized(self):
+        """A boolean indicating whether current session has authorization token or not."""
+        return self._make_session().authorized
 
     def fetch_user(self):
         return models.User(self.get("/users/@me"))
