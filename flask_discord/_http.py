@@ -2,6 +2,7 @@ import os
 import abc
 
 from . import configs
+from . import exceptions
 
 from flask import session, jsonify
 from requests_oauthlib import OAuth2Session
@@ -87,8 +88,19 @@ class DiscordOAuth2HttpClient(abc.ABC):
         -------
         dict
             Dictionary containing received from sent HTTP GET request.
+
+        Raises
+        ------
+        flask_discord.exceptions.Unauthorized
+            Raises :py:class:`flask_discord.exceptions.Unauthorized` if current user is not authorized.
+
         """
-        return self._make_session().get(configs.API_BASE_URL + route).json()
+        response = self._make_session().get(configs.API_BASE_URL + route)
+
+        if response.status_code == 401:
+            raise exceptions.Unauthorized
+
+        return response.json()
 
     def get_json(self):
         discord_session = self._make_session(token=session.get("discord_oauth2_token"))
