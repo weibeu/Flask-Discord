@@ -45,8 +45,6 @@ Exceptions
 
 .. autoclass:: flask_discord.exceptions.HttpException
     :members:
-    :inherited-members:
 
 .. autoclass:: flask_discord.exceptions.Unauthorized
     :members:
-    :inherited-members:
