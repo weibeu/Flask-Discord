@@ -1,9 +1,14 @@
 from .client import DiscordOAuth2Session
 
+from .exceptions import *
+
 
 __all__ = [
     "DiscordOAuth2Session",
+
+    "HttpException",
+    "Unauthorized",
 ]
 
 
-__version__ = "0.0.9"
+__version__ = "0.1.0"
