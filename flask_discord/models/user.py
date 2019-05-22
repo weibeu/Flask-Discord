@@ -1,7 +1,9 @@
+from .base import DiscordModelsBase
+
 from .. import configs
 
 
-class User(object):
+class User(DiscordModelsBase):
     """Class representing Discord User.
 
     Attributes
@@ -64,16 +66,6 @@ class User(object):
     def is_avatar_animated(self):
         """A boolean representing if avatar of user is animated. Meaning user has GIF avatar."""
         return self.avatar_hash.startswith("a_")
-
-    def to_json(self):
-        """A utility method which returns raw user object as it was returned from discord.
-
-        Returns
-        -------
-        dict
-            A dict of user's document.
-        """
-        return self._payload
 
 
 class Bot(User):

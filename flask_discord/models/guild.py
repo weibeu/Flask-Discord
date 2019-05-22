@@ -1,7 +1,9 @@
+from .base import DiscordModelsBase
+
 from .. import configs
 
 
-class Guild(object):
+class Guild(DiscordModelsBase):
     """Class representing discord Guild the user is part of.
 
     Attributes

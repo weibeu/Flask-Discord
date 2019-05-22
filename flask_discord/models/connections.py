@@ -1,7 +1,9 @@
+from .base import DiscordModelsBase
+
 from .user import User
 
 
-class Integration(object):
+class Integration(DiscordModelsBase):
     """"Class representing discord server integrations.
 
     Attributes
