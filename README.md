@@ -27,18 +27,18 @@ app.secret_key = "random bytes representing flask secret key"
 discord = DiscordOAuth2Session(**CONFIGS)
 
 
-@app.route("/login")
+@app.route("/login/")
 def login():
     return discord.create_session()
 	
 
-@app.route("/callback")
+@app.route("/callback/")
 def callback():
     discord.callback()
     return redirect(url_for(".me"))
 	
 	
-@app.route("/me")
+@app.route("/me/")
 def me():
     user = discord.fetch_user()
     return f"""
