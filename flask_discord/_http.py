@@ -91,7 +91,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         Raises
         ------
-        flask_discord.exceptions.Unauthorized
+        flask_discord.Unauthorized
             Raises :py:class:`flask_discord.exceptions.Unauthorized` if current user is not authorized.
 
         """

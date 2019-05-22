@@ -43,8 +43,8 @@ Models
 Exceptions
 ----------
 
-.. autoclass:: flask_discord.exceptions.HttpException
+.. autoclass:: flask_discord.HttpException
     :members:
 
-.. autoclass:: flask_discord.exceptions.Unauthorized
+.. autoclass:: flask_discord.Unauthorized
     :members:
