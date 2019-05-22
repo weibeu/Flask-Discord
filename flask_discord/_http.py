@@ -11,7 +11,7 @@ from requests_oauthlib import OAuth2Session
 class DiscordOAuth2HttpClient(abc.ABC):
     """An OAuth2 http abstract base class providing some factory methods.
     This class is meant to be overridden by :py:class:`flask_discord.DiscordOAuth2Session`
-     and should not be used directly.
+    and should not be used directly.
 
     Attributes
     ----------
