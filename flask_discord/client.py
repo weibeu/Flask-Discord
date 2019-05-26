@@ -47,7 +47,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         """
         if request.values.get("error"):
             return request.values["error"]
-        discord = self._make_session(state=session.get("discord_oauth2_state"))
+        discord = self._make_session(state=session.get("DISCORD_OAUTH2_STATE"))
         token = discord.fetch_token(
             configs.TOKEN_URL,
             client_secret=self.client_secret,

@@ -61,7 +61,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         """
         return OAuth2Session(
             client_id=self.client_id,
-            token=token or session.get("discord_oauth2_token"),
+            token=token or session.get("DISCORD_OAUTH2_TOKEN"),
             state=state,
             scope=scope,
             redirect_uri=self.redirect_uri,
@@ -103,7 +103,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         return response.json()
 
     def get_json(self):
-        discord_session = self._make_session(token=session.get("discord_oauth2_token"))
+        discord_session = self._make_session(token=session.get("DISCORD_OAUTH2_TOKEN"))
         user = discord_session.get(configs.API_BASE_URL + '/users/@me').json()
         guilds = discord_session.get(configs.API_BASE_URL + '/users/@me/guilds').json()
         connections = discord_session.get(configs.API_BASE_URL + '/users/@me/connections').json()
