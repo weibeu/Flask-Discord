@@ -12,7 +12,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
     Parameters
     ----------
     app : Flask
-        An instance of your flask application.
+        An instance of your `flask application <http://flask.pocoo.org/docs/1.0/api/#flask.Flask>`_.
 
     """
 
