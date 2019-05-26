@@ -25,8 +25,8 @@ class DiscordOAuth2HttpClient(abc.ABC):
     """
 
     SESSION_KEYS = [
-        "discord_oauth2_state",
-        "discord_oauth2_token",
+        "DISCORD_OAUTH2_STATE",
+        "DISCORD_OAUTH2_TOKEN",
     ]
 
     def __init__(self, app):
@@ -38,7 +38,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
     @staticmethod
     def _token_updater(token):
-        session["discord_oauth2_token"] = token
+        session["DISCORD_OAUTH2_TOKEN"] = token
 
     def _make_session(self, token: str = None, state: str = None, scope: list = None) -> OAuth2Session:
         """A low level method used for creating OAuth2 session.
