@@ -45,15 +45,15 @@ in exchange for fetching user's details and display them on web page.
     from flask import Flask, redirect, url_for
     from flask_discord import DiscordOAuth2Session
 
-    CONFIGS = {
-        "client_id": 9999999999,
-        "client_secret": "your client secret",
-        "redirect_uri": "default redirect uri",
-    }
-
     app = Flask(__name__)
-    app.secret_key = "random bytes representing flask secret key"
-    discord = DiscordOAuth2Session(**CONFIGS)
+
+    app.secret_key = b"random bytes representing flask secret key"
+
+    app.config["DISCORD_CLIENT_ID"] = 490732332240863233    # Discord client ID.
+    app.config["DISCORD_CLIENT_SECRET"] = ""                # Discord client secret.
+    app.config["DISCORD_REDIRECT_URI"] = ""                 # Redirect URI.
+
+    discord = DiscordOAuth2Session(app)
 
 
     @app.route("/login/")

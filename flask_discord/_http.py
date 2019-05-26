@@ -29,10 +29,10 @@ class DiscordOAuth2HttpClient(abc.ABC):
         "discord_oauth2_token",
     ]
 
-    def __init__(self, client_id, client_secret, redirect_uri):
-        self.client_id = client_id
-        self.client_secret = client_secret
-        self.redirect_uri = redirect_uri
+    def __init__(self, app):
+        self.client_id = app.config["DISCORD_CLIENT_ID"]
+        self.client_secret = app.config["DISCORD_CLIENT_SECRET"]
+        self.redirect_uri = app.config["DISCORD_REDIRECT_URI"]
         if "http://" in self.redirect_uri:
             os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
 

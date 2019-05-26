@@ -11,12 +11,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
     Parameters
     ----------
-    client_id : int
-        Client ID of your discord application.
-    client_secret : str
-        Client secret of your discord application.
-    redirect_uri : str
-        The default URL to be used to redirect user after the OAuth2 authorization.
+    app : Flask
+        An instance of your flask application.
 
     """
 
