@@ -62,7 +62,10 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         """
         for session_key in self.SESSION_KEYS:
-            session.pop(session_key)
+            try:
+                session.pop(session_key)
+            except KeyError:
+                pass
 
     @property
     def authorized(self):
