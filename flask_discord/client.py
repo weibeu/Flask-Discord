@@ -90,7 +90,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         flask_discord.models.UserConnection
 
         """
-        return models.UserConnection(self.get("/users/@me/connections"))
+        connections_payload = self.get("/users/@me/connections")
+        return [models.UserConnection(payload) for payload in connections_payload]
 
     def fetch_guilds(self) -> list:
         """Requests and returns guilds of current user from discord.
