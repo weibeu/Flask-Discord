@@ -54,7 +54,7 @@ class UserConnection(object):
 
     Attributes
     ----------
-    id : int
+    id : str
         ID of the connection account.
     name : str
         The username of the connection account.
