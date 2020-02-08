@@ -35,6 +35,24 @@ def me():
 <title>{user.name}</title>
 </head>
 <body><img src='{user.avatar_url}' />
+<a href={url_for("my_connections")}>Connections</a>
+</body>
+</html>
+
+"""
+
+
+@app.route("/me/connections/")
+def my_connections():
+    user = discord.fetch_user()
+    connections = discord.fetch_connections()
+    return f"""
+<html>
+<head>
+<title>{user.name}</title>
+</head>
+<body>
+{str([f"{connection.name} - {connection.type}" for connection in connections])}
 </body>
 </html>
 
