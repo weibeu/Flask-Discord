@@ -87,7 +87,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         Returns
         -------
-        flask_discord.models.UserConnection
+        list
+            List of :py:class:`flask_discord.models.UserConnection` objects.
 
         """
         connections_payload = self.get("/users/@me/connections")
