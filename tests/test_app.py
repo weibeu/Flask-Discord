@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, redirect, url_for
 from flask_discord import DiscordOAuth2Session
 
@@ -7,7 +9,7 @@ app = Flask(__name__)
 app.secret_key = b"%\xe0'\x01\xdeH\x8e\x85m|\xb3\xffCN\xc9g"
 
 app.config["DISCORD_CLIENT_ID"] = 490732332240863233
-app.config["DISCORD_CLIENT_SECRET"] = "GjKMenfebgLrOYQ_A_X7ouaWv9IhWdbI"
+app.config["DISCORD_CLIENT_SECRET"] = os.getenv("DISCORD_CLIENT_SECRET")
 app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:5000/callback"
 
 discord = DiscordOAuth2Session(app)
