@@ -54,7 +54,7 @@ class UserConnection(object):
 
     Attributes
     ----------
-    id : int
+    id : str
         ID of the connection account.
     name : str
         The username of the connection account.
@@ -80,7 +80,7 @@ class UserConnection(object):
 
     def __init__(self, payload):
         self._payload = payload
-        self.id = int(self._payload.get("id", 0))
+        self.id = self._payload["id"]
         self.name = self._payload.get("name")
         self.type = self._payload.get("type")
         self.revoked = self._payload.get("revoked")

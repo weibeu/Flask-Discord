@@ -62,7 +62,10 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         """
         for session_key in self.SESSION_KEYS:
-            session.pop(session_key)
+            try:
+                session.pop(session_key)
+            except KeyError:
+                pass
 
     @property
     def authorized(self):
@@ -79,7 +82,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         """
         return models.User(self.get("/users/@me"))
 
-    def fetch_connections(self) -> models.UserConnection:
+    def fetch_connections(self) -> list:
         """Requests and returns connections of current user from discord.
 
         Returns
@@ -87,7 +90,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         flask_discord.models.UserConnection
 
         """
-        return models.UserConnection(self.get("/users/@me/connections"))
+        connections_payload = self.get("/users/@me/connections")
+        return [models.UserConnection(payload) for payload in connections_payload]
 
     def fetch_guilds(self) -> list:
         """Requests and returns guilds of current user from discord.
