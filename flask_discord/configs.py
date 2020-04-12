@@ -19,3 +19,6 @@ IMAGE_FORMAT = "png"
 ANIMATED_IMAGE_FORMAT = "gif"
 USER_AVATAR_BASE_URL = IMAGE_BASE_URL + "avatars/{user_id}/{avatar_hash}.{format}"
 GUILD_ICON_BASE_URL = IMAGE_BASE_URL + "icons/{guild_id}/{icon_hash}.png"
+
+
+# TODO: Prefix configs with DISCORD_ to avoid users overriding it with their own configs.
