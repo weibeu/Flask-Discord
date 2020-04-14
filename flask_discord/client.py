@@ -80,7 +80,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         flask_discord.models.User
 
         """
-        return models.User(self.get("/users/@me"))
+        return models.User(self.request("/users/@me"))
 
     def fetch_connections(self) -> list:
         """Requests and returns connections of current user from discord.
@@ -91,7 +91,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             List of :py:class:`flask_discord.models.UserConnection` objects.
 
         """
-        connections_payload = self.get("/users/@me/connections")
+        connections_payload = self.request("/users/@me/connections")
         return [models.UserConnection(payload) for payload in connections_payload]
 
     def fetch_guilds(self) -> list:
@@ -103,5 +103,5 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             List of :py:class:`flask_discord.models.Guild` objects.
 
         """
-        guilds_payload = self.get("/users/@me/guilds")
+        guilds_payload = self.request("/users/@me/guilds")
         return [models.Guild(payload) for payload in guilds_payload]

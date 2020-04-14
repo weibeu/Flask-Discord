@@ -17,13 +17,18 @@ discord = DiscordOAuth2Session(app)
 
 @app.route("/")
 def index():
-    return discord.create_session()
+    return discord.create_session(["guilds", "connections"])
 
 
 @app.route("/callback/")
 def callback():
     discord.callback()
     return redirect(url_for(".me"))
+
+
+@app.route("/get_json/")
+def get_json():
+    return discord.get_json()
 
 
 @app.route("/me/")
@@ -36,6 +41,7 @@ def me():
 </head>
 <body><img src='{user.avatar_url}' />
 <a href={url_for("my_connections")}>Connections</a>
+<a href={url_for("get_json")}>Get default JSON.</a>
 </body>
 </html>
 

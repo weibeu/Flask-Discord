@@ -72,8 +72,8 @@ class DiscordOAuth2HttpClient(abc.ABC):
             auto_refresh_url=configs.DISCORD_TOKEN_URL,
             token_updater=self._token_updater)
 
-    def get(self, route: str) -> dict:
-        """Sends HTTP GET request to provided route or discord  endpoint.
+    def request(self, route: str, method="GET", data=None, **kwargs) -> dict:
+        """Sends HTTP request to provided route or discord  endpoint.
 
         Note
         ----
@@ -83,6 +83,10 @@ class DiscordOAuth2HttpClient(abc.ABC):
         ----------
         route : str
             Route or endpoint URL to send HTTP GET request to. Example: ``/users/@me``
+        method : str, optional
+            Specify the HTTP method to use to perform this request.
+        data : dict, optional
+            The optional payload the include with the request.
 
         Returns
         -------
@@ -95,7 +99,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
             Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
 
         """
-        response = self._make_session().get(configs.DISCORD_API_BASE_URL + route)
+        response = self._make_session().request(method, configs.DISCORD_API_BASE_URL + route, data, **kwargs)
 
         if response.status_code == 401:
             raise exceptions.Unauthorized
@@ -103,8 +107,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         return response.json()
 
     def get_json(self):
-        discord_session = self._make_session(token=session.get("DISCORD_OAUTH2_TOKEN"))
-        user = discord_session.get(configs.DISCORD_API_BASE_URL + '/users/@me').json()
-        guilds = discord_session.get(configs.DISCORD_API_BASE_URL + '/users/@me/guilds').json()
-        connections = discord_session.get(configs.DISCORD_API_BASE_URL + '/users/@me/connections').json()
+        user = self.request('/users/@me')
+        guilds = self.request('/users/@me/guilds')
+        connections = self.request('/users/@me/connections')
         return jsonify(user=user, guilds=guilds, connections=connections)
