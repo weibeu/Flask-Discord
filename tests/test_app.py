@@ -26,11 +26,6 @@ def callback():
     return redirect(url_for(".me"))
 
 
-@app.route("/get_json/")
-def get_json():
-    return discord.get_json()
-
-
 @app.route("/me/")
 def me():
     user = discord.fetch_user()
@@ -41,7 +36,6 @@ def me():
 </head>
 <body><img src='{user.avatar_url}' />
 <a href={url_for("my_connections")}>Connections</a>
-<a href={url_for("get_json")}>Get default JSON.</a>
 </body>
 </html>
 
