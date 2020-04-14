@@ -1,8 +1,9 @@
+from flask import current_app, session
+
+import requests
+
 from .base import DiscordModelsBase
-
-from .. import configs
-
-from flask import current_app
+from .. import configs, exceptions
 
 
 class User(DiscordModelsBase):
@@ -72,10 +73,37 @@ class User(DiscordModelsBase):
         """A boolean representing if avatar of user is animated. Meaning user has GIF avatar."""
         return self.avatar_hash.startswith("a_")
 
-    def add_to_guild(self, guild_id):
-        discord = current_app.discord
-        return discord.request(
-            f"/guilds/{guild_id}/members/{self.id}", method="PUT", headers=discord.bot_authorization_header)
+    def add_to_guild(self, guild_id) -> dict:
+        """Method to add user to the guild, provided OAuth2 session has already been created with ``guilds.join`` scope.
+
+        Parameters
+        ----------
+        guild_id : int
+            The ID of the guild you want this user to be added.
+            
+        Returns
+        -------
+        dict
+            A dict of guild member object.
+
+        Raises
+        ------
+        flask_discord.Unauthorized
+            Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
+
+        """
+        route = configs.DISCORD_API_BASE_URL + f"/guilds/{guild_id}/members/{self.id}"
+        data = {"access_token": session["DISCORD_OAUTH2_TOKEN"]["access_token"]}
+        headers = {"Authorization": f"Bot {current_app.config['DISCORD_BOT_TOKEN']}"}
+        response = requests.put(route, json=data, headers=headers)
+
+        if response.status_code == 401:
+            raise exceptions.Unauthorized
+
+        if response.status_code == 204:
+            return dict()
+
+        return response.json()
 
 
 class Bot(User):
