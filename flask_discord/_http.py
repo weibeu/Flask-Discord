@@ -4,7 +4,7 @@ import abc
 from . import configs
 from . import exceptions
 
-from flask import session, jsonify
+from flask import session
 from requests_oauthlib import OAuth2Session
 
 
@@ -105,9 +105,3 @@ class DiscordOAuth2HttpClient(abc.ABC):
             raise exceptions.Unauthorized
 
         return response.json()
-
-    def get_json(self):
-        user = self.request('/users/@me')
-        guilds = self.request('/users/@me/guilds')
-        connections = self.request('/users/@me/connections')
-        return jsonify(user=user, guilds=guilds, connections=connections)
