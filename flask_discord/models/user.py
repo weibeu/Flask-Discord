@@ -72,8 +72,4 @@ class User(DiscordModelsBase):
 
 
 class Bot(User):
-    """Class representing the client user itself.
-
-    """
-
-    pass
+    """Class representing the client user itself."""
