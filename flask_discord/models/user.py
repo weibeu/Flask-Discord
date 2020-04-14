@@ -84,7 +84,7 @@ class User(DiscordModelsBase):
         Returns
         -------
         dict
-            A dict of guild member object.
+            A dict of guild member object. Returns an empty dict if user is already present in the guild.
 
         Raises
         ------
