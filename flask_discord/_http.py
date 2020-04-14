@@ -73,7 +73,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
             token_updater=self._token_updater)
 
     def request(self, route: str, method="GET", data=None, **kwargs) -> dict:
-        """Sends HTTP request to provided route or discord  endpoint.
+        """Sends HTTP request to provided route or discord endpoint.
 
         Note
         ----
@@ -82,7 +82,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         Parameters
         ----------
         route : str
-            Route or endpoint URL to send HTTP GET request to. Example: ``/users/@me``
+            Route or endpoint URL to send HTTP request to. Example: ``/users/@me``
         method : str, optional
             Specify the HTTP method to use to perform this request.
         data : dict, optional
