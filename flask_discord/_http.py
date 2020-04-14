@@ -69,7 +69,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
                 'client_id': self.client_id,
                 'client_secret': self.client_secret,
             },
-            auto_refresh_url=configs.TOKEN_URL,
+            auto_refresh_url=configs.DISCORD_TOKEN_URL,
             token_updater=self._token_updater)
 
     def get(self, route: str) -> dict:
@@ -95,7 +95,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
             Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
 
         """
-        response = self._make_session().get(configs.API_BASE_URL + route)
+        response = self._make_session().get(configs.DISCORD_API_BASE_URL + route)
 
         if response.status_code == 401:
             raise exceptions.Unauthorized
@@ -104,7 +104,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
     def get_json(self):
         discord_session = self._make_session(token=session.get("DISCORD_OAUTH2_TOKEN"))
-        user = discord_session.get(configs.API_BASE_URL + '/users/@me').json()
-        guilds = discord_session.get(configs.API_BASE_URL + '/users/@me/guilds').json()
-        connections = discord_session.get(configs.API_BASE_URL + '/users/@me/connections').json()
+        user = discord_session.get(configs.DISCORD_API_BASE_URL + '/users/@me').json()
+        guilds = discord_session.get(configs.DISCORD_API_BASE_URL + '/users/@me/guilds').json()
+        connections = discord_session.get(configs.DISCORD_API_BASE_URL + '/users/@me/connections').json()
         return jsonify(user=user, guilds=guilds, connections=connections)

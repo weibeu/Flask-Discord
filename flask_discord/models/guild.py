@@ -37,4 +37,4 @@ class Guild(DiscordModelsBase):
         """A property returning direct URL to the guild's icon. Returns None if guild has no icon set."""
         if not self.icon_hash:
             return
-        return configs.GUILD_ICON_BASE_URL.format(guild_id=self.id, icon_hash=self.icon_hash)
+        return configs.DISCORD_GUILD_ICON_BASE_URL.format(guild_id=self.id, icon_hash=self.icon_hash)

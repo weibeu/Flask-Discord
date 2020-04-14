@@ -32,9 +32,9 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             Flask redirect to discord authorization servers to complete authorization code grant process.
 
         """
-        scope = scope or request.args.get("scope", str()).split() or configs.DEFAULT_SCOPES
+        scope = scope or request.args.get("scope", str()).split() or configs.DISCORD_OAUTH_DEFAULT_SCOPES
         discord_session = self._make_session(scope=scope)
-        authorization_url, state = discord_session.authorization_url(configs.AUTHORIZATION_BASE_URL)
+        authorization_url, state = discord_session.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
         session["DISCORD_OAUTH2_STATE"] = state
         return redirect(authorization_url)
 
@@ -49,7 +49,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             return request.values["error"]
         discord = self._make_session(state=session.get("DISCORD_OAUTH2_STATE"))
         token = discord.fetch_token(
-            configs.TOKEN_URL,
+            configs.DISCORD_TOKEN_URL,
             client_secret=self.client_secret,
             authorization_response=request.url
         )

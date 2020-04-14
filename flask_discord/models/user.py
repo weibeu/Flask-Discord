@@ -60,8 +60,10 @@ class User(DiscordModelsBase):
     @property
     def avatar_url(self):
         """A property returning direct URL to user's avatar."""
-        image_format = configs.ANIMATED_IMAGE_FORMAT if self.is_avatar_animated else configs.IMAGE_FORMAT
-        return configs.USER_AVATAR_BASE_URL.format(user_id=self.id, avatar_hash=self.avatar_hash, format=image_format)
+        image_format = configs.DISCORD_ANIMATED_IMAGE_FORMAT \
+            if self.is_avatar_animated else configs.DISCORD_IMAGE_FORMAT
+        return configs.DISCORD_USER_AVATAR_BASE_URL.format(
+            user_id=self.id, avatar_hash=self.avatar_hash, format=image_format)
 
     @property
     def is_avatar_animated(self):
