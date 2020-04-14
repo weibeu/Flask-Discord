@@ -53,7 +53,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             client_secret=self.client_secret,
             authorization_response=request.url
         )
-        session["DISCORD_OAUTH2_TOKEN"] = token
+        self._token_updater(token)
 
     def revoke(self):
         """This method clears current discord token, state and all session data from flask
