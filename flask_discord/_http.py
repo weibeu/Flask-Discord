@@ -33,8 +33,17 @@ class DiscordOAuth2HttpClient(abc.ABC):
         self.client_id = app.config["DISCORD_CLIENT_ID"]
         self.client_secret = app.config["DISCORD_CLIENT_SECRET"]
         self.redirect_uri = app.config["DISCORD_REDIRECT_URI"]
+        self.bot_token = app.config.get("DISCORD_BOT_TOKEN", str())
         if "http://" in self.redirect_uri:
             os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
+        app.discord = self
+
+    @property
+    def bot_authorization_header(self):
+        return {
+            "Authorization": f"Bot {self.bot_token}",
+            "Content-Type": "application/json",
+        }
 
     @staticmethod
     def _token_updater(token):

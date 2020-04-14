@@ -2,6 +2,8 @@ from .base import DiscordModelsBase
 
 from .. import configs
 
+from flask import current_app
+
 
 class User(DiscordModelsBase):
     """Class representing Discord User.
@@ -69,6 +71,11 @@ class User(DiscordModelsBase):
     def is_avatar_animated(self):
         """A boolean representing if avatar of user is animated. Meaning user has GIF avatar."""
         return self.avatar_hash.startswith("a_")
+
+    def add_to_guild(self, guild_id):
+        discord = current_app.discord
+        return discord.request(
+            f"/guilds/{guild_id}/members/{self.id}", method="PUT", headers=discord.bot_authorization_header)
 
 
 class Bot(User):

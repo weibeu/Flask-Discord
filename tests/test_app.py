@@ -10,6 +10,7 @@ app.secret_key = b"%\xe0'\x01\xdeH\x8e\x85m|\xb3\xffCN\xc9g"
 
 app.config["DISCORD_CLIENT_ID"] = 490732332240863233
 app.config["DISCORD_CLIENT_SECRET"] = os.getenv("DISCORD_CLIENT_SECRET")
+app.config["DISCORD_BOT_TOKEN"] = os.getenv("DISCORD_BOT_TOKEN")
 app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:5000/callback"
 
 discord = DiscordOAuth2Session(app)
@@ -17,7 +18,7 @@ discord = DiscordOAuth2Session(app)
 
 @app.route("/")
 def index():
-    return discord.create_session(["guilds", "connections"])
+    return discord.create_session()
 
 
 @app.route("/callback/")
@@ -36,6 +37,8 @@ def me():
 </head>
 <body><img src='{user.avatar_url}' />
 <a href={url_for("my_connections")}>Connections</a>
+<br />
+<a href={user.add_to_guild(475549041741135881)}>Add me to square server!</a>
 </body>
 </html>
 
