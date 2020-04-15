@@ -38,11 +38,16 @@ def me():
 <body><img src='{user.avatar_url}' />
 <a href={url_for("my_connections")}>Connections</a>
 <br />
-<a href={user.add_to_guild(475549041741135881)}>Add me to square server!</a>
 </body>
 </html>
 
 """
+
+
+@app.route("/add_to/<int:guild_id>/")
+def add_to_guild(guild_id):
+    user = discord.fetch_user()
+    return user.add_to_guild(guild_id)
 
 
 @app.route("/me/connections/")
