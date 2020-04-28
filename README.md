@@ -1,5 +1,5 @@
 # Flask-Discord
-![Read the Docs](https://img.shields.io/readthedocs/flask-discord?style=for-the-badge) ![PyPI](https://img.shields.io/pypi/v/Flask-Discord?style=for-the-badge) [![Discord](https://img.shields.io/discord/690878977920729177?label=Discord%20Community&logo=Discord&style=for-the-badge)](https://discord.gg/7CrQEyP)
+![PyPI](https://img.shields.io/pypi/v/Flask-Discord?style=for-the-badge) ![Read the Docs](https://img.shields.io/readthedocs/flask-discord?style=for-the-badge) [![Discord](https://img.shields.io/discord/690878977920729177?label=Discord%20Community&logo=Discord&style=for-the-badge)](https://discord.gg/7CrQEyP)
 
 Discord OAuth2 extension for Flask.
 
