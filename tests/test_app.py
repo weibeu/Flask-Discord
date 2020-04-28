@@ -44,6 +44,12 @@ def me():
 """
 
 
+@app.route("/me/guilds/")
+def user_guilds():
+    guilds = discord.fetch_guilds()
+    return "<br />".join([g.name for g in guilds])
+
+
 @app.route("/add_to/<int:guild_id>/")
 def add_to_guild(guild_id):
     user = discord.fetch_user()
