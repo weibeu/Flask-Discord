@@ -43,7 +43,7 @@ in exchange for fetching user's details and display them on web page.
 .. code-block:: python3
 
     from flask import Flask, redirect, url_for
-    from flask_discord import DiscordOAuth2Session
+    from flask_discord import DiscordOAuth2Session, requires_authorization
 
     app = Flask(__name__)
 
@@ -70,6 +70,7 @@ in exchange for fetching user's details and display them on web page.
 
 
     @app.route("/me/")
+    @requires_authorization
     def me():
         user = discord.fetch_user()
         return f"""

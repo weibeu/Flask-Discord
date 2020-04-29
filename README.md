@@ -14,7 +14,7 @@ python3 -m pip install Flask-Discord
 ### Basic Example
 ```python
 from flask import Flask, redirect, url_for
-from flask_discord import DiscordOAuth2Session
+from flask_discord import DiscordOAuth2Session, requires_authorization
 
 app = Flask(__name__)
 
@@ -40,6 +40,7 @@ def callback():
 	
 	
 @app.route("/me/")
+@requires_authorization
 def me():
     user = discord.fetch_user()
     return f"""

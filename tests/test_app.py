@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, redirect, url_for
-from flask_discord import DiscordOAuth2Session
+from flask_discord import DiscordOAuth2Session, requires_authorization
 
 
 app = Flask(__name__)
@@ -77,6 +77,12 @@ def my_connections():
 def logout():
     discord.revoke()
     return redirect(url_for(".index"))
+
+
+@app.route("/secret/")
+@requires_authorization
+def secret():
+    return os.urandom(16)
 
 
 if __name__ == "__main__":

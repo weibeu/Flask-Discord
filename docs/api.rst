@@ -40,6 +40,11 @@ Models
     :inherited-members:
 
 
+Utilities
+
+.. py:function:: flask_discord.requires_authorization
+
+
 Exceptions
 ----------
 
