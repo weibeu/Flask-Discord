@@ -8,7 +8,7 @@ from flask import current_app
 # Decorators.
 
 def requires_authorization(view):
-    """A decorator for flask views which raises exception :py:class:`flask_discord.exceptions.Unauthorized` if the user
+    """A decorator for flask views which raises exception :py:class:`flask_discord.Unauthorized` if the user
     is not authorized from Discord OAuth2.
 
     """
