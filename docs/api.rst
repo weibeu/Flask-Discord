@@ -43,7 +43,7 @@ Models
 Utilities
 ---------
 
-.. py:function:: flask_discord.requires_authorization
+.. autodecorator:: flask_discord.requires_authorization
 
 
 Exceptions
