@@ -4,6 +4,7 @@ API Reference
 This sections has reference to all of the available classes, their
 attributes and available methods.
 
+
 Discord OAuth2 Client
 ---------------------
 
