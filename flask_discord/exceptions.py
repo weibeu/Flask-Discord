@@ -36,7 +36,8 @@ class RateLimited(HttpException):
             self.message = self.json["message"]
             self.is_global = self.json["global"]
             self.retry_after = self.json["retry_after"]
-        super().__init__(self.message)
+        finally:
+            super().__init__(self.message)
 
 
 class Unauthorized(HttpException):
