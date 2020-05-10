@@ -1,3 +1,4 @@
+import requests
 import os
 import abc
 
@@ -73,7 +74,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
             auto_refresh_url=configs.DISCORD_TOKEN_URL,
             token_updater=self._token_updater)
 
-    def request(self, route: str, method="GET", data=None, **kwargs) -> dict:
+    def request(self, route: str, method="GET", data=None, oauth=True, **kwargs) -> dict:
         """Sends HTTP request to provided route or discord endpoint.
 
         Note
@@ -88,6 +89,8 @@ class DiscordOAuth2HttpClient(abc.ABC):
             Specify the HTTP method to use to perform this request.
         data : dict, optional
             The optional payload the include with the request.
+        oauth : bool
+            A boolean determining if this should be Discord OAuth2 session request or any standard request.
 
         Returns
         -------
@@ -100,7 +103,11 @@ class DiscordOAuth2HttpClient(abc.ABC):
             Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
 
         """
-        response = self._make_session().request(method, configs.DISCORD_API_BASE_URL + route, data, **kwargs)
+        route = configs.DISCORD_API_BASE_URL + route
+        if oauth:
+            response = self._make_session().request(method, route, data, **kwargs)
+        else:
+            response = requests.request(method, route, data=data, **kwargs)
 
         if response.status_code == 401:
             raise exceptions.Unauthorized
