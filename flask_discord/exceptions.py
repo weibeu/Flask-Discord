@@ -1,3 +1,6 @@
+import json
+
+
 class HttpException(Exception):
     """Base Exception class representing a HTTP exception."""
 
@@ -24,11 +27,16 @@ class RateLimited(HttpException):
 
     def __init__(self, response):
         self.response = response
-        self.json = self.response.json()
-        self.message = self.json["message"]
-        self.is_global = self.json["global"]
-        self.retry_after = self.json["retry_after"]
-        super().__init__(self.json["message"])
+        try:
+            self.json = self.response.json()
+        except json.JSONDecodeError:
+            self.json = dict()
+            self.message = self.response.text
+        else:
+            self.message = self.json["message"]
+            self.is_global = self.json["global"]
+            self.retry_after = self.json["retry_after"]
+        super().__init__(self.message)
 
 
 class Unauthorized(HttpException):
