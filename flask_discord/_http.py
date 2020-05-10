@@ -104,6 +104,8 @@ class DiscordOAuth2HttpClient(abc.ABC):
         ------
         flask_discord.Unauthorized
             Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
+        flask_discord.RateLimited
+            Raise instance of :py:class:`lask_discord.RateLimited` if application is being rate limited by Discord.
 
         """
         route = configs.DISCORD_API_BASE_URL + route
@@ -112,6 +114,8 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         if response.status_code == 401:
             raise exceptions.Unauthorized
+        if response.status_code == 429:
+            raise exceptions.RateLimited(response)
 
         try:
             return response.json()
