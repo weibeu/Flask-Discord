@@ -9,6 +9,7 @@ __all__ = [
     "requires_authorization",
 
     "HttpException",
+    "RateLimited",
     "Unauthorized",
 ]
 
