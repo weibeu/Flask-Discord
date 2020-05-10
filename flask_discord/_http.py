@@ -107,10 +107,8 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         """
         route = configs.DISCORD_API_BASE_URL + route
-        if oauth:
-            response = self._make_session().request(method, route, data, **kwargs)
-        else:
-            response = requests.request(method, route, data=data, **kwargs)
+        response = self._make_session(
+        ).request(method, route, data, **kwargs) if oauth else requests.request(method, route, data=data, **kwargs)
 
         if response.status_code == 401:
             raise exceptions.Unauthorized
