@@ -105,7 +105,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         flask_discord.Unauthorized
             Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
         flask_discord.RateLimited
-            Raise instance of :py:class:`lask_discord.RateLimited` if application is being rate limited by Discord.
+            Raise instance of :py:class:`flask_discord.RateLimited` if application is being rate limited by Discord.
 
         """
         route = configs.DISCORD_API_BASE_URL + route
