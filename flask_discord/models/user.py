@@ -1,9 +1,8 @@
-from flask import current_app, session
+from .. import configs
 
-import requests
-
+from json import JSONDecodeError
 from .base import DiscordModelsBase
-from .. import configs, exceptions
+from flask import current_app, session
 
 
 class User(DiscordModelsBase):
@@ -92,18 +91,13 @@ class User(DiscordModelsBase):
             Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
 
         """
-        route = configs.DISCORD_API_BASE_URL + f"/guilds/{guild_id}/members/{self.id}"
         data = {"access_token": session["DISCORD_OAUTH2_TOKEN"]["access_token"]}
         headers = {"Authorization": f"Bot {current_app.config['DISCORD_BOT_TOKEN']}"}
-        response = requests.put(route, json=data, headers=headers)
-
-        if response.status_code == 401:
-            raise exceptions.Unauthorized
-
-        if response.status_code == 204:
+        try:
+            return current_app.discord.request(
+                f"/guilds/{guild_id}/members/{self.id}", method="PUT", oauth=False, json=data, headers=headers)
+        except JSONDecodeError:
             return dict()
-
-        return response.json()
 
 
 class Bot(User):
