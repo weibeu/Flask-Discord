@@ -27,7 +27,7 @@ def index():
     {HYPERLINK.format(url_for(".me"), "@ME")}<br />
     {HYPERLINK.format(url_for(".logout"), "Logout")}<br />
     {HYPERLINK.format(url_for(".user_guilds"), "My Servers")}<br />
-    {HYPERLINK.format(url_for(".add_to_guild", guild_id=475549041741135881), "Add bot to 475549041741135881.")}    
+    {HYPERLINK.format(url_for(".add_to_guild", guild_id=390134592507609088), "Add me to 390134592507609088.")}    
     """
 
 
