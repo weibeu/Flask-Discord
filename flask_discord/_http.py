@@ -1,4 +1,6 @@
 import requests
+import typing
+import json
 import os
 import abc
 
@@ -74,7 +76,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
             auto_refresh_url=configs.DISCORD_TOKEN_URL,
             token_updater=self._token_updater)
 
-    def request(self, route: str, method="GET", data=None, oauth=True, **kwargs) -> dict:
+    def request(self, route: str, method="GET", data=None, oauth=True, **kwargs) -> typing.Union[dict, str]:
         """Sends HTTP request to provided route or discord endpoint.
 
         Note
@@ -94,8 +96,9 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         Returns
         -------
-        dict
-            Dictionary containing received from sent HTTP GET request.
+        dict, str
+            Dictionary containing received from sent HTTP GET request if content-type is ``application/json``
+            otherwise returns raw text content of the response.
 
         Raises
         ------
@@ -112,4 +115,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         if response.status_code == 401:
             raise exceptions.Unauthorized
 
-        return response.json()
+        try:
+            return response.json()
+        except json.JSONDecodeError:
+            return response.text

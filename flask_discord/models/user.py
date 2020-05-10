@@ -1,6 +1,5 @@
 from .. import configs
 
-from json import JSONDecodeError
 from .base import DiscordModelsBase
 from flask import current_app, session
 
@@ -93,11 +92,9 @@ class User(DiscordModelsBase):
         """
         data = {"access_token": session["DISCORD_OAUTH2_TOKEN"]["access_token"]}
         headers = {"Authorization": f"Bot {current_app.config['DISCORD_BOT_TOKEN']}"}
-        try:
-            return current_app.discord.request(
-                f"/guilds/{guild_id}/members/{self.id}", method="PUT", oauth=False, json=data, headers=headers)
-        except JSONDecodeError:
-            return dict()
+        return current_app.discord.request(
+            f"/guilds/{guild_id}/members/{self.id}", method="PUT", oauth=False, json=data, headers=headers
+        ) or dict()
 
 
 class Bot(User):
