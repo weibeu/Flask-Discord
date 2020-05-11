@@ -92,7 +92,7 @@ class User(DiscordModelsBase):
         """
         data = {"access_token": session["DISCORD_OAUTH2_TOKEN"]["access_token"]}
         headers = {"Authorization": f"Bot {current_app.config['DISCORD_BOT_TOKEN']}"}
-        return current_app.discord.request(
+        return self._request(
             f"/guilds/{guild_id}/members/{self.id}", method="PUT", oauth=False, json=data, headers=headers
         ) or dict()
 
