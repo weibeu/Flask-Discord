@@ -21,6 +21,7 @@ class Guild(DiscordModelsBase):
 
     """
 
+    MANY = True
     ROUTE = "/users/@me/guilds"
 
     def __init__(self, payload):

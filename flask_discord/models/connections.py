@@ -78,6 +78,7 @@ class UserConnection(DiscordModelsBase):
 
     """
 
+    MANY = True
     ROUTE = "/users/@me/connections"
 
     def __init__(self, payload):

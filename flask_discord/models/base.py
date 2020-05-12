@@ -14,6 +14,8 @@ class DiscordModelsMeta(ABCMeta):
 
 class DiscordModelsBase(metaclass=DiscordModelsMeta):
 
+    MANY = False
+
     @abstractmethod
     def __init__(self, payload):
         self._payload = payload
@@ -28,8 +30,21 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
 
     @classmethod
     def fetch_from_api(cls):
-        """A class method which returns instance of this model by implicitly making an API call to Discord."""
-        return cls(cls._request(cls.ROUTE))
+        """A class method which returns an instance or list of instances of this model by implicitly making an
+        API call to Discord.
+
+        Returns
+        -------
+        cls
+            An instance of this model itself.
+        [cls, ...]
+            List of instances of this model when many of these models exist.
+
+        """
+        payload = cls._request(cls.ROUTE)
+        if cls.MANY:
+            return [cls(_) for _ in payload]
+        return cls(payload)
 
     def to_json(self):
         """A utility method which returns raw payload object as it was received from discord.

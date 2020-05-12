@@ -72,7 +72,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         """A boolean indicating whether current session has authorization token or not."""
         return self._make_session().authorized
 
-    def fetch_user(self) -> models.User:
+    @staticmethod
+    def fetch_user() -> models.User:
         """This method requests for data of current user from discord and returns user object.
 
         Returns
@@ -80,9 +81,10 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         flask_discord.models.User
 
         """
-        return models.User(self.request("/users/@me"))
+        return models.User.fetch_from_api()
 
-    def fetch_connections(self) -> list:
+    @staticmethod
+    def fetch_connections() -> list:
         """Requests and returns connections of current user from discord.
 
         Returns
@@ -91,10 +93,10 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             List of :py:class:`flask_discord.models.UserConnection` objects.
 
         """
-        connections_payload = self.request("/users/@me/connections")
-        return [models.UserConnection(payload) for payload in connections_payload]
+        return models.UserConnection.fetch_from_api()
 
-    def fetch_guilds(self) -> list:
+    @staticmethod
+    def fetch_guilds() -> list:
         """Requests and returns guilds of current user from discord.
 
         Returns
@@ -103,5 +105,4 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             List of :py:class:`flask_discord.models.Guild` objects.
 
         """
-        guilds_payload = self.request("/users/@me/guilds")
-        return [models.Guild(payload) for payload in guilds_payload]
+        return models.Guild.fetch_from_api()
