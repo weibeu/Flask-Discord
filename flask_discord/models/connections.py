@@ -3,7 +3,7 @@ from .base import DiscordModelsBase
 from .user import User
 
 
-class Integration(DiscordModelsBase):
+class Integration(object):
     """"Class representing discord server integrations.
 
     Attributes
@@ -49,7 +49,7 @@ class Integration(DiscordModelsBase):
         self.synced_at = self._payload.get("synced_at")
 
 
-class UserConnection(object):
+class UserConnection(DiscordModelsBase):
     """Class representing connections in discord account of the user.
 
     Attributes
@@ -78,8 +78,10 @@ class UserConnection(object):
 
     """
 
+    ROUTE = "/users/@me/connections"
+
     def __init__(self, payload):
-        self._payload = payload
+        super().__init__(payload)
         self.id = self._payload["id"]
         self.name = self._payload.get("name")
         self.type = self._payload.get("type")

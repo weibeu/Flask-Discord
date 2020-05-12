@@ -36,8 +36,10 @@ class User(DiscordModelsBase):
 
     """
 
+    ROUTE = "/users/@me"
+
     def __init__(self, payload):
-        self._payload = payload
+        super().__init__(payload)
         self.id = int(self._payload["id"])
         self.username = self._payload["username"]
         self.discriminator = self._payload["discriminator"]
@@ -99,3 +101,4 @@ class User(DiscordModelsBase):
 
 class Bot(User):
     """Class representing the client user itself."""
+    # TODO: What is this?

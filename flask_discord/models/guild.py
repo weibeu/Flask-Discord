@@ -21,8 +21,10 @@ class Guild(DiscordModelsBase):
 
     """
 
+    ROUTE = "/users/@me/guilds"
+
     def __init__(self, payload):
-        self._payload = payload
+        super().__init__(payload)
         self.id = int(self._payload["id"])
         self.name = self._payload["name"]
         self.icon_hash = self._payload.get("icon")
