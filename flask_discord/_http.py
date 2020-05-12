@@ -1,3 +1,4 @@
+import cachetools
 import requests
 import typing
 import json
@@ -8,6 +9,7 @@ from . import configs
 from . import exceptions
 
 from flask import session
+from collections.abc import Mapping
 from requests_oauthlib import OAuth2Session
 
 
@@ -24,6 +26,10 @@ class DiscordOAuth2HttpClient(abc.ABC):
         The client secret of discord application provided.
     redirect_uri : str
         The default URL to use to redirect user to after authorization.
+    users_cache : cachetools.LFUCache
+        Any dict like mapping to internally cache the authorized users. Preferably an instance of
+        cachetools.LFUCache or cachetools.TTLCache. If not specified, default cachetools.LFUCache is used.
+        Uses the default max limit for cache if ``DISCORD_USERS_CACHE_MAX_LIMIT`` isn't specified in app config.
 
     """
 
@@ -32,10 +38,15 @@ class DiscordOAuth2HttpClient(abc.ABC):
         "DISCORD_OAUTH2_TOKEN",
     ]
 
-    def __init__(self, app):
+    def __init__(self, app, users_cache=None):
         self.client_id = app.config["DISCORD_CLIENT_ID"]
         self.client_secret = app.config["DISCORD_CLIENT_SECRET"]
         self.redirect_uri = app.config["DISCORD_REDIRECT_URI"]
+        self.users_cache = cachetools.LFUCache(
+            app.config.get("DISCORD_USERS_CACHE_MAX_LIMIT", configs.DISCORD_USERS_CACHE_DEFAULT_MAX_LIMIT)
+        ) if users_cache is None else users_cache
+        if not issubclass(self.users_cache.__class__, Mapping):
+            raise ValueError("Instance users_cache must be a mapping like object.")
         if "http://" in self.redirect_uri:
             os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
         app.discord = self
