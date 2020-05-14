@@ -1,3 +1,4 @@
+from flask import current_app, session
 from .base import DiscordModelsBase
 
 from .. import configs
@@ -41,3 +42,31 @@ class Guild(DiscordModelsBase):
         if not self.icon_hash:
             return
         return configs.DISCORD_GUILD_ICON_BASE_URL.format(guild_id=self.id, icon_hash=self.icon_hash)
+
+    @classmethod
+    def fetch_from_api(cls, cache=True):
+        """A class method which returns an instance or list of instances of this model by implicitly making an
+        API call to Discord. If an instance of :py:class:`flask_discord.User` exists in the users internal cache
+        who belongs to these guilds then, the cached property :py:attr:`flask_discord.User.guilds` is updated.
+
+        Parameters
+        ----------
+        cache : bool
+            Determines if the :py:attr:`flask_discord.User.guilds` cache should be updated with the new guilds.
+
+        Returns
+        -------
+        list[flask_discord.Guild, ...]
+            List of instances of :py:class:`flask_discord.Guild` to which this user belogs.
+
+        """
+        guilds = super().fetch_from_api()
+
+        if cache:
+            user = current_app.discord.users_cache.get(session.get("DISCORD_USER_ID"))
+            try:
+                user.guilds = guilds
+            except AttributeError:
+                pass
+
+        return guilds
