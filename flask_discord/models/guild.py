@@ -57,7 +57,7 @@ class Guild(DiscordModelsBase):
         Returns
         -------
         list[flask_discord.Guild, ...]
-            List of instances of :py:class:`flask_discord.Guild` to which this user belogs.
+            List of instances of :py:class:`flask_discord.Guild` to which this user belongs.
 
         """
         guilds = super().fetch_from_api()
