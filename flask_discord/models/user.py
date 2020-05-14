@@ -110,6 +110,7 @@ class User(DiscordModelsBase):
         [cls, ...]
             List of instances of this model when many of these models exist."""
         self = super().fetch_from_api()
+        app.discord.users_cache.update({self.id: self})
         session["DISCORD_USER_ID"] = self.id
 
         if guilds:
