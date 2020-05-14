@@ -110,10 +110,13 @@ class User(DiscordModelsBase):
         [cls, ...]
             List of instances of this model when many of these models exist."""
         self = super().fetch_from_api()
+        session["DISCORD_USER_ID"] = self.id
+
         if guilds:
             self.fetch_guilds()
         if connections:
             self.fetch_connections()
+
         return self
 
     def add_to_guild(self, guild_id) -> dict:
