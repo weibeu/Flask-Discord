@@ -65,7 +65,7 @@ class Guild(DiscordModelsBase):
         if cache:
             user = current_app.discord.users_cache.get(session.get("DISCORD_USER_ID"))
             try:
-                user.guilds = guilds
+                user.guilds = {guild.id: guild for guild in guilds}
             except AttributeError:
                 pass
 
