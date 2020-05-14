@@ -1,7 +1,9 @@
 from .. import configs
 
+from .guild import Guild
 from .base import DiscordModelsBase
 from flask import current_app, session
+from .connections import UserConnection
 
 
 class User(DiscordModelsBase):
@@ -33,6 +35,8 @@ class User(DiscordModelsBase):
     premium_type : int
         An integer representing the
         `type of nitro subscription <https://discordapp.com/developers/docs/resources/user#user-object-premium-types>`_.
+    connections : list
+        A list of :py:class:`flask_discord.UserConnection` instances. These are cached and this list might be empty.
 
     """
 
@@ -51,6 +55,18 @@ class User(DiscordModelsBase):
         self.email = self._payload.get("email")
         self.flags = self._payload.get("flags")
         self.premium_type = self._payload.get("premium_type")
+
+        # Few properties which are intended to be cached.
+        self._guilds = dict()         # Mapping of guild ID to flask_discord.models.Guild(...).
+        self.connections = list()     # List of flask_discord.models.UserConnection(...).
+
+    @property
+    def guilds(self):
+        """A cached mapping of user's guild ID to :py:class:`flask_discord.Guild`. The guilds are cached when the first
+        API call for guilds is requested so it might be an empty dict.
+
+        """
+        return list(self._guilds.values())
 
     def __str__(self):
         return f"{self.name}#{self.discriminator}"
@@ -97,6 +113,32 @@ class User(DiscordModelsBase):
         return self._request(
             f"/guilds/{guild_id}/members/{self.id}", method="PUT", oauth=False, json=data, headers=headers
         ) or dict()
+
+    def fetch_guilds(self) -> list:
+        """A method which makes an API call to Discord to get user's guilds. It prepares the internal guilds cache
+        and returns list of all guilds the user is member of.
+
+        Returns
+        -------
+        list
+            List of :py:class:`flask_discord.Guilds` instances.
+
+        """
+        self._guilds = {guild.id: guild for guild in Guild.fetch_from_api()}
+        return self.guilds
+
+    def fetch_connections(self) -> list:
+        """A method which makes an API call to Discord to get user's connections. It prepares the internal connection
+        cache and returns list of all connection instances.
+
+        Returns
+        -------
+        list
+            A list of :py:class:`flask_discord.UserConnection` instances.
+
+        """
+        self.connections = UserConnection.fetch_from_api()
+        return self.connections
 
 
 class Bot(User):
