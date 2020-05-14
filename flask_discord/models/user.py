@@ -89,6 +89,33 @@ class User(DiscordModelsBase):
         """A boolean representing if avatar of user is animated. Meaning user has GIF avatar."""
         return self.avatar_hash.startswith("a_")
 
+    @classmethod
+    def fetch_from_api(cls, guilds=True, connections=False):
+        """A class method which returns an instance or list of instances of this model by implicitly making an
+        API call to Discord.
+
+        Parameters
+        ----------
+        guilds : bool
+            A boolean indicating if user's guilds should be cached or not. Defaults to ``True``. If chose to not
+            cache, user's guilds can always be obtained from :py:func:`flask_discord.Guilds.fetch_from_api()`.
+        connections : bool
+            A boolean indicating if user's connections should be cached or not. Defaults to ``False``. If chose to not
+            cache, user's connections can always be obtained from :py:func:`flask_discord.Connections.fetch_from_api()`.
+
+        Returns
+        -------
+        cls
+            An instance of this model itself.
+        [cls, ...]
+            List of instances of this model when many of these models exist."""
+        self = super().fetch_from_api()
+        if guilds:
+            self.fetch_guilds()
+        if connections:
+            self.fetch_connections()
+        return self
+
     def add_to_guild(self, guild_id) -> dict:
         """Method to add user to the guild, provided OAuth2 session has already been created with ``guilds.join`` scope.
 
