@@ -186,7 +186,7 @@ class User(DiscordModelsBase):
             A list of :py:class:`flask_discord.UserConnection` instances.
 
         """
-        self.connections = UserConnection.fetch_from_api()
+        self.connections = UserConnection.fetch_from_api(cache=False)
         return self.connections
 
 
