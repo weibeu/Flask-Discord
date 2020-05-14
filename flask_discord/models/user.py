@@ -68,6 +68,10 @@ class User(DiscordModelsBase):
         """
         return list(self._guilds.values())
 
+    @guilds.setter
+    def guilds(self, value):
+        self._guilds = value
+
     def __str__(self):
         return f"{self.name}#{self.discriminator}"
 
@@ -169,7 +173,7 @@ class User(DiscordModelsBase):
             List of :py:class:`flask_discord.Guilds` instances.
 
         """
-        self._guilds = {guild.id: guild for guild in Guild.fetch_from_api()}
+        self._guilds = {guild.id: guild for guild in Guild.fetch_from_api(cache=False)}
         return self.guilds
 
     def fetch_connections(self) -> list:
