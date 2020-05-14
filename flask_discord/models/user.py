@@ -91,7 +91,7 @@ class User(DiscordModelsBase):
 
     @classmethod
     def fetch_from_api(cls, guilds=True, connections=False):
-        """A class method which returns an instance or list of instances of this model by implicitly making an
+        """A class method which returns an instance of this model by implicitly making an
         API call to Discord.
 
         Parameters
@@ -118,6 +118,20 @@ class User(DiscordModelsBase):
             self.fetch_connections()
 
         return self
+
+    @classmethod
+    def get_from_cache(cls):
+        """A class method which returns an instance of this model if it exists in internal cache.
+
+        Returns
+        -------
+        flask_discord.User
+            An user instance if it exists in internal cache.
+        None
+            If the current doesn't exists in internal cache.
+
+        """
+        return current_app.discord.users_cache.get(session.get("DISCORD_USER_ID"))
 
     def add_to_guild(self, guild_id) -> dict:
         """Method to add user to the guild, provided OAuth2 session has already been created with ``guilds.join`` scope.
