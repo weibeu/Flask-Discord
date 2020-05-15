@@ -8,5 +8,4 @@ __all__ = [
     "User",
     "Bot",
     "UserConnection",
-    "Integration",
 ]
