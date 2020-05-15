@@ -53,8 +53,18 @@ class DiscordOAuth2HttpClient(abc.ABC):
         app.discord = self
 
     @property
-    def user_id(self):
-        """A property which returns Discord user ID if it exists in flask :py:attr:`flask.session` object."""
+    def user_id(self) -> typing.Union[int, None]:
+        """A property which returns Discord user ID if it exists in flask :py:attr:`flask.session` object.
+
+        Returns
+        -------
+        int
+            The Discord user ID of current user.
+        None
+            If the user ID doesn't exists in flask :py:attr:`flask.session`.
+
+        """
+        return session.get("DISCORD_USER_ID")
 
     @staticmethod
     def _token_updater(token):
