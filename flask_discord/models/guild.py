@@ -1,6 +1,5 @@
-from flask import current_app, session
 from .base import DiscordModelsBase
-
+from flask import current_app
 from .. import configs
 
 
@@ -63,7 +62,7 @@ class Guild(DiscordModelsBase):
         guilds = super().fetch_from_api()
 
         if cache:
-            user = current_app.discord.users_cache.get(session.get("DISCORD_USER_ID"))
+            user = current_app.discord.users_cache.get(current_app.discord.user_id)
             try:
                 user.guilds = {guild.id: guild for guild in guilds}
             except AttributeError:

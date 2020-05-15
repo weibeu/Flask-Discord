@@ -63,8 +63,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         """
 
-        user_id = session.get("DISCORD_USER_ID")
-        self.users_cache.pop(user_id, None)
+        self.users_cache.pop(self.user_id, None)
 
         for session_key in self.SESSION_KEYS:
             try:

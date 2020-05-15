@@ -1,6 +1,7 @@
+from flask import current_app
+
 from .base import DiscordModelsBase
 from .integration import Integration
-from flask import current_app, session
 
 
 class UserConnection(DiscordModelsBase):
@@ -76,7 +77,7 @@ class UserConnection(DiscordModelsBase):
         connections = super().fetch_from_api()
 
         if cache:
-            user = current_app.discord.users_cache.get(session.get("DISCORD_USER_ID"))
+            user = current_app.discord.users_cache.get(current_app.discord.user_id)
             try:
                 user.connections = connections
             except AttributeError:

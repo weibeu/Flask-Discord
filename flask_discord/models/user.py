@@ -136,7 +136,7 @@ class User(DiscordModelsBase):
             If the current doesn't exists in internal cache.
 
         """
-        return current_app.discord.users_cache.get(session.get("DISCORD_USER_ID"))
+        return current_app.discord.users_cache.get(current_app.discord.user_id)
 
     def add_to_guild(self, guild_id) -> dict:
         """Method to add user to the guild, provided OAuth2 session has already been created with ``guilds.join`` scope.
