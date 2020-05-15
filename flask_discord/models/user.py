@@ -57,8 +57,8 @@ class User(DiscordModelsBase):
         self.premium_type = self._payload.get("premium_type")
 
         # Few properties which are intended to be cached.
-        self._guilds = dict()         # Mapping of guild ID to flask_discord.models.Guild(...).
-        self.connections = list()     # List of flask_discord.models.UserConnection(...).
+        self._guilds = None         # Mapping of guild ID to flask_discord.models.Guild(...).
+        self.connections = None     # List of flask_discord.models.UserConnection(...).
 
     @property
     def guilds(self):
@@ -66,7 +66,10 @@ class User(DiscordModelsBase):
         API call for guilds is requested so it might be an empty dict.
 
         """
-        return list(self._guilds.values())
+        try:
+            return list(self._guilds.values())
+        except AttributeError:
+            pass
 
     @guilds.setter
     def guilds(self, value):
