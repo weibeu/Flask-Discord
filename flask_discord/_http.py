@@ -52,6 +52,10 @@ class DiscordOAuth2HttpClient(abc.ABC):
             os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
         app.discord = self
 
+    @property
+    def user_id(self):
+        """A property which returns Discord user ID if it exists in flask :py:attr:`flask.session` object."""
+
     @staticmethod
     def _token_updater(token):
         session["DISCORD_OAUTH2_TOKEN"] = token
