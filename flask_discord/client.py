@@ -78,18 +78,19 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
     @staticmethod
     def fetch_user() -> models.User:
-        """This method requests for data of current user from discord and returns user object.
+        """This method returns user object from the internal cache if it exists otherwise makes an API call to do so.
 
         Returns
         -------
         flask_discord.models.User
 
         """
-        return models.User.fetch_from_api()
+        return models.User.get_from_cache() or models.User.fetch_from_api()
 
     @staticmethod
     def fetch_connections() -> list:
-        """Requests and returns connections of current user from discord.
+        """This method returns list of user connection objects from internal cache if it exists otherwise
+        makes an API call to do so.
 
         Returns
         -------
@@ -97,11 +98,19 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             List of :py:class:`flask_discord.models.UserConnection` objects.
 
         """
+        user = models.User.get_from_cache()
+        try:
+            if user.connections is not None:
+                return user.connections
+        except AttributeError:
+            pass
+
         return models.UserConnection.fetch_from_api()
 
     @staticmethod
     def fetch_guilds() -> list:
-        """Requests and returns guilds of current user from discord.
+        """This method returns list of guild objects from internal cache if it exists otherwise makes an API
+        call to do so.
 
         Returns
         -------
@@ -109,4 +118,11 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             List of :py:class:`flask_discord.models.Guild` objects.
 
         """
+        user = models.User.get_from_cache()
+        try:
+            if user.guilds is not None:
+                return user.guilds
+        except AttributeError:
+            pass
+
         return models.Guild.fetch_from_api()
