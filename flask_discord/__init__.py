@@ -9,8 +9,9 @@ __all__ = [
     "requires_authorization",
 
     "HttpException",
+    "RateLimited",
     "Unauthorized",
 ]
 
 
-__version__ = "0.1.11"
+__version__ = "0.1.50"

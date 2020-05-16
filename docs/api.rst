@@ -53,5 +53,8 @@ Exceptions
 .. autoclass:: flask_discord.HttpException
     :members:
 
+.. autoclass:: flask_discord.RateLimited
+    :members:
+
 .. autoclass:: flask_discord.Unauthorized
     :members:

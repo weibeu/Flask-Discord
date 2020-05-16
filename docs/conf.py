@@ -45,6 +45,13 @@ extensions = [
     'pallets_sphinx_themes',
 ]
 
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'flask': ('https://flask.palletsprojects.com/en/1.1.x/', None),
+    'cachetools': ('https://cachetools.readthedocs.io/en/stable/', None),
+    'requests_oauthlib': ('https://requests-oauthlib.readthedocs.io/en/latest/', None)
+}
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

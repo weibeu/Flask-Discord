@@ -1,6 +1,7 @@
-from .guild import Guild
+from .connections import UserConnection
+from .integration import Integration
 from .user import User, Bot
-from .connections import UserConnection, Integration
+from .guild import Guild
 
 
 __all__ = [
@@ -8,5 +9,4 @@ __all__ = [
     "User",
     "Bot",
     "UserConnection",
-    "Integration",
 ]

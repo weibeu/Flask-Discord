@@ -58,9 +58,13 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
     def revoke(self):
         """This method clears current discord token, state and all session data from flask
         `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_. Which means user will have
-        to go through discord authorization token grant flow again.
+        to go through discord authorization token grant flow again. Also tries to remove the user from internal
+        cache if they exist.
 
         """
+
+        self.users_cache.pop(self.user_id, None)
+
         for session_key in self.SESSION_KEYS:
             try:
                 session.pop(session_key)
@@ -72,18 +76,21 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         """A boolean indicating whether current session has authorization token or not."""
         return self._make_session().authorized
 
-    def fetch_user(self) -> models.User:
-        """This method requests for data of current user from discord and returns user object.
+    @staticmethod
+    def fetch_user() -> models.User:
+        """This method returns user object from the internal cache if it exists otherwise makes an API call to do so.
 
         Returns
         -------
         flask_discord.models.User
 
         """
-        return models.User(self.request("/users/@me"))
+        return models.User.get_from_cache() or models.User.fetch_from_api()
 
-    def fetch_connections(self) -> list:
-        """Requests and returns connections of current user from discord.
+    @staticmethod
+    def fetch_connections() -> list:
+        """This method returns list of user connection objects from internal cache if it exists otherwise
+        makes an API call to do so.
 
         Returns
         -------
@@ -91,11 +98,19 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             List of :py:class:`flask_discord.models.UserConnection` objects.
 
         """
-        connections_payload = self.request("/users/@me/connections")
-        return [models.UserConnection(payload) for payload in connections_payload]
+        user = models.User.get_from_cache()
+        try:
+            if user.connections is not None:
+                return user.connections
+        except AttributeError:
+            pass
 
-    def fetch_guilds(self) -> list:
-        """Requests and returns guilds of current user from discord.
+        return models.UserConnection.fetch_from_api()
+
+    @staticmethod
+    def fetch_guilds() -> list:
+        """This method returns list of guild objects from internal cache if it exists otherwise makes an API
+        call to do so.
 
         Returns
         -------
@@ -103,5 +118,11 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             List of :py:class:`flask_discord.models.Guild` objects.
 
         """
-        guilds_payload = self.request("/users/@me/guilds")
-        return [models.Guild(payload) for payload in guilds_payload]
+        user = models.User.get_from_cache()
+        try:
+            if user.guilds is not None:
+                return user.guilds
+        except AttributeError:
+            pass
+
+        return models.Guild.fetch_from_api()
