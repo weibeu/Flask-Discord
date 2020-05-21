@@ -9,6 +9,16 @@ from .connections import UserConnection
 class User(DiscordModelsBase):
     """Class representing Discord User.
 
+
+    Operations
+    ----------
+    x == y
+        Checks if two user's are the same.
+    x != y
+        Checks if two user's are not the same.
+    str(x)
+        Returns the user's name with discriminator.
+
     Attributes
     ----------
     id : int
