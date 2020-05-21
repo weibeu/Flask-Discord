@@ -9,6 +9,16 @@ from .connections import UserConnection
 class User(DiscordModelsBase):
     """Class representing Discord User.
 
+
+    Operations
+    ----------
+    x == y
+        Checks if two user's are the same.
+    x != y
+        Checks if two user's are not the same.
+    str(x)
+        Returns the user's name with discriminator.
+
     Attributes
     ----------
     id : int
@@ -77,6 +87,12 @@ class User(DiscordModelsBase):
 
     def __str__(self):
         return f"{self.name}#{self.discriminator}"
+
+    def __eq__(self, user):
+        return isinstance(user, User) and user.id == self.id
+
+    def __ne__(self, user):
+        return not self.__eq__(user)
 
     @property
     def name(self):

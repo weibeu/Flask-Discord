@@ -6,6 +6,15 @@ from .. import configs
 class Guild(DiscordModelsBase):
     """Class representing discord Guild the user is part of.
 
+    Operations
+    ----------
+    x == y
+        Checks if two guild's are the same.
+    x != y
+        Checks if two guild's are not the same.
+    str(x)
+        Returns the guild's name.
+
     Attributes
     ----------
     id : int
@@ -34,6 +43,12 @@ class Guild(DiscordModelsBase):
 
     def __str__(self):
         return self.name
+
+    def __eq__(self, guild):
+        return isinstance(guild, Guild) and guild.id == self.id
+
+    def __ne__(self, guild):
+        return not self.__eq__(guild)
 
     @property
     def icon_url(self):
