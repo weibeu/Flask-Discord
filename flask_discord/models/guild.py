@@ -35,6 +35,12 @@ class Guild(DiscordModelsBase):
     def __str__(self):
         return self.name
 
+    def __eq__(self, guild):
+        return isinstance(guild, Guild) and guild.id == self.id
+
+    def __ne__(self, guild):
+        return not self.__eq__(guild)
+
     @property
     def icon_url(self):
         """A property returning direct URL to the guild's icon. Returns None if guild has no icon set."""
