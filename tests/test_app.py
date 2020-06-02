@@ -50,7 +50,8 @@ def me():
 <head>
 <title>{user.name}</title>
 </head>
-<body><img src='{user.avatar_url}' />
+<body><img src='{user.avatar_url or user.default_avatar_url}' />
+<p>Is avatar animated: {str(user.is_avatar_animated)}</p>
 <a href={url_for("my_connections")}>Connections</a>
 <br />
 </body>

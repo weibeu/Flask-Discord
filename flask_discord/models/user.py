@@ -102,15 +102,25 @@ class User(DiscordModelsBase):
     @property
     def avatar_url(self):
         """A property returning direct URL to user's avatar."""
+        if not self.avatar_hash:
+            return
         image_format = configs.DISCORD_ANIMATED_IMAGE_FORMAT \
             if self.is_avatar_animated else configs.DISCORD_IMAGE_FORMAT
         return configs.DISCORD_USER_AVATAR_BASE_URL.format(
             user_id=self.id, avatar_hash=self.avatar_hash, format=image_format)
 
     @property
+    def default_avatar_url(self):
+        """A property which returns the default avatar URL as when user doesn't has any avatar set."""
+        return configs.DISCORD_DEFAULT_USER_AVATAR_BASE_URL.format(modulo5=int(self.discriminator) % 5)
+
+    @property
     def is_avatar_animated(self):
         """A boolean representing if avatar of user is animated. Meaning user has GIF avatar."""
-        return self.avatar_hash.startswith("a_")
+        try:
+            return self.avatar_hash.startswith("a_")
+        except AttributeError:
+            return False
 
     @classmethod
     def fetch_from_api(cls, guilds=False, connections=False):
