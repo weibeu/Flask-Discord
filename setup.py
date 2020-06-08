@@ -17,10 +17,10 @@ def __get_version():
 
 
 requirements = [
-        'Flask',
-        'requests_oauthlib',
-        'cachetools',
-    ]
+    'Flask',
+    'requests_oauthlib',
+    'cachetools',
+]
 
 
 on_rtd = os.getenv('READTHEDOCS') == 'True'
