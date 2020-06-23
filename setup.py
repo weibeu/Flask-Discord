@@ -18,6 +18,7 @@ def __get_version():
 
 requirements = [
     'Flask',
+    'oauthlib',
     'requests_oauthlib',
     'cachetools',
 ]
