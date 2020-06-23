@@ -1,3 +1,6 @@
 Flask
 cachetools
+setuptools
+requests
+oauthlib
 requests_oauthlib

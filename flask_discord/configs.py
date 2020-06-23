@@ -14,6 +14,11 @@ DISCORD_OAUTH_DEFAULT_SCOPES = [
 ]
 
 
+DISCORD_PASSTHROUGH_SCOPES = [
+    "bot", "webhook.incoming",
+]
+
+
 DISCORD_IMAGE_BASE_URL = "https://cdn.discordapp.com/"
 DISCORD_EMBED_BASE_BASE_URL = "https://cdn.discordapp.com/"
 DISCORD_IMAGE_FORMAT = "png"

@@ -1,6 +1,7 @@
 from . import configs, _http, models
 
 from flask import request, session, redirect
+from oauthlib.common import add_params_to_uri
 
 
 class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
@@ -16,7 +17,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
     """
 
-    def create_session(self, scope: list = None):
+    def create_session(self, scope: list = None, prompt: bool = True, params: dict = None):
         """Primary method used to create OAuth2 session and redirect users for
         authorization code grant.
 
@@ -25,6 +26,11 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         scope : list, optional
             An optional list of valid `Discord OAuth2 Scopes
             <https://discordapp.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
+        prompt : bool, optional
+            Determines if the OAuth2 grant should be explicitly prompted and re-approved. Defaults to True.
+            Specify False for implicit grant which will skip the authorization screen and redirect to redirect URI.
+        params : dict, optional
+            An optional mapping of query parameters to supply to the authorization URL.
 
         Returns
         -------
@@ -33,9 +39,19 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         """
         scope = scope or request.args.get("scope", str()).split() or configs.DISCORD_OAUTH_DEFAULT_SCOPES
+
+        if not prompt and set(scope) & set(configs.DISCORD_PASSTHROUGH_SCOPES):
+            raise ValueError("You should use explicit OAuth grant for passthrough scopes like bot.")
+
         discord_session = self._make_session(scope=scope)
         authorization_url, state = discord_session.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
         session["DISCORD_OAUTH2_STATE"] = state
+
+        prompt = "consent" if prompt else "none"
+        params = params or dict()
+        params.update(prompt=prompt)
+        authorization_url = add_params_to_uri(authorization_url, params)
+
         return redirect(authorization_url)
 
     def callback(self):
