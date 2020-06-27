@@ -28,6 +28,11 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
         """
         return current_app.discord.request(*args, **kwargs)
 
+    @staticmethod
+    def _bot_request(*args, **kwargs):
+        """A shorthand to :py:func:flask_discord.bot_request`."""
+        return current_app.discord.bot_request(*args, **kwargs)
+
     @classmethod
     def fetch_from_api(cls):
         """A class method which returns an instance or list of instances of this model by implicitly making an

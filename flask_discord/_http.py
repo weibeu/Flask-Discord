@@ -26,6 +26,10 @@ class DiscordOAuth2HttpClient(abc.ABC):
         The client secret of discord application provided.
     redirect_uri : str
         The default URL to use to redirect user to after authorization.
+    bot_token : str
+        The bot token of the application. This is required when you also need to access bot scope resources
+        beyond the normal resources provided by the OAuth. Can be also set to flask config with
+        key ``DISCORD_BOT_TOKEN``.
     users_cache : cachetools.LFUCache
         Any dict like mapping to internally cache the authorized users. Preferably an instance of
         cachetools.LFUCache or cachetools.TTLCache. If not specified, default cachetools.LFUCache is used.
@@ -39,10 +43,11 @@ class DiscordOAuth2HttpClient(abc.ABC):
         "DISCORD_OAUTH2_TOKEN",
     ]
 
-    def __init__(self, app, users_cache=None):
-        self.client_id = app.config["DISCORD_CLIENT_ID"]
-        self.client_secret = app.config["DISCORD_CLIENT_SECRET"]
-        self.redirect_uri = app.config["DISCORD_REDIRECT_URI"]
+    def __init__(self, app, client_id=None, client_secret=None, redirect_uri=None, bot_token=None, users_cache=None):
+        self.client_id = client_id or app.config["DISCORD_CLIENT_ID"]
+        self.client_secret = client_secret or app.config["DISCORD_CLIENT_SECRET"]
+        self.redirect_uri = redirect_uri or app.config["DISCORD_REDIRECT_URI"]
+        self.bot_token = bot_token or app.config.get("DISCORD_BOT_TOKEN", str())
         self.users_cache = cachetools.LFUCache(
             app.config.get("DISCORD_USERS_CACHE_MAX_LIMIT", configs.DISCORD_USERS_CACHE_DEFAULT_MAX_LIMIT)
         ) if users_cache is None else users_cache
@@ -147,3 +152,30 @@ class DiscordOAuth2HttpClient(abc.ABC):
             return response.json()
         except json.JSONDecodeError:
             return response.text
+
+    def bot_request(self, route: str, method="GET", **kwargs) -> typing.Union[dict, str]:
+        """Make HTTP request to specified endpoint with bot token as authorization headers.
+
+        Parameters
+        ----------
+        route : str
+            Route or endpoint URL to send HTTP request to.
+        method : str, optional
+            Specify the HTTP method to use to perform this request.
+
+        Returns
+        -------
+        dict, str
+            Dictionary containing received from sent HTTP GET request if content-type is ``application/json``
+            otherwise returns raw text content of the response.
+
+        Raises
+        ------
+        flask_discord.Unauthorized
+            Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
+        flask_discord.RateLimited
+            Raises an instance of :py:class:`flask_discord.RateLimited` if application is being rate limited by Discord.
+
+        """
+        headers = {"Authorization": f"Bot {self.bot_token}"}
+        return self.request(route, method=method, oauth=False, headers=headers, **kwargs)

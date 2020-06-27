@@ -14,6 +14,23 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
     ----------
     app : Flask
         An instance of your `flask application <http://flask.pocoo.org/docs/1.0/api/#flask.Flask>`_.
+    client_id : int, optional
+        The client ID of discord application provided. Can be also set to flask config
+        with key ``DISCORD_CLIENT_ID``.
+    client_secret : str, optional
+        The client secret of discord application provided. Can be also set to flask config
+        with key ``DISCORD_CLIENT_SECRET``.
+    redirect_uri : str, optional
+        The default URL to use to redirect user to after authorization. Can be also set to flask config
+        with key ``DISCORD_REDIRECT_URI``.
+    bot_token : str, optional
+        The bot token of the application. This is required when you also need to access bot scope resources
+        beyond the normal resources provided by the OAuth. Can be also set to flask config with
+        key ``DISCORD_BOT_TOKEN``.
+    users_cache : cachetools.LFUCache, optional
+        Any dict like mapping to internally cache the authorized users. Preferably an instance of
+        cachetools.LFUCache or cachetools.TTLCache. If not specified, default cachetools.LFUCache is used.
+        Uses the default max limit for cache if ``DISCORD_USERS_CACHE_MAX_LIMIT`` isn't specified in app config.
 
     """
 
