@@ -1,9 +1,11 @@
 from .. import configs
 
 from .guild import Guild
+from .. import exceptions
 from .base import DiscordModelsBase
-from flask import current_app, session
 from .connections import UserConnection
+
+from flask import current_app, session
 
 
 class User(DiscordModelsBase):
@@ -186,11 +188,11 @@ class User(DiscordModelsBase):
             Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
 
         """
-        data = {"access_token": session["DISCORD_OAUTH2_TOKEN"]["access_token"]}
-        headers = {"Authorization": f"Bot {current_app.config['DISCORD_BOT_TOKEN']}"}
-        return self._request(
-            f"/guilds/{guild_id}/members/{self.id}", method="PUT", oauth=False, json=data, headers=headers
-        ) or dict()
+        try:
+            data = {"access_token": session["DISCORD_OAUTH2_TOKEN"]["access_token"]}
+        except KeyError:
+            raise exceptions.Unauthorized
+        return self._bot_request(f"/guilds/{guild_id}/members/{self.id}", method="PUT", json=data) or dict()
 
     def fetch_guilds(self) -> list:
         """A method which makes an API call to Discord to get user's guilds. It prepares the internal guilds cache
