@@ -14,6 +14,7 @@ class DiscordModelsMeta(ABCMeta):
 
 class DiscordModelsBase(metaclass=DiscordModelsMeta):
 
+    BOT = False
     MANY = False
 
     @abstractmethod
@@ -46,7 +47,8 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
             List of instances of this model when many of these models exist.
 
         """
-        payload = cls._request(cls.ROUTE)
+        request_method = cls._bot_request if cls.BOT else cls._request
+        payload = request_method(cls.ROUTE)
         if cls.MANY:
             return [cls(_) for _ in payload]
         return cls(payload)
