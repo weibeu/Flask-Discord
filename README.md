@@ -22,8 +22,8 @@ app.secret_key = b"random bytes representing flask secret key"
 
 app.config["DISCORD_CLIENT_ID"] = 490732332240863233    # Discord client ID.
 app.config["DISCORD_CLIENT_SECRET"] = ""                # Discord client secret.
-app.config["DISCORD_REDIRECT_URI"] = ""                 # Redirect URI.
-app.config["DISCORD_BOT_TOKEN"] = ""                    # Required when you want to use User.add_to_guild method. 
+app.config["DISCORD_REDIRECT_URI"] = ""                 # URL to your callback endpoint.
+app.config["DISCORD_BOT_TOKEN"] = ""                    # Required to access BOT resources.
 
 discord = DiscordOAuth2Session(app)
 
@@ -62,6 +62,8 @@ def me():
 if __name__ == "__main__":
     app.run()
 ```
+
+For an example to the working application, check [`test_app.py`](tests/test_app.py)
 
 
 ### Requirements

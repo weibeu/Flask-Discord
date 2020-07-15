@@ -51,8 +51,8 @@ in exchange for fetching user's details and display them on web page.
 
     app.config["DISCORD_CLIENT_ID"] = 490732332240863233    # Discord client ID.
     app.config["DISCORD_CLIENT_SECRET"] = ""                # Discord client secret.
-    app.config["DISCORD_REDIRECT_URI"] = ""                 # Redirect URI.
-    app.config["DISCORD_BOT_TOKEN"] = ""                    # Required when you want to use User.add_to_guild method.
+    app.config["DISCORD_REDIRECT_URI"] = ""                 # URL to your callback endpoint.
+    app.config["DISCORD_BOT_TOKEN"] = ""                    # Required to access BOT resources.
 
 
     discord = DiscordOAuth2Session(app)
