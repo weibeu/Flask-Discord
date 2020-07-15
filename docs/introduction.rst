@@ -43,7 +43,7 @@ in exchange for fetching user's details and display them on web page.
 .. code-block:: python3
 
     from flask import Flask, redirect, url_for
-    from flask_discord import DiscordOAuth2Session, requires_authorization
+    from flask_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
 
     app = Flask(__name__)
 
@@ -67,6 +67,11 @@ in exchange for fetching user's details and display them on web page.
     def callback():
         discord.callback()
         return redirect(url_for(".me"))
+
+
+    @app.errorhandler(Unauthorized)
+    def redirect_unauthorized(e):
+        return redirect(url_for("login"))
 
 
     @app.route("/me/")
