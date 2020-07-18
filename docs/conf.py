@@ -47,6 +47,7 @@ extensions = [
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
+    'discord': ('https://discordpy.readthedocs.io/en/latest/', None),
     'flask': ('https://flask.palletsprojects.com/en/1.1.x/', None),
     'cachetools': ('https://cachetools.readthedocs.io/en/stable/', None),
     'requests_oauthlib': ('https://requests-oauthlib.readthedocs.io/en/latest/', None)
