@@ -63,7 +63,7 @@ def me():
 @app.route("/me/guilds/")
 def user_guilds():
     guilds = discord.fetch_guilds()
-    return "<br />".join([g.name for g in guilds])
+    return "<br />".join([f"[ADMIN] {g.name}" if g.permissions.administrator else g.name for g in guilds])
 
 
 @app.route("/add_to/<int:guild_id>/")

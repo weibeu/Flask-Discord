@@ -1,5 +1,7 @@
 from .base import DiscordModelsBase
 from flask import current_app
+
+import discord
 from .. import configs
 
 
@@ -25,8 +27,8 @@ class Guild(DiscordModelsBase):
         Hash of guild's icon.
     is_owner : bool
         Boolean determining if current user is owner of the guild or not.
-    permissions_value : int
-        An integer representing permissions of current user in the guild.
+    permissions : discord.Permissions
+        An instance of discord.Permissions representing permissions of current user in the guild.
 
     """
 
@@ -39,7 +41,13 @@ class Guild(DiscordModelsBase):
         self.name = self._payload["name"]
         self.icon_hash = self._payload.get("icon")
         self.is_owner = self._payload.get("owner")
-        self.permissions_value = self._payload.get("permissions")
+        self.permissions = self.__get_permissions(self._payload.get("permissions"))
+
+    @staticmethod
+    def __get_permissions(permissions_value):
+        if permissions_value is None:
+            return
+        return discord.Permissions(int(permissions_value))
 
     def __str__(self):
         return self.name
