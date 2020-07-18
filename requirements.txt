@@ -3,4 +3,5 @@ cachetools
 setuptools
 requests
 oauthlib
+discord.py
 requests_oauthlib

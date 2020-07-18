@@ -21,6 +21,8 @@ requirements = [
     'oauthlib',
     'requests_oauthlib',
     'cachetools',
+    'requests',
+    'discord.py',
 ]
 
 
