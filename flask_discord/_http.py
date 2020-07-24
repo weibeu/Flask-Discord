@@ -15,25 +15,8 @@ from requests_oauthlib import OAuth2Session
 
 class DiscordOAuth2HttpClient(abc.ABC):
     """An OAuth2 http abstract base class providing some factory methods.
-    This class is meant to be overridden by :py:class:`flask_discord.DiscordOAuth2Session`
-    and should not be used directly.
-
-    Attributes
-    ----------
-    client_id : int
-        The client ID of discord application provided.
-    client_secret : str
-        The client secret of discord application provided.
-    redirect_uri : str
-        The default URL to use to redirect user to after authorization.
-    bot_token : str
-        The bot token of the application. This is required when you also need to access bot scope resources
-        beyond the normal resources provided by the OAuth. Can be also set to flask config with
-        key ``DISCORD_BOT_TOKEN``.
-    users_cache : cachetools.LFUCache
-        Any dict like mapping to internally cache the authorized users. Preferably an instance of
-        cachetools.LFUCache or cachetools.TTLCache. If not specified, default cachetools.LFUCache is used.
-        Uses the default max limit for cache if ``DISCORD_USERS_CACHE_MAX_LIMIT`` isn't specified in app config.
+    This class is meant to be overridden by :py:class:`flask_discord.DiscordOAuth2Session` and should not be
+    used directly.
 
     """
 

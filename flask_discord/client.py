@@ -32,6 +32,17 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         cachetools.LFUCache or cachetools.TTLCache. If not specified, default cachetools.LFUCache is used.
         Uses the default max limit for cache if ``DISCORD_USERS_CACHE_MAX_LIMIT`` isn't specified in app config.
 
+    Attributes
+    ----------
+    client_id : int
+        The client ID of discord application provided.
+    redirect_uri : str
+        The default URL to use to redirect user to after authorization.
+    users_cache : cachetools.LFUCache
+        A dict like mapping to internally cache the authorized users. Preferably an instance of
+        cachetools.LFUCache or cachetools.TTLCache. If not specified, default cachetools.LFUCache is used.
+        Uses the default max limit for cache if ``DISCORD_USERS_CACHE_MAX_LIMIT`` isn't specified in app config.
+
     """
 
     def create_session(self, scope: list = None, prompt: bool = True, params: dict = None):
