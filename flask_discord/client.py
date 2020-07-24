@@ -83,7 +83,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         discord = self._make_session(state=session.get("DISCORD_OAUTH2_STATE"))
         token = discord.fetch_token(
             configs.DISCORD_TOKEN_URL,
-            client_secret=self.client_secret,
+            client_secret=self.__client_secret,
             authorization_response=request.url
         )
         self._token_updater(token)

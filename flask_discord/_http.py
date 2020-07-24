@@ -45,9 +45,9 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
     def __init__(self, app, client_id=None, client_secret=None, redirect_uri=None, bot_token=None, users_cache=None):
         self.client_id = client_id or app.config["DISCORD_CLIENT_ID"]
-        self.client_secret = client_secret or app.config["DISCORD_CLIENT_SECRET"]
+        self.__client_secret = client_secret or app.config["DISCORD_CLIENT_SECRET"]
         self.redirect_uri = redirect_uri or app.config["DISCORD_REDIRECT_URI"]
-        self.bot_token = bot_token or app.config.get("DISCORD_BOT_TOKEN", str())
+        self.__bot_token = bot_token or app.config.get("DISCORD_BOT_TOKEN", str())
         self.users_cache = cachetools.LFUCache(
             app.config.get("DISCORD_USERS_CACHE_MAX_LIMIT", configs.DISCORD_USERS_CACHE_DEFAULT_MAX_LIMIT)
         ) if users_cache is None else users_cache
@@ -102,7 +102,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
             redirect_uri=self.redirect_uri,
             auto_refresh_kwargs={
                 'client_id': self.client_id,
-                'client_secret': self.client_secret,
+                'client_secret': self.__client_secret,
             },
             auto_refresh_url=configs.DISCORD_TOKEN_URL,
             token_updater=self._token_updater)
@@ -177,5 +177,5 @@ class DiscordOAuth2HttpClient(abc.ABC):
             Raises an instance of :py:class:`flask_discord.RateLimited` if application is being rate limited by Discord.
 
         """
-        headers = {"Authorization": f"Bot {self.bot_token}"}
+        headers = {"Authorization": f"Bot {self.__bot_token}"}
         return self.request(route, method=method, oauth=False, headers=headers, **kwargs)
