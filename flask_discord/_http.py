@@ -8,7 +8,7 @@ import abc
 from . import configs
 from . import exceptions
 
-from flask import session
+from flask import session, request
 from collections.abc import Mapping
 from requests_oauthlib import OAuth2Session
 
@@ -57,6 +57,14 @@ class DiscordOAuth2HttpClient(abc.ABC):
     @staticmethod
     def _token_updater(token):
         session["DISCORD_OAUTH2_TOKEN"] = token
+
+    def _fetch_token(self):
+        discord = self._make_session(state=session.get("DISCORD_OAUTH2_STATE"))
+        return discord.fetch_token(
+            configs.DISCORD_TOKEN_URL,
+            client_secret=self.__client_secret,
+            authorization_response=request.url
+        )
 
     def _make_session(self, token: str = None, state: str = None, scope: list = None) -> OAuth2Session:
         """A low level method used for creating OAuth2 session.

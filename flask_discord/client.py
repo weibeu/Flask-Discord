@@ -91,12 +91,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         """
         if request.values.get("error"):
             return request.values["error"]
-        discord = self._make_session(state=session.get("DISCORD_OAUTH2_STATE"))
-        token = discord.fetch_token(
-            configs.DISCORD_TOKEN_URL,
-            client_secret=self.__client_secret,
-            authorization_response=request.url
-        )
+        token = self._fetch_token()
         self._token_updater(token)
 
     def revoke(self):
