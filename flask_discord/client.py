@@ -82,6 +82,27 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         return redirect(authorization_url)
 
+    @staticmethod
+    def save_authorization_token(token: dict):
+        """A staticmethod which saves a dict containing Discord OAuth2 token and other secrets to the user's cookies.
+        Meaning by default, it uses client side session handling.
+
+        Override this method if you want to handle the user's session server side. If this method is overridden then,
+        you must also override :py:meth:`flask_discord.DiscordOAuth2Session.get_authorization_token`.
+
+        """
+        session["DISCORD_OAUTH2_TOKEN"] = token
+
+    @staticmethod
+    def get_authorization_token() -> dict:
+        """A static method which returns a dict containing Discord OAuth2 token and other secrets which was saved
+        previously by `:py:meth:`flask_discord.DiscordOAuth2Session.save_authorization_token` from user's cookies.
+
+        You must override this method if you are implementing server side session handling.
+
+        """
+        return session.get("DISCORD_OAUTH2_TOKEN")
+
     def callback(self):
         """A method which should be always called after completing authorization code grant process
         usually in callback view.
@@ -92,7 +113,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         if request.values.get("error"):
             return request.values["error"]
         token = self._fetch_token()
-        self._token_updater(token)
+        self.save_authorization_token(token)
 
     def revoke(self):
         """This method clears current discord token, state and all session data from flask

@@ -55,8 +55,14 @@ class DiscordOAuth2HttpClient(abc.ABC):
         return session.get("DISCORD_USER_ID")
 
     @staticmethod
-    def _token_updater(token):
-        session["DISCORD_OAUTH2_TOKEN"] = token
+    @abc.abstractmethod
+    def save_authorization_token(token: dict):
+        raise NotImplementedError
+
+    @staticmethod
+    @abc.abstractmethod
+    def get_authorization_token() -> dict:
+        raise NotImplementedError
 
     def _fetch_token(self):
         discord = self._make_session(state=session.get("DISCORD_OAUTH2_STATE"))
@@ -87,7 +93,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         """
         return OAuth2Session(
             client_id=self.client_id,
-            token=token or session.get("DISCORD_OAUTH2_TOKEN"),
+            token=token or self.get_authorization_token(),
             state=state or session.get("DISCORD_OAUTH2_STATE"),
             scope=scope,
             redirect_uri=self.redirect_uri,
@@ -96,7 +102,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
                 'client_secret': self.__client_secret,
             },
             auto_refresh_url=configs.DISCORD_TOKEN_URL,
-            token_updater=self._token_updater)
+            token_updater=self.save_authorization_token)
 
     def request(self, route: str, method="GET", data=None, oauth=True, **kwargs) -> typing.Union[dict, str]:
         """Sends HTTP request to provided route or discord endpoint.
