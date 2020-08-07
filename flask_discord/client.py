@@ -1,7 +1,11 @@
+from typing import Union
+
 from . import configs, _http, models
 
 from flask import request, session, redirect
-from oauthlib.common import add_params_to_uri
+from oauthlib.common import add_params_to_uri, generate_token
+import discord
+import jwt
 
 
 class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
@@ -12,40 +16,43 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
     Parameters
     ----------
-    app : Flask
+    `app` : Flask
         An instance of your `flask application <http://flask.pocoo.org/docs/1.0/api/#flask.Flask>`_.
-    client_id : int, optional
+    `client_id` : int, optional
         The client ID of discord application provided. Can be also set to flask config
         with key ``DISCORD_CLIENT_ID``.
-    client_secret : str, optional
+    `client_secret` : str, optional
         The client secret of discord application provided. Can be also set to flask config
         with key ``DISCORD_CLIENT_SECRET``.
-    redirect_uri : str, optional
+    `redirect_uri` : str, optional
         The default URL to use to redirect user to after authorization. Can be also set to flask config
         with key ``DISCORD_REDIRECT_URI``.
-    bot_token : str, optional
+    `bot_token` : str, optional
         The bot token of the application. This is required when you also need to access bot scope resources
         beyond the normal resources provided by the OAuth. Can be also set to flask config with
         key ``DISCORD_BOT_TOKEN``.
-    users_cache : cachetools.LFUCache, optional
+    `users_cache` : cachetools.LFUCache, optional
         Any dict like mapping to internally cache the authorized users. Preferably an instance of
         cachetools.LFUCache or cachetools.TTLCache. If not specified, default cachetools.LFUCache is used.
         Uses the default max limit for cache if ``DISCORD_USERS_CACHE_MAX_LIMIT`` isn't specified in app config.
 
     Attributes
     ----------
-    client_id : int
+    `client_id` : int
         The client ID of discord application provided.
-    redirect_uri : str
+    `redirect_uri` : str
         The default URL to use to redirect user to after authorization.
-    users_cache : cachetools.LFUCache
+    `users_cache` : cachetools.LFUCache
         A dict like mapping to internally cache the authorized users. Preferably an instance of
         cachetools.LFUCache or cachetools.TTLCache. If not specified, default cachetools.LFUCache is used.
         Uses the default max limit for cache if ``DISCORD_USERS_CACHE_MAX_LIMIT`` isn't specified in app config.
 
     """
 
-    def create_session(self, scope: list = None, prompt: bool = True, params: dict = None):
+    def create_session(self, scope: list = None, prompt: str = "consent",
+                       permissions: Union[discord.Permissions, int] = None,
+                       guild_id: int = None, disable_guild_select: bool = None,
+                       **params):
         """Primary method used to create OAuth2 session and redirect users for
         authorization code grant.
 
@@ -54,11 +61,18 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         scope : list, optional
             An optional list of valid `Discord OAuth2 Scopes
             <https://discordapp.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
-        prompt : bool, optional
-            Determines if the OAuth2 grant should be explicitly prompted and re-approved. Defaults to True.
-            Specify False for implicit grant which will skip the authorization screen and redirect to redirect URI.
-        params : dict, optional
+        prompt : str, optional
+        permissions: discord.Permissions object or int, optional
+        guild_id : int, optional
+        disable_guild_select : bool, optional
+        params : kwargs, optional
             An optional mapping of query parameters to supply to the authorization URL.
+            Since query parameters aren't passed through Discord Oauth2, these get added to the state.
+            Use `:py:meth:`flask_discord.DiscordOAuth2Session.callback()` to retrieve the params passed in.
+
+        Notes
+        -----
+         `prompt` has been changed. You must specify the raw value ('consent' or 'none'). Defaults to 'consent'.
 
         Returns
         -------
@@ -68,17 +82,39 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         """
         scope = scope or request.args.get("scope", str()).split() or configs.DISCORD_OAUTH_DEFAULT_SCOPES
 
-        if not prompt and set(scope) & set(configs.DISCORD_PASSTHROUGH_SCOPES):
+        if prompt != "consent" and set(scope) & set(configs.DISCORD_PASSTHROUGH_SCOPES):
             raise ValueError("You should use explicit OAuth grant for passthrough scopes like bot.")
 
-        discord_session = self._make_session(scope=scope)
-        authorization_url, state = discord_session.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
-        session["DISCORD_OAUTH2_STATE"] = state
+        if permissions is not None and not (isinstance(permissions, discord.Permissions)
+                                            or isinstance(permissions, int)):
+            raise ValueError(f"permissions must be an int or discord.Permissions, not {type(permissions)}.")
 
-        prompt = "consent" if prompt else "none"
-        params = params or dict()
-        params.update(prompt=prompt)
-        authorization_url = add_params_to_uri(authorization_url, params)
+        if isinstance(permissions, discord.Permissions):
+            permissions = permissions.value
+
+        # Encode any params into a jwt with the state as the key
+        # Use generate_token in case state is None
+        session['DISCORD_RAW_OAUTH2_STATE'] = session.get("DISCORD_OAUTH2_STATE", generate_token())
+        state = jwt.encode(params, session.get("DISCORD_RAW_OAUTH2_STATE"))
+
+        discord_session = self._make_session(scope=scope, state=state)
+        authorization_url, state = discord_session.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
+
+        # Save the encoded state as that's what Oauth2 lib is expecting
+        session["DISCORD_OAUTH2_STATE"] = state.decode("utf-8")
+
+        # Add special parameters to uri instead of state
+        uri_params = {'prompt': prompt}
+        if permissions:
+            uri_params.update(permissions=permissions)
+        if guild_id:
+            uri_params.update(guild_id=guild_id)
+        if disable_guild_select is not None:
+            uri_params.update(disable_guild_select=disable_guild_select)
+
+        authorization_url = add_params_to_uri(authorization_url, uri_params)
+        if permissions:
+            authorization_url = add_params_to_uri(authorization_url, {'permissions': permissions})
 
         return redirect(authorization_url)
 
@@ -114,6 +150,11 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             return request.values["error"]
         token = self._fetch_token()
         self.save_authorization_token(token)
+
+        # Decode any parameters passed through state variable
+        raw_oauth_state = session.get("DISCORD_RAW_OAUTH2_STATE")
+        passed_state = request.args.get("state")
+        return jwt.decode(passed_state, raw_oauth_state)
 
     def revoke(self):
         """This method clears current discord token, state and all session data from flask
