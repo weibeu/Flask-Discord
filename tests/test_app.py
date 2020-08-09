@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, session
 from flask_discord import DiscordOAuth2Session, requires_authorization
 
 
@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 app.secret_key = b"%\xe0'\x01\xdeH\x8e\x85m|\xb3\xffCN\xc9g"
 
-app.config["DISCORD_CLIENT_ID"] = 490732332240863233
+app.config["DISCORD_CLIENT_ID"] = 732337836619202590
 app.config["DISCORD_CLIENT_SECRET"] = os.getenv("DISCORD_CLIENT_SECRET")
 app.config["DISCORD_BOT_TOKEN"] = os.getenv("DISCORD_BOT_TOKEN")
 app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:5000/callback"
@@ -22,7 +22,13 @@ HYPERLINK = '<a href="{}">{}</a>'
 @app.route("/")
 def index():
     if not discord.authorized:
-        return HYPERLINK.format(url_for(".login"), "Login")
+        return f"""
+        {HYPERLINK.format(url_for(".login"), "Login")} <br />
+        {HYPERLINK.format(url_for(".login_with_params"), "Login with params")} <br />
+        {HYPERLINK.format(url_for(".invite"), "Invite Bot")} <br />
+        {HYPERLINK.format(url_for(".invite_oauth"), "Authorize with oauth and bot invite")}
+        """
+
     return f"""
     {HYPERLINK.format(url_for(".me"), "@ME")}<br />
     {HYPERLINK.format(url_for(".logout"), "Logout")}<br />
@@ -36,10 +42,26 @@ def login():
     return discord.create_session()
 
 
+@app.route("/login-params/")
+def login_with_params():
+    return discord.create_session(redirect="/me/", coupon="15off", number=15, zero=0, status=False)
+
+
+@app.route("/invite/")
+def invite():
+    return discord.create_session(scope=['bot'], permissions=8)
+
+
+@app.route("/invite_oauth/")
+def invite_oauth():
+    return discord.create_session(scope=['bot', 'identify'], permissions=8)
+
+
 @app.route("/callback/")
 def callback():
-    discord.callback()
-    return redirect(url_for(".index"))
+    params = discord.callback()
+    redirect_to = params.get("redirect", "/")
+    return redirect(redirect_to)
 
 
 @app.route("/me/")
