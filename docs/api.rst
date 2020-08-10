@@ -58,3 +58,6 @@ Exceptions
 
 .. autoclass:: flask_discord.Unauthorized
     :members:
+
+.. autoclass:: flask_discord.AccessDenied
+    :members:

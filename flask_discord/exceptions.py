@@ -42,3 +42,7 @@ class RateLimited(HttpException):
 
 class Unauthorized(HttpException):
     """A HTTP Exception raised when user is not authorized."""
+
+
+class AccessDenied(HttpException):
+    """Exception raised when user cancels OAuth authorization grant."""

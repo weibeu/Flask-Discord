@@ -2,7 +2,7 @@ import jwt
 import typing
 import discord
 
-from . import configs, _http, models, utils
+from . import configs, _http, models, utils, exceptions
 
 from oauthlib.common import add_params_to_uri
 from flask import request, session, redirect, current_app
@@ -144,8 +144,12 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_ object.
 
         """
-        if request.values.get("error"):
-            return request.values["error"]
+        error = request.values.get("error")
+        if error:
+            if error == "access_denied":
+                raise exceptions.AccessDenied()
+            raise exceptions.HttpException(error)
+
         state = self.__get_state()
         token = self._fetch_token(state)
         self.save_authorization_token(token)
