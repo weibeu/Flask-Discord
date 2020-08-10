@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, redirect, url_for, session
+from flask import Flask, redirect, url_for
 from flask_discord import DiscordOAuth2Session, requires_authorization
 
 
@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 app.secret_key = b"%\xe0'\x01\xdeH\x8e\x85m|\xb3\xffCN\xc9g"
 
-app.config["DISCORD_CLIENT_ID"] = 732337836619202590
+app.config["DISCORD_CLIENT_ID"] = 490732332240863233
 app.config["DISCORD_CLIENT_SECRET"] = os.getenv("DISCORD_CLIENT_SECRET")
 app.config["DISCORD_BOT_TOKEN"] = os.getenv("DISCORD_BOT_TOKEN")
 app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:5000/callback"
@@ -24,8 +24,8 @@ def index():
     if not discord.authorized:
         return f"""
         {HYPERLINK.format(url_for(".login"), "Login")} <br />
-        {HYPERLINK.format(url_for(".login_with_params"), "Login with params")} <br />
-        {HYPERLINK.format(url_for(".invite"), "Invite Bot")} <br />
+        {HYPERLINK.format(url_for(".login_with_data"), "Login with custom data")} <br />
+        {HYPERLINK.format(url_for(".invite_bot"), "Invite Bot with permissions 8")} <br />
         {HYPERLINK.format(url_for(".invite_oauth"), "Authorize with oauth and bot invite")}
         """
 
@@ -42,25 +42,25 @@ def login():
     return discord.create_session()
 
 
-@app.route("/login-params/")
-def login_with_params():
-    return discord.create_session(redirect="/me/", coupon="15off", number=15, zero=0, status=False)
+@app.route("/login-data/")
+def login_with_data():
+    return discord.create_session(data=dict(redirect="/me/", coupon="15off", number=15, zero=0, status=False))
 
 
-@app.route("/invite/")
-def invite():
-    return discord.create_session(scope=['bot'], permissions=8)
+@app.route("/invite-bot/")
+def invite_bot():
+    return discord.create_session(scope=["bot"], permissions=8, guild_id=464488012328468480, disable_guild_select=True)
 
 
-@app.route("/invite_oauth/")
+@app.route("/invite-oauth/")
 def invite_oauth():
-    return discord.create_session(scope=['bot', 'identify'], permissions=8)
+    return discord.create_session(scope=["bot", "identify"], permissions=8)
 
 
 @app.route("/callback/")
 def callback():
-    params = discord.callback()
-    redirect_to = params.get("redirect", "/")
+    data = discord.callback()
+    redirect_to = data.get("redirect", "/")
     return redirect(redirect_to)
 
 

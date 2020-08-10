@@ -64,8 +64,8 @@ class DiscordOAuth2HttpClient(abc.ABC):
     def get_authorization_token() -> dict:
         raise NotImplementedError
 
-    def _fetch_token(self):
-        discord = self._make_session(state=session.get("DISCORD_OAUTH2_STATE"))
+    def _fetch_token(self, state):
+        discord = self._make_session(state=state)
         return discord.fetch_token(
             configs.DISCORD_TOKEN_URL,
             client_secret=self.__client_secret,
