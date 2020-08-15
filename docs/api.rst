@@ -8,11 +8,11 @@ attributes and available methods.
 Discord OAuth2 Client
 ---------------------
 
-.. autoclass:: flask_discord.DiscordOAuth2Session
+.. autoclass:: quart_discord.DiscordOAuth2Session
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord._http.DiscordOAuth2HttpClient
+.. autoclass:: quart_discord._http.DiscordOAuth2HttpClient
     :members:
     :inherited-members:
 
@@ -20,23 +20,23 @@ Discord OAuth2 Client
 Models
 ------
 
-.. autoclass:: flask_discord.models.Guild
+.. autoclass:: quart_discord.models.Guild
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord.models.User
+.. autoclass:: quart_discord.models.User
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord.models.Bot
+.. autoclass:: quart_discord.models.Bot
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord.models.Integration
+.. autoclass:: quart_discord.models.Integration
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord.models.UserConnection
+.. autoclass:: quart_discord.models.UserConnection
     :members:
     :inherited-members:
 
@@ -44,20 +44,20 @@ Models
 Utilities
 ---------
 
-.. autodecorator:: flask_discord.requires_authorization
+.. autodecorator:: quart_discord.requires_authorization
 
 
 Exceptions
 ----------
 
-.. autoclass:: flask_discord.HttpException
+.. autoclass:: quart_discord.HttpException
     :members:
 
-.. autoclass:: flask_discord.RateLimited
+.. autoclass:: quart_discord.RateLimited
     :members:
 
-.. autoclass:: flask_discord.Unauthorized
+.. autoclass:: quart_discord.Unauthorized
     :members:
 
-.. autoclass:: flask_discord.AccessDenied
+.. autoclass:: quart_discord.AccessDenied
     :members:

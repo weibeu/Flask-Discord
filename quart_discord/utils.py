@@ -3,7 +3,7 @@
 import functools
 
 from . import exceptions
-from flask import current_app
+from quart import current_app
 
 
 class JSONBool(object):
@@ -35,7 +35,7 @@ def json_bool(value):
 # Decorators.
 
 def requires_authorization(view):
-    """A decorator for flask views which raises exception :py:class:`flask_discord.Unauthorized` if the user
+    """A decorator for quart views which raises exception :py:class:`quart_discord.Unauthorized` if the user
     is not authorized from Discord OAuth2.
 
     """

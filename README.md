@@ -1,24 +1,24 @@
-# Flask-Discord
-[![PyPI](https://img.shields.io/pypi/v/Flask-Discord?style=for-the-badge)](https://pypi.org/project/Flask-Discord/) [![Read the Docs](https://img.shields.io/readthedocs/flask-discord?style=for-the-badge)](https://flask-discord.readthedocs.io/en/latest/) [![Discord](https://img.shields.io/discord/690878977920729177?label=Discord%20Community&logo=Discord&style=for-the-badge)](https://discord.gg/7CrQEyP)
+# Quart-Discord
+[![PyPI](https://img.shields.io/pypi/v/Quart-Discord?style=for-the-badge)](https://pypi.org/project/Quart-Discord/) [![Read the Docs](https://img.shields.io/readthedocs/quart-discord?style=for-the-badge)](https://quart-discord.readthedocs.io/en/latest/) 
 
-Discord OAuth2 extension for Flask.
+Discord OAuth2 extension for Quart.
 
 
 ### Installation
 To install current latest release you can use following command:
 ```sh
-python3 -m pip install Flask-Discord
+python3 -m pip install Quart-Discord
 ```
 
 
 ### Basic Example
 ```python
-from flask import Flask, redirect, url_for
-from flask_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
+from quart import Quart, redirect, url_for
+from quart_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
 
-app = Flask(__name__)
+app = Quart(__name__)
 
-app.secret_key = b"random bytes representing flask secret key"
+app.secret_key = b"random bytes representing quart secret key"
 
 app.config["DISCORD_CLIENT_ID"] = 490732332240863233    # Discord client ID.
 app.config["DISCORD_CLIENT_SECRET"] = ""                # Discord client secret.
@@ -67,7 +67,7 @@ For an example to the working application, check [`test_app.py`](tests/test_app.
 
 
 ### Requirements
-* Flask
+* Quart
 * requests_oauthlib
 * cachetools
 * discord.py
@@ -77,4 +77,4 @@ For an example to the working application, check [`test_app.py`](tests/test_app.
 Head over to [documentation] for full API reference. 
 
 
-[documentation]: https://flask-discord.readthedocs.io/en/latest/
+[documentation]: https://quart-discord.readthedocs.io/en/latest/

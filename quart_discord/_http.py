@@ -8,14 +8,14 @@ import abc
 from . import configs
 from . import exceptions
 
-from flask import session, request
+from quart import session, request
 from collections.abc import Mapping
 from requests_oauthlib import OAuth2Session
 
 
 class DiscordOAuth2HttpClient(abc.ABC):
     """An OAuth2 http abstract base class providing some factory methods.
-    This class is meant to be overridden by :py:class:`flask_discord.DiscordOAuth2Session` and should not be
+    This class is meant to be overridden by :py:class:`quart_discord.DiscordOAuth2Session` and should not be
     used directly.
 
     """
@@ -42,14 +42,14 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
     @property
     def user_id(self) -> typing.Union[int, None]:
-        """A property which returns Discord user ID if it exists in flask :py:attr:`flask.session` object.
+        """A property which returns Discord user ID if it exists in quart :py:attr:`quart.session` object.
 
         Returns
         -------
         int
             The Discord user ID of current user.
         None
-            If the user ID doesn't exists in flask :py:attr:`flask.session`.
+            If the user ID doesn't exists in quart :py:attr:`quart.session`.
 
         """
         return session.get("DISCORD_USER_ID")
@@ -130,10 +130,10 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         Raises
         ------
-        flask_discord.Unauthorized
-            Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
-        flask_discord.RateLimited
-            Raises an instance of :py:class:`flask_discord.RateLimited` if application is being rate limited by Discord.
+        quart_discord.Unauthorized
+            Raises :py:class:`quart_discord.Unauthorized` if current user is not authorized.
+        quart_discord.RateLimited
+            Raises an instance of :py:class:`quart_discord.RateLimited` if application is being rate limited by Discord.
 
         """
         route = configs.DISCORD_API_BASE_URL + route
@@ -168,10 +168,10 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         Raises
         ------
-        flask_discord.Unauthorized
-            Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
-        flask_discord.RateLimited
-            Raises an instance of :py:class:`flask_discord.RateLimited` if application is being rate limited by Discord.
+        quart_discord.Unauthorized
+            Raises :py:class:`quart_discord.Unauthorized` if current user is not authorized.
+        quart_discord.RateLimited
+            Raises an instance of :py:class:`quart_discord.RateLimited` if application is being rate limited by Discord.
 
         """
         headers = {"Authorization": f"Bot {self.__bot_token}"}

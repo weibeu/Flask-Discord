@@ -1,10 +1,10 @@
 import os
 
-from flask import Flask, redirect, url_for
-from flask_discord import DiscordOAuth2Session, requires_authorization
+from quart import Quart, redirect, url_for
+from quart_discord import DiscordOAuth2Session, requires_authorization
 
 
-app = Flask(__name__)
+app = Quart(__name__)
 
 app.secret_key = b"%\xe0'\x01\xdeH\x8e\x85m|\xb3\xffCN\xc9g"
 

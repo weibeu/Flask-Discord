@@ -5,7 +5,7 @@ from .. import exceptions
 from .base import DiscordModelsBase
 from .connections import UserConnection
 
-from flask import current_app, session
+from quart import current_app, session
 
 
 class User(DiscordModelsBase):
@@ -48,7 +48,7 @@ class User(DiscordModelsBase):
         An integer representing the
         `type of nitro subscription <https://discordapp.com/developers/docs/resources/user#user-object-premium-types>`_.
     connections : list
-        A list of :py:class:`flask_discord.UserConnection` instances. These are cached and this list might be empty.
+        A list of :py:class:`quart_discord.UserConnection` instances. These are cached and this list might be empty.
 
     """
 
@@ -69,12 +69,12 @@ class User(DiscordModelsBase):
         self.premium_type = self._payload.get("premium_type")
 
         # Few properties which are intended to be cached.
-        self._guilds = None         # Mapping of guild ID to flask_discord.models.Guild(...).
-        self.connections = None     # List of flask_discord.models.UserConnection(...).
+        self._guilds = None         # Mapping of guild ID to quart_discord.models.Guild(...).
+        self.connections = None     # List of quart_discord.models.UserConnection(...).
 
     @property
     def guilds(self):
-        """A cached mapping of user's guild ID to :py:class:`flask_discord.Guild`. The guilds are cached when the first
+        """A cached mapping of user's guild ID to :py:class:`quart_discord.Guild`. The guilds are cached when the first
         API call for guilds is requested so it might be an empty dict.
 
         """
@@ -133,10 +133,10 @@ class User(DiscordModelsBase):
         ----------
         guilds : bool
             A boolean indicating if user's guilds should be cached or not. Defaults to ``False``. If chose to not
-            cache, user's guilds can always be obtained from :py:func:`flask_discord.Guilds.fetch_from_api()`.
+            cache, user's guilds can always be obtained from :py:func:`quart_discord.Guilds.fetch_from_api()`.
         connections : bool
             A boolean indicating if user's connections should be cached or not. Defaults to ``False``. If chose to not
-            cache, user's connections can always be obtained from :py:func:`flask_discord.Connections.fetch_from_api()`.
+            cache, user's connections can always be obtained from :py:func:`quart_discord.Connections.fetch_from_api()`.
 
         Returns
         -------
@@ -161,7 +161,7 @@ class User(DiscordModelsBase):
 
         Returns
         -------
-        flask_discord.User
+        quart_discord.User
             An user instance if it exists in internal cache.
         None
             If the current doesn't exists in internal cache.
@@ -184,8 +184,8 @@ class User(DiscordModelsBase):
 
         Raises
         ------
-        flask_discord.Unauthorized
-            Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
+        quart_discord.Unauthorized
+            Raises :py:class:`quart_discord.Unauthorized` if current user is not authorized.
 
         """
         try:
@@ -201,7 +201,7 @@ class User(DiscordModelsBase):
         Returns
         -------
         list
-            List of :py:class:`flask_discord.Guilds` instances.
+            List of :py:class:`quart_discord.Guilds` instances.
 
         """
         self._guilds = {guild.id: guild for guild in Guild.fetch_from_api(cache=False)}
@@ -214,7 +214,7 @@ class User(DiscordModelsBase):
         Returns
         -------
         list
-            A list of :py:class:`flask_discord.UserConnection` instances.
+            A list of :py:class:`quart_discord.UserConnection` instances.
 
         """
         self.connections = UserConnection.fetch_from_api(cache=False)

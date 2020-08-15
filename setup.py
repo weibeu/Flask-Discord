@@ -1,8 +1,8 @@
 """
-Flask-Discord
+Quart-Discord
 -------------
 
-An Discord OAuth2 flask extension.
+An Discord OAuth2 quart extension.
 """
 
 import re
@@ -12,12 +12,12 @@ from setuptools import setup, find_packages
 
 
 def __get_version():
-    with open("flask_discord/__init__.py") as package_init_file:
+    with open("quart_discord/__init__.py") as package_init_file:
         return re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', package_init_file.read(), re.MULTILINE).group(1)
 
 
 requirements = [
-    'Flask',
+    'Quart',
     'pyjwt',
     'oauthlib',
     'requests_oauthlib',
@@ -40,13 +40,13 @@ extra_requirements = {
 
 
 setup(
-    name='Flask-Discord',
+    name='Quart-Discord',
     version=__get_version(),
-    url='https://github.com/thec0sm0s/Flask-Discord',
+    url='https://github.com/quart/Quart-Discord',
     license='MIT',
     author='□ | The Cosmos',
     author_email='deepakrajko14@gmail.com',
-    description='Discord OAuth2 extension for Flask.',
+    description='Discord OAuth2 extension for Quart.',
     long_description=__doc__,
     packages=find_packages(),
     zip_safe=False,
@@ -55,7 +55,7 @@ setup(
     install_requires=requirements,
     extra_requirements=extra_requirements,
     classifiers=[
-        'Framework :: Flask',
+        'Framework :: Quart',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
