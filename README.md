@@ -29,24 +29,24 @@ discord = DiscordOAuth2Session(app)
 
 
 @app.route("/login/")
-def login():
+async def login():
     return discord.create_session()
 	
 
 @app.route("/callback/")
-def callback():
-    discord.callback()
+async def callback():
+    await discord.callback()
     return redirect(url_for(".me"))
 
 
 @app.errorhandler(Unauthorized)
-def redirect_unauthorized(e):
+async def redirect_unauthorized(e):
     return redirect(url_for("login"))
 
 	
 @app.route("/me/")
 @requires_authorization
-def me():
+async def me():
     user = discord.fetch_user()
     return f"""
     <html>

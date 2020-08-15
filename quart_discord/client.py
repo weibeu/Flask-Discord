@@ -137,14 +137,14 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         """
         return session.get("DISCORD_OAUTH2_TOKEN")
 
-    def callback(self):
+    async def callback(self):
         """A method which should be always called after completing authorization code grant process
         usually in callback view.
         It fetches the authorization token and saves it quart
         `session <https://pgjones.gitlab.io/quart/reference/source/quart.sessions.html#quart.sessions.Session>`_ object.
 
         """
-        error = request.values.get("error")
+        error = await request.values.get("error")
         if error:
             if error == "access_denied":
                 raise exceptions.AccessDenied()
