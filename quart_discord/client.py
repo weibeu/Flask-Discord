@@ -144,7 +144,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         `session <https://pgjones.gitlab.io/quart/reference/source/quart.sessions.html#quart.sessions.Session>`_ object.
 
         """
-        error = await request.values.get("error")
+        error = (await request.values).get("error")
         if error:
             if error == "access_denied":
                 raise exceptions.AccessDenied()
