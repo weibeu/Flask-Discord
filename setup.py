@@ -55,7 +55,6 @@ setup(
     install_requires=requirements,
     extra_requirements=extra_requirements,
     classifiers=[
-        'Framework :: Quart',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
