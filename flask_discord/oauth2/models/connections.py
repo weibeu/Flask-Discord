@@ -59,19 +59,20 @@ class UserConnection(DiscordModelsBase):
     @classmethod
     def fetch_from_api(cls, cache=True):
         """A class method which returns an instance or list of instances of this model by implicitly making an
-        API call to Discord. If an instance of :py:class:`flask_discord.User` exists in the users internal cache
-        who are attached to these connections then, the cached property :py:attr:`flask_discord.User.connections`
-        is updated.
+        API call to Discord. If an instance of :py:class:`flask_discord.oauth2.models.User` exists in the
+        users internal cache who are attached to these connections then, the cached property
+        :py:attr:`flask_discord.oauth2.models.User.connections` is updated.
 
         Parameters
         ----------
         cache : bool
-            Determines if the :py:attr:`flask_discord.User.guilds` cache should be updated with the new guilds.
+            Determines if the :py:attr:`flask_discord.oauth2.models.User.guilds` cache should be
+            updated with the new guilds.
 
         Returns
         -------
-        list[flask_discord.UserConnection, ...]
-            List of instances of :py:class:`flask_discord.UserConnection` to which this user belongs.
+        list[flask_discord.oauth2.models.UserConnection, ...]
+            List of instances of :py:class:`flask_discord.oauth2.models.UserConnection` to which this user belongs.
 
         """
         connections = super().fetch_from_api()

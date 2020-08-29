@@ -1,7 +1,7 @@
-from .exceptions import *
-from .utils import *
+from .oauth2.client import DiscordOAuth2Session
 
-from .client import DiscordOAuth2Session
+from .utils import *
+from .exceptions import *
 
 
 __all__ = [

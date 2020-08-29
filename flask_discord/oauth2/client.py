@@ -2,9 +2,10 @@ import jwt
 import typing
 import discord
 
-from . import configs, _http, models, utils, exceptions
+from . import _http, models
 
 from oauthlib.common import add_params_to_uri
+from flask_discord import configs, utils, exceptions
 from flask import request, session, redirect, current_app
 
 
@@ -12,7 +13,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
     """Main client class representing hypothetical OAuth2 session with discord.
     It uses Flask `session <http://flask.pocoo.org/docs/1.0/api/#flask.session>`_ local proxy object
     to save state, authorization token and keeps record of users sessions across different requests.
-    This class inherits :py:class:`flask_discord._http.DiscordOAuth2HttpClient` class.
+    This class inherits :py:class:`flask_discord.oauth2._http.DiscordOAuth2HttpClient` class.
 
     Parameters
     ----------
@@ -71,7 +72,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             <https://discordapp.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
         data : dict, optional
             A mapping of your any custom data which you want to access after authorization grant. Use
-            `:py:meth:flask_discord.DiscordOAuth2Session.callback` to retrieve this data in your callback view.
+            `:py:meth:flask_discord.oauth2.DiscordOAuth2Session.callback` to retrieve this data in your callback view.
         prompt : bool, optional
             Determines if the OAuth2 grant should be explicitly prompted and re-approved. Defaults to True.
             Specify False for implicit grant which will skip the authorization screen and redirect to redirect URI.
@@ -122,7 +123,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         Meaning by default, it uses client side session handling.
 
         Override this method if you want to handle the user's session server side. If this method is overridden then,
-        you must also override :py:meth:`flask_discord.DiscordOAuth2Session.get_authorization_token`.
+        you must also override :py:meth:`flask_discord.oauth2.DiscordOAuth2Session.get_authorization_token`.
 
         """
         session["DISCORD_OAUTH2_TOKEN"] = token
@@ -130,7 +131,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
     @staticmethod
     def get_authorization_token() -> dict:
         """A static method which returns a dict containing Discord OAuth2 token and other secrets which was saved
-        previously by `:py:meth:`flask_discord.DiscordOAuth2Session.save_authorization_token` from user's cookies.
+        by `:py:meth:`flask_discord.oauth2.DiscordOAuth2Session.save_authorization_token` from user's cookies.
 
         You must override this method if you are implementing server side session handling.
 
@@ -183,7 +184,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         Returns
         -------
-        flask_discord.models.User
+        flask_discord.oauth2.models.User
 
         """
         return models.User.get_from_cache() or models.User.fetch_from_api()
@@ -196,7 +197,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         Returns
         -------
         list
-            List of :py:class:`flask_discord.models.UserConnection` objects.
+            List of :py:class:`flask_discord.oauth2.models.UserConnection` objects.
 
         """
         user = models.User.get_from_cache()
@@ -216,7 +217,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         Returns
         -------
         list
-            List of :py:class:`flask_discord.models.Guild` objects.
+            List of :py:class:`flask_discord.oauth2.models.Guild` objects.
 
         """
         user = models.User.get_from_cache()

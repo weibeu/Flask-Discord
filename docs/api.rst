@@ -8,11 +8,11 @@ attributes and available methods.
 Discord OAuth2 Client
 ---------------------
 
-.. autoclass:: flask_discord.DiscordOAuth2Session
+.. autoclass:: flask_discord.oauth2.DiscordOAuth2Session
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord._http.DiscordOAuth2HttpClient
+.. autoclass:: flask_discord.oauth2._http.DiscordOAuth2HttpClient
     :members:
     :inherited-members:
 
@@ -20,23 +20,23 @@ Discord OAuth2 Client
 Models
 ------
 
-.. autoclass:: flask_discord.models.Guild
+.. autoclass:: flask_discord.oauth2.models.Guild
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord.models.User
+.. autoclass:: flask_discord.oauth2.models.User
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord.models.Bot
+.. autoclass:: flask_discord.oauth2.models.Bot
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord.models.Integration
+.. autoclass:: flask_discord.oauth2.models.Integration
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord.models.UserConnection
+.. autoclass:: flask_discord.oauth2.models.UserConnection
     :members:
     :inherited-members:
 

@@ -1,8 +1,9 @@
 from .base import DiscordModelsBase
-from flask import current_app
 
 import discord
-from .. import configs
+
+from flask import current_app
+from flask_discord import configs
 
 
 class Guild(DiscordModelsBase):
@@ -68,18 +69,20 @@ class Guild(DiscordModelsBase):
     @classmethod
     def fetch_from_api(cls, cache=True):
         """A class method which returns an instance or list of instances of this model by implicitly making an
-        API call to Discord. If an instance of :py:class:`flask_discord.User` exists in the users internal cache
-        who belongs to these guilds then, the cached property :py:attr:`flask_discord.User.guilds` is updated.
+        API call to Discord. If an instance of :py:class:`flask_discord.oauth2.models.Guild` exists in the
+        users internal cache who belongs to these guilds then, the cached property
+        :py:attr:`flask_discord.oauth2.models.User.guilds` is updated.
 
         Parameters
         ----------
         cache : bool
-            Determines if the :py:attr:`flask_discord.User.guilds` cache should be updated with the new guilds.
+            Determines if the :py:attr:`flask_discord.oauth2.models.User.guilds` cache should be updated with
+            the new guilds.
 
         Returns
         -------
-        list[flask_discord.Guild, ...]
-            List of instances of :py:class:`flask_discord.Guild` to which this user belongs.
+        list[flask_discord.oauth2.models.Guild, ...]
+            List of instances of :py:class:`flask_discord.oauth2.models.Guild` to which this user belongs.
 
         """
         guilds = super().fetch_from_api()

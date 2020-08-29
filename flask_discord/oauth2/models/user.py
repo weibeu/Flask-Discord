@@ -1,10 +1,9 @@
-from .. import configs
-
-from .guild import Guild
-from .. import exceptions
 from .base import DiscordModelsBase
+from .guild import Guild
 from .connections import UserConnection
 
+from flask_discord import configs
+from flask_discord import exceptions
 from flask import current_app, session
 
 
@@ -74,8 +73,8 @@ class User(DiscordModelsBase):
 
     @property
     def guilds(self):
-        """A cached mapping of user's guild ID to :py:class:`flask_discord.Guild`. The guilds are cached when the first
-        API call for guilds is requested so it might be an empty dict.
+        """A cached mapping of user's guild ID to :py:class:`flask_discord.oauth2.models.Guild`.
+        The guilds are cached when the first API call for guilds is requested so it might be an empty dict.
 
         """
         try:
@@ -133,10 +132,11 @@ class User(DiscordModelsBase):
         ----------
         guilds : bool
             A boolean indicating if user's guilds should be cached or not. Defaults to ``False``. If chose to not
-            cache, user's guilds can always be obtained from :py:func:`flask_discord.Guilds.fetch_from_api()`.
+            cache, user's guilds can be obtained from :py:func:`flask_discord.oauth2.models.Guilds.fetch_from_api()`.
         connections : bool
-            A boolean indicating if user's connections should be cached or not. Defaults to ``False``. If chose to not
-            cache, user's connections can always be obtained from :py:func:`flask_discord.Connections.fetch_from_api()`.
+            A boolean indicating if user's connections should be cached or not. Defaults to ``False``.
+            If chose to notvcache, user's connections can be obtained from
+            :py:func:`flask_discord.oauth2.models.UserConnection.fetch_from_api()`.
 
         Returns
         -------
@@ -161,7 +161,7 @@ class User(DiscordModelsBase):
 
         Returns
         -------
-        flask_discord.User
+        flask_discord.oauth2.models.User
             An user instance if it exists in internal cache.
         None
             If the current doesn't exists in internal cache.
@@ -201,7 +201,7 @@ class User(DiscordModelsBase):
         Returns
         -------
         list
-            List of :py:class:`flask_discord.Guilds` instances.
+            List of :py:class:`flask_discord.oauth2.models.Guilds` instances.
 
         """
         self._guilds = {guild.id: guild for guild in Guild.fetch_from_api(cache=False)}
@@ -214,7 +214,7 @@ class User(DiscordModelsBase):
         Returns
         -------
         list
-            A list of :py:class:`flask_discord.UserConnection` instances.
+            A list of :py:class:`flask_discord.oauth2.models.UserConnection` instances.
 
         """
         self.connections = UserConnection.fetch_from_api(cache=False)

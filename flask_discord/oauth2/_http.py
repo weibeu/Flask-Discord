@@ -5,8 +5,8 @@ import json
 import os
 import abc
 
-from . import configs
-from . import exceptions
+from flask_discord import configs
+from flask_discord import exceptions
 
 from flask import session, request
 from collections.abc import Mapping
