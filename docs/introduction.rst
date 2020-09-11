@@ -54,6 +54,8 @@ in exchange for fetching user's details and display them on web page.
     app = Flask(__name__)
 
     app.secret_key = b"random bytes representing flask secret key"
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"    # !! Only in development environment.
+    # OAuth2 must make use of HTTPS in production environment.
 
     app.config["DISCORD_CLIENT_ID"] = 490732332240863233    # Discord client ID.
     app.config["DISCORD_CLIENT_SECRET"] = ""                # Discord client secret.
