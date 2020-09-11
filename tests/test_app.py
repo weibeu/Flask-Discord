@@ -7,6 +7,7 @@ from flask_discord import DiscordOAuth2Session, requires_authorization
 app = Flask(__name__)
 
 app.secret_key = b"%\xe0'\x01\xdeH\x8e\x85m|\xb3\xffCN\xc9g"
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"    # !! Only in development environment.
 
 app.config["DISCORD_CLIENT_ID"] = 490732332240863233
 app.config["DISCORD_CLIENT_SECRET"] = os.getenv("DISCORD_CLIENT_SECRET")
