@@ -161,7 +161,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         ).request(method, route, data, **kwargs) if oauth else requests.request(method, route, data=data, **kwargs)
 
         if response.status_code == 401:
-            raise exceptions.Unauthorized
+            raise exceptions.Unauthorized()
         if response.status_code == 429:
             raise exceptions.RateLimited(response)
 
