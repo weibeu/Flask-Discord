@@ -2,7 +2,6 @@ import cachetools
 import requests
 import typing
 import json
-import os
 import abc
 
 from . import configs
@@ -59,8 +58,6 @@ class DiscordOAuth2HttpClient(abc.ABC):
         ) if self.users_cache is None else self.users_cache
         if not issubclass(self.users_cache.__class__, Mapping):
             raise ValueError("Instance users_cache must be a mapping like object.")
-        if "http://" in self.redirect_uri:
-            os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
         app.discord = self
 
     @property
