@@ -54,6 +54,8 @@ in exchange for fetching user's details and display them on web page.
     app = Flask(__name__)
 
     app.secret_key = b"random bytes representing flask secret key"
+    # OAuth2 must make use of HTTPS in production environment.
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"      # !! Only in development environment.
 
     app.config["DISCORD_CLIENT_ID"] = 490732332240863233    # Discord client ID.
     app.config["DISCORD_CLIENT_SECRET"] = ""                # Discord client secret.
@@ -97,3 +99,26 @@ in exchange for fetching user's details and display them on web page.
 
     if __name__ == "__main__":
         app.run()
+
+**Lazy initialization with flask factory pattern**
+
+.. code-block:: python3
+
+    from flask_discord import DiscordOAuth2Session
+
+    discord = DiscordOAuth2Session()
+
+    def get_app():
+        app = Flask(__name__)
+
+        app.secret_key = b"random bytes representing flask secret key"
+        # OAuth2 must make use of HTTPS in production environment.
+        os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"      # !! Only in development environment.
+        app.config["DISCORD_CLIENT_ID"] = 490732332240863233    # Discord client ID.
+        app.config["DISCORD_CLIENT_SECRET"] = ""                # Discord client secret.
+        app.config["DISCORD_REDIRECT_URI"] = ""                 # URL to your callback endpoint.
+        app.config["DISCORD_BOT_TOKEN"] = ""                    # Required to access BOT resources.
+
+        discord.init_app(app)
+
+        return app

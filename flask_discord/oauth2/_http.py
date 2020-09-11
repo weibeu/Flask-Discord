@@ -2,7 +2,6 @@ import cachetools
 import requests
 import typing
 import json
-import os
 import abc
 
 from flask_discord import configs
@@ -26,18 +25,39 @@ class DiscordOAuth2HttpClient(abc.ABC):
         "DISCORD_OAUTH2_TOKEN",
     ]
 
-    def __init__(self, app, client_id=None, client_secret=None, redirect_uri=None, bot_token=None, users_cache=None):
-        self.client_id = client_id or app.config["DISCORD_CLIENT_ID"]
-        self.__client_secret = client_secret or app.config["DISCORD_CLIENT_SECRET"]
-        self.redirect_uri = redirect_uri or app.config["DISCORD_REDIRECT_URI"]
-        self.__bot_token = bot_token or app.config.get("DISCORD_BOT_TOKEN", str())
+    def __init__(
+            self, app=None,
+            client_id=None, client_secret=None, redirect_uri=None,
+            bot_token=None, users_cache=None
+    ):
+        self.client_id = client_id
+        self.__client_secret = client_secret
+        self.redirect_uri = redirect_uri
+        self.__bot_token = bot_token
+        self.users_cache = users_cache
+
+        if app is not None:
+            self.init_app(app)
+
+    def init_app(self, app):
+        """A method to lazily initialize the application.
+        Use this when you're using flask factory pattern to create your instances of your flask application.
+
+        Parameters
+        ----------
+        app : Flask
+            An instance of your `flask application <http://flask.pocoo.org/docs/1.0/api/#flask.Flask>`_.
+
+        """
+        self.client_id = self.client_id or app.config["DISCORD_CLIENT_ID"]
+        self.__client_secret = self.__client_secret or app.config["DISCORD_CLIENT_SECRET"]
+        self.redirect_uri = self.redirect_uri or app.config["DISCORD_REDIRECT_URI"]
+        self.__bot_token = self.__bot_token or app.config.get("DISCORD_BOT_TOKEN", str())
         self.users_cache = cachetools.LFUCache(
             app.config.get("DISCORD_USERS_CACHE_MAX_LIMIT", configs.DISCORD_USERS_CACHE_DEFAULT_MAX_LIMIT)
-        ) if users_cache is None else users_cache
+        ) if self.users_cache is None else self.users_cache
         if not issubclass(self.users_cache.__class__, Mapping):
             raise ValueError("Instance users_cache must be a mapping like object.")
-        if "http://" in self.redirect_uri:
-            os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
         app.discord = self
 
     @property
@@ -141,7 +161,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         ).request(method, route, data, **kwargs) if oauth else requests.request(method, route, data=data, **kwargs)
 
         if response.status_code == 401:
-            raise exceptions.Unauthorized
+            raise exceptions.Unauthorized()
         if response.status_code == 429:
             raise exceptions.RateLimited(response)
 

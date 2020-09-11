@@ -13,12 +13,15 @@ python3 -m pip install Flask-Discord
 
 ### Basic Example
 ```python
+import os
+
 from flask import Flask, redirect, url_for
 from flask_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
 
 app = Flask(__name__)
 
 app.secret_key = b"random bytes representing flask secret key"
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"      # !! Only in development environment.
 
 app.config["DISCORD_CLIENT_ID"] = 490732332240863233    # Discord client ID.
 app.config["DISCORD_CLIENT_SECRET"] = ""                # Discord client secret.
