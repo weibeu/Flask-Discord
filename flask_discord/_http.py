@@ -28,13 +28,15 @@ class DiscordOAuth2HttpClient(abc.ABC):
     def __init__(
             self, app=None,
             client_id=None, client_secret=None, redirect_uri=None,
-            bot_token=None, users_cache=None
+            bot_token=None, users_cache=None, proxy=None, proxy_auth=None
     ):
         self.client_id = client_id
         self.__client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.__bot_token = bot_token
         self.users_cache = users_cache
+        self.proxy = proxy
+        self.proxy_auth = proxy_auth
 
         if app is not None:
             self.init_app(app)
@@ -58,6 +60,8 @@ class DiscordOAuth2HttpClient(abc.ABC):
         ) if self.users_cache is None else self.users_cache
         if not issubclass(self.users_cache.__class__, Mapping):
             raise ValueError("Instance users_cache must be a mapping like object.")
+        self.proxy = self.proxy or app.config.get("DISCORD_PROXY_SETTINGS")
+        self.proxy_auth = self.proxy_auth or app.config.get("DISCORD_PROXY_AUTH_SETTINGS")
         app.discord = self
 
     @property
@@ -157,6 +161,12 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         """
         route = configs.DISCORD_API_BASE_URL + route
+
+        if self.proxy is not None:
+            kwargs["proxy"] = self.proxy
+        if self.proxy_auth is not None:
+            kwargs["proxy_auth"] = self.proxy_auth
+
         response = self._make_session(
         ).request(method, route, data, **kwargs) if oauth else requests.request(method, route, data=data, **kwargs)
 
