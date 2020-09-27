@@ -19,7 +19,8 @@ Reporting New Issues
 
 Feel free to drop a new issue whenever you feel anything could be potentially be wrong with the library or if you're just stuck somewhere.
 
-Make sure to provide following information with your post:
+Make sure to include following information with your post.
+
 - The expected workflow you were trying to achieve.
 - If possible, include few steps to reproduce the situation.
 - What actually happened or the full traceback.
