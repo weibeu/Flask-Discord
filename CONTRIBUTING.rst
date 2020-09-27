@@ -34,11 +34,11 @@ Minimal Style Guide
 
 You may or may not find it much relevant but I prefer few conventions and code style, some of which are list below.
 
-- Make use of present tense for your commit messages. For example, use "Fix state mismatch error" rather than ~~"Fixed state mismatch error"~~.
+- Make use of present tense for your commit messages. For example, use "Fix state mismatch error" rather than "Fixed state mismatch error".
 - Please do follow the Python `PEP 8`_ style guide.
 - You may or may not include docstrings. Although it's required but can also be added later on after making the PR.
 - Prefer prefixing the commit messages with emojis. Check the `Emoji Usage Reference`_ for info on which emoji to use.
-- Explicitly mention and inherit ``object`` when writing classes. For example, prefer `class Foo(object): ...` over ~~class Foo: ...~~.
+- Explicitly mention and inherit ``object`` when writing classes. For example, prefer `class Foo(object): ...` over ``class Foo: ...``.
 - Prefer relative imports over absolute imports.
 
 Emoji Usage Reference
