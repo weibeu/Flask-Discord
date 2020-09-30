@@ -138,7 +138,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         """
         route = configs.DISCORD_API_BASE_URL + route
         discord = await self._make_session()
-        async with (discord.request(
+        async with (await discord.request(
                 method, route, data, **kwargs
         ) if oauth else aiohttp.request(method, route, data=data, **kwargs)) as response:
 
