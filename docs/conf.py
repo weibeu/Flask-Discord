@@ -20,8 +20,8 @@ sys.path.append('../quart_discord/')
 # -- Project information -----------------------------------------------------
 
 project = 'Quart-Discord'
-copyright = '2020, □ | The Cosmos'
-author = '□ | The Cosmos'
+copyright = '2020, Philip Dowie'
+author = 'Philip Dowie'
 
 with open('../quart_discord/__init__.py') as f:
     ver = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)

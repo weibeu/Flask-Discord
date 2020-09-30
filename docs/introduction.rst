@@ -32,12 +32,12 @@ Installing
 You can install Quart-Discord directly from PyPI using PIP and following command
 in shell or command prompt: ::
 
-    python3 -m pip install -U https://github.com/thec0sm0s/Flask-Discord.git@quart
+    python3 -m pip install -U Quart-Discord
 
 You can also install the latest development version (**maybe unstable/broken**) by
 using following command: ::
 
-    python3 -m pip install -U https://github.com/thec0sm0s/Flask-Discord.git@quart
+    python3 -m pip install -U git+https://github.com/jnawk/Quart-Discord.git
 
 
 Basic Usage

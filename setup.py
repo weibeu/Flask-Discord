@@ -41,10 +41,10 @@ extra_requirements = {
 setup(
     name='Quart-Discord',
     version=__get_version(),
-    url='https://github.com/thec0sm0s/Flask-Discord/tree/quart',
+    url='https://github.com/jnawk/Quart-Discord',
     license='MIT',
     author='Philip Dowie',
-    author_email='deepakrajko14@gmail.com',
+    author_email='philip@jnawk.nz',
     description='Discord OAuth2 extension for Quart.',
     long_description=__doc__,
     packages=find_packages(),
