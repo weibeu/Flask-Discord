@@ -57,7 +57,7 @@ class UserConnection(DiscordModelsBase):
         return bool(self.visibility)
 
     @classmethod
-    def fetch_from_api(cls, cache=True):
+    async def fetch_from_api(cls, cache=True):
         """A class method which returns an instance or list of instances of this model by implicitly making an
         API call to Discord. If an instance of :py:class:`quart_discord.User` exists in the users internal cache
         who are attached to these connections then, the cached property :py:attr:`quart_discord.User.connections`
@@ -74,7 +74,7 @@ class UserConnection(DiscordModelsBase):
             List of instances of :py:class:`quart_discord.UserConnection` to which this user belongs.
 
         """
-        connections = super().fetch_from_api()
+        connections = await super().fetch_from_api()
 
         if cache:
             user = current_app.discord.users_cache.get(current_app.discord.user_id)

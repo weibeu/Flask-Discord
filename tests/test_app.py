@@ -21,7 +21,7 @@ HYPERLINK = '<a href="{}">{}</a>'
 
 @app.route("/")
 async def index():
-    if not discord.authorized:
+    if not await discord.authorized():
         return f"""
         {HYPERLINK.format(url_for(".login"), "Login")} <br />
         {HYPERLINK.format(url_for(".login_with_data"), "Login with custom data")} <br />
@@ -39,22 +39,24 @@ async def index():
 
 @app.route("/login/")
 async def login():
-    return discord.create_session()
+    return await discord.create_session()
 
 
 @app.route("/login-data/")
 async def login_with_data():
-    return discord.create_session(data=dict(redirect="/me/", coupon="15off", number=15, zero=0, status=False))
+    return await discord.create_session(data=dict(redirect="/me/", coupon="15off", number=15, zero=0, status=False))
 
 
 @app.route("/invite-bot/")
 async def invite_bot():
-    return discord.create_session(scope=["bot"], permissions=8, guild_id=464488012328468480, disable_guild_select=True)
+    return await discord.create_session(
+        scope=["bot"], permissions=8, guild_id=464488012328468480, disable_guild_select=True
+    )
 
 
 @app.route("/invite-oauth/")
 async def invite_oauth():
-    return discord.create_session(scope=["bot", "identify"], permissions=8)
+    return await discord.create_session(scope=["bot", "identify"], permissions=8)
 
 
 @app.route("/callback/")
@@ -66,7 +68,7 @@ async def callback():
 
 @app.route("/me/")
 async def me():
-    user = discord.fetch_user()
+    user = await discord.fetch_user()
     return f"""
 <html>
 <head>
@@ -84,20 +86,20 @@ async def me():
 
 @app.route("/me/guilds/")
 async def user_guilds():
-    guilds = discord.fetch_guilds()
+    guilds = await discord.fetch_guilds()
     return "<br />".join([f"[ADMIN] {g.name}" if g.permissions.administrator else g.name for g in guilds])
 
 
 @app.route("/add_to/<int:guild_id>/")
 async def add_to_guild(guild_id):
-    user = discord.fetch_user()
-    return user.add_to_guild(guild_id)
+    user = await discord.fetch_user()
+    return await user.add_to_guild(guild_id)
 
 
 @app.route("/me/connections/")
 async def my_connections():
-    user = discord.fetch_user()
-    connections = discord.fetch_connections()
+    user = await discord.fetch_user()
+    connections = await discord.fetch_connections()
     return f"""
 <html>
 <head>

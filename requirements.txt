@@ -1,8 +1,9 @@
 Quart
 pyjwt
 requests
+aiohttp
 oauthlib
 discord.py
 cachetools
 setuptools
-requests_oauthlib
+git+https://github.com/thec0sm0s/requests-oauthlib.git@async
