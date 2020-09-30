@@ -1,7 +1,6 @@
 import cachetools
 import aiohttp
 import typing
-import json
 import os
 import abc
 
@@ -149,7 +148,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
             try:
                 return await response.json()
-            except json.JSONDecodeError:
+            except aiohttp.ContentTypeError:
                 return await response.text()
 
     async def bot_request(self, route: str, method="GET", **kwargs) -> typing.Union[dict, str]:
