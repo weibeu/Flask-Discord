@@ -5,7 +5,7 @@ from .. import exceptions
 from .base import DiscordModelsBase
 from .connections import UserConnection
 
-from flask import current_app, session
+from quart import current_app, session
 
 
 class User(DiscordModelsBase):
@@ -48,7 +48,7 @@ class User(DiscordModelsBase):
         An integer representing the
         `type of nitro subscription <https://discordapp.com/developers/docs/resources/user#user-object-premium-types>`_.
     connections : list
-        A list of :py:class:`flask_discord.UserConnection` instances. These are cached and this list might be empty.
+        A list of :py:class:`quart_discord.UserConnection` instances. These are cached and this list might be empty.
 
     """
 
@@ -69,12 +69,12 @@ class User(DiscordModelsBase):
         self.premium_type = self._payload.get("premium_type")
 
         # Few properties which are intended to be cached.
-        self._guilds = None         # Mapping of guild ID to flask_discord.models.Guild(...).
-        self.connections = None     # List of flask_discord.models.UserConnection(...).
+        self._guilds = None         # Mapping of guild ID to quart_discord.models.Guild(...).
+        self.connections = None     # List of quart_discord.models.UserConnection(...).
 
     @property
     def guilds(self):
-        """A cached mapping of user's guild ID to :py:class:`flask_discord.Guild`. The guilds are cached when the first
+        """A cached mapping of user's guild ID to :py:class:`quart_discord.Guild`. The guilds are cached when the first
         API call for guilds is requested so it might be an empty dict.
 
         """
@@ -125,7 +125,7 @@ class User(DiscordModelsBase):
             return False
 
     @classmethod
-    def fetch_from_api(cls, guilds=False, connections=False):
+    async def fetch_from_api(cls, guilds=False, connections=False):
         """A class method which returns an instance of this model by implicitly making an
         API call to Discord. The user returned from API will always be cached and update in internal cache.
 
@@ -133,10 +133,10 @@ class User(DiscordModelsBase):
         ----------
         guilds : bool
             A boolean indicating if user's guilds should be cached or not. Defaults to ``False``. If chose to not
-            cache, user's guilds can always be obtained from :py:func:`flask_discord.Guilds.fetch_from_api()`.
+            cache, user's guilds can always be obtained from :py:func:`quart_discord.Guilds.fetch_from_api()`.
         connections : bool
             A boolean indicating if user's connections should be cached or not. Defaults to ``False``. If chose to not
-            cache, user's connections can always be obtained from :py:func:`flask_discord.Connections.fetch_from_api()`.
+            cache, user's connections can always be obtained from :py:func:`quart_discord.Connections.fetch_from_api()`.
 
         Returns
         -------
@@ -144,14 +144,14 @@ class User(DiscordModelsBase):
             An instance of this model itself.
         [cls, ...]
             List of instances of this model when many of these models exist."""
-        self = super().fetch_from_api()
+        self = await super().fetch_from_api()
         current_app.discord.users_cache.update({self.id: self})
         session["DISCORD_USER_ID"] = self.id
 
         if guilds:
-            self.fetch_guilds()
+            await self.fetch_guilds()
         if connections:
-            self.fetch_connections()
+            await self.fetch_connections()
 
         return self
 
@@ -161,7 +161,7 @@ class User(DiscordModelsBase):
 
         Returns
         -------
-        flask_discord.User
+        quart_discord.User
             An user instance if it exists in internal cache.
         None
             If the current doesn't exists in internal cache.
@@ -169,7 +169,7 @@ class User(DiscordModelsBase):
         """
         return current_app.discord.users_cache.get(current_app.discord.user_id)
 
-    def add_to_guild(self, guild_id) -> dict:
+    async def add_to_guild(self, guild_id) -> dict:
         """Method to add user to the guild, provided OAuth2 session has already been created with ``guilds.join`` scope.
 
         Parameters
@@ -184,40 +184,40 @@ class User(DiscordModelsBase):
 
         Raises
         ------
-        flask_discord.Unauthorized
-            Raises :py:class:`flask_discord.Unauthorized` if current user is not authorized.
+        quart_discord.Unauthorized
+            Raises :py:class:`quart_discord.Unauthorized` if current user is not authorized.
 
         """
         try:
-            data = {"access_token": current_app.discord.get_authorization_token()["access_token"]}
+            data = {"access_token": (await current_app.discord.get_authorization_token())["access_token"]}
         except KeyError:
             raise exceptions.Unauthorized
-        return self._bot_request(f"/guilds/{guild_id}/members/{self.id}", method="PUT", json=data) or dict()
+        return await self._bot_request(f"/guilds/{guild_id}/members/{self.id}", method="PUT", json=data) or dict()
 
-    def fetch_guilds(self) -> list:
+    async def fetch_guilds(self) -> list:
         """A method which makes an API call to Discord to get user's guilds. It prepares the internal guilds cache
         and returns list of all guilds the user is member of.
 
         Returns
         -------
         list
-            List of :py:class:`flask_discord.Guilds` instances.
+            List of :py:class:`quart_discord.Guilds` instances.
 
         """
-        self._guilds = {guild.id: guild for guild in Guild.fetch_from_api(cache=False)}
+        self._guilds = {guild.id: guild for guild in await Guild.fetch_from_api(cache=False)}
         return self.guilds
 
-    def fetch_connections(self) -> list:
+    async def fetch_connections(self) -> list:
         """A method which makes an API call to Discord to get user's connections. It prepares the internal connection
         cache and returns list of all connection instances.
 
         Returns
         -------
         list
-            A list of :py:class:`flask_discord.UserConnection` instances.
+            A list of :py:class:`quart_discord.UserConnection` instances.
 
         """
-        self.connections = UserConnection.fetch_from_api(cache=False)
+        self.connections = await UserConnection.fetch_from_api(cache=False)
         return self.connections
 
 

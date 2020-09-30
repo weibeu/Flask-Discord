@@ -1,8 +1,9 @@
-Flask
+Quart
 pyjwt
 requests
+aiohttp
 oauthlib
 discord.py
 cachetools
 setuptools
-requests_oauthlib
+Async-OAuthlib

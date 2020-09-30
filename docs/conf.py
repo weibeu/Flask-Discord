@@ -14,16 +14,16 @@ import os
 import re
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.append('../flask_discord/')
+sys.path.append('../quart_discord/')
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'Flask-Discord'
-copyright = '2019, □ | The Cosmos'
-author = '□ | The Cosmos'
+project = 'Quart-Discord'
+copyright = '2020, Philip Dowie'
+author = 'Philip Dowie'
 
-with open('../flask_discord/__init__.py') as f:
+with open('../quart_discord/__init__.py') as f:
     ver = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
 # The short X.Y version
 version = ver
@@ -48,9 +48,9 @@ extensions = [
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'discord': ('https://discordpy.readthedocs.io/en/latest/', None),
-    'flask': ('https://flask.palletsprojects.com/en/1.1.x/', None),
+    'quart': ('https://pgjones.gitlab.io/quart/', None),
     'cachetools': ('https://cachetools.readthedocs.io/en/stable/', None),
-    'requests_oauthlib': ('https://requests-oauthlib.readthedocs.io/en/latest/', None)
+    'async_oauthlib': ('https://async-oauthlib.readthedocs.io/en/latest/', None)
 }
 
 # Add any paths that contain templates here, relative to this directory.

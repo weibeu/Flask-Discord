@@ -1,27 +1,24 @@
-# Flask-Discord
-[![PyPI](https://img.shields.io/pypi/v/Flask-Discord?style=for-the-badge)](https://pypi.org/project/Flask-Discord/) [![Read the Docs](https://img.shields.io/readthedocs/flask-discord?style=for-the-badge)](https://flask-discord.readthedocs.io/en/latest/) [![Discord](https://img.shields.io/discord/690878977920729177?label=Discord%20Community&logo=Discord&style=for-the-badge)](https://discord.gg/7CrQEyP)
+# Quart-Discord
+[![PyPI](https://img.shields.io/pypi/v/Quart-Discord?style=for-the-badge)](https://pypi.org/project/Quart-Discord/) [![Read the Docs](https://img.shields.io/readthedocs/quart-discord?style=for-the-badge)](https://quart-discord.readthedocs.io/en/latest/) 
 
-Discord OAuth2 extension for Flask.
+Discord OAuth2 extension for Quart.
 
 
 ### Installation
 To install current latest release you can use following command:
 ```sh
-python3 -m pip install Flask-Discord
+python3 -m pip install Quart-Discord
 ```
 
 
 ### Basic Example
 ```python
-import os
+from quart import Quart, redirect, url_for
+from quart_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
 
-from flask import Flask, redirect, url_for
-from flask_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
+app = Quart(__name__)
 
-app = Flask(__name__)
-
-app.secret_key = b"random bytes representing flask secret key"
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"      # !! Only in development environment.
+app.secret_key = b"random bytes representing quart secret key"
 
 app.config["DISCORD_CLIENT_ID"] = 490732332240863233    # Discord client ID.
 app.config["DISCORD_CLIENT_SECRET"] = ""                # Discord client secret.
@@ -32,25 +29,25 @@ discord = DiscordOAuth2Session(app)
 
 
 @app.route("/login/")
-def login():
-    return discord.create_session()
+async def login():
+    return await discord.create_session()
 	
 
 @app.route("/callback/")
-def callback():
-    discord.callback()
+async def callback():
+    await discord.callback()
     return redirect(url_for(".me"))
 
 
 @app.errorhandler(Unauthorized)
-def redirect_unauthorized(e):
+async def redirect_unauthorized(e):
     return redirect(url_for("login"))
 
 	
 @app.route("/me/")
 @requires_authorization
-def me():
-    user = discord.fetch_user()
+async def me():
+    user = await discord.fetch_user()
     return f"""
     <html>
         <head>
@@ -70,8 +67,8 @@ For an example to the working application, check [`test_app.py`](tests/test_app.
 
 
 ### Requirements
-* Flask
-* requests_oauthlib
+* Quart
+* Async-OAuthlib
 * cachetools
 * discord.py
 
@@ -80,4 +77,4 @@ For an example to the working application, check [`test_app.py`](tests/test_app.
 Head over to [documentation] for full API reference. 
 
 
-[documentation]: https://flask-discord.readthedocs.io/en/latest/
+[documentation]: https://quart-discord.readthedocs.io/en/latest/
