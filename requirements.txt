@@ -6,4 +6,4 @@ oauthlib
 discord.py
 cachetools
 setuptools
-git+https://github.com/thec0sm0s/requests-oauthlib.git@async
+Async-OAuthlib

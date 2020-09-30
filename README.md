@@ -30,7 +30,7 @@ discord = DiscordOAuth2Session(app)
 
 @app.route("/login/")
 async def login():
-    return discord.create_session()
+    return await discord.create_session()
 	
 
 @app.route("/callback/")
@@ -47,7 +47,7 @@ async def redirect_unauthorized(e):
 @app.route("/me/")
 @requires_authorization
 async def me():
-    user = discord.fetch_user()
+    user = await discord.fetch_user()
     return f"""
     <html>
         <head>
@@ -68,7 +68,7 @@ For an example to the working application, check [`test_app.py`](tests/test_app.
 
 ### Requirements
 * Quart
-* requests_oauthlib
+* Async-OAuthlib
 * cachetools
 * discord.py
 

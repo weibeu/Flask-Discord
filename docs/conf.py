@@ -50,7 +50,7 @@ intersphinx_mapping = {
     'discord': ('https://discordpy.readthedocs.io/en/latest/', None),
     'quart': ('https://pgjones.gitlab.io/quart/', None),
     'cachetools': ('https://cachetools.readthedocs.io/en/stable/', None),
-    'requests_oauthlib': ('https://requests-oauthlib.readthedocs.io/en/latest/', None)
+    'async_oauthlib': ('https://async-oauthlib.readthedocs.io/en/latest/', None)
 }
 
 # Add any paths that contain templates here, relative to this directory.

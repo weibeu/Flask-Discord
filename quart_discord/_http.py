@@ -9,7 +9,7 @@ from . import exceptions
 
 from quart import session, request
 from collections.abc import Mapping
-from requests_oauthlib import OAuth2Session
+from async_oauthlib import OAuth2Session
 
 
 class DiscordOAuth2HttpClient(abc.ABC):
