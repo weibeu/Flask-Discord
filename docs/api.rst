@@ -65,10 +65,12 @@ Exceptions
 Config
 ----------
 
-| ``DISCORD_CLIENT_ID`` Discord client ID
+| ``DISCORD_CLIENT_ID`` Discord client ID is the id for you Discord app that will be used for the authentication
 |
-| ``DISCORD_CLIENT_SECRET`` Discord client secret
+| ``DISCORD_CLIENT_SECRET`` Discord client secret is the secret found on the developer portal
 |
-| ``DISCORD_REDIRECT_URI`` URL to your callback endpoint
+| ``DISCORD_REDIRECT_URI`` URL to your callback endpoint the redirect url when a user has been authenticated
 |
-| ``DISCORD_BOT_TOKEN`` Required to access BOT resources
+| ``DISCORD_BOT_TOKEN`` Required to access BOT resources; It is the token from a pot account connected to the application in the developer portal
+|
+| ``DISCORD_USERS_CACHE_MAX_LIMIT`` ??
