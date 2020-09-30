@@ -61,3 +61,11 @@ Exceptions
 
 .. autoclass:: flask_discord.AccessDenied
     :members:
+
+Config
+----------
+
+- `DISCORD_CLIENT_ID` Discord client ID
+- `DISCORD_CLIENT_SECRET` Discord client secret
+- `DISCORD_REDIRECT_URI` URL to your callback endpoint
+- `DISCORD_BOT_TOKEN` Required to access BOT resources
