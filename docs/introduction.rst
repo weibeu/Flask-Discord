@@ -17,8 +17,8 @@ Requirements
 - **Quart**
     This is a Quart extension.
 
-- **requests_oauthlib**
-    It also requires requests_oauthlib to make OAuth2 sessions with discord.
+- **Async-OAuthlib**
+    It also requires async_oauthlib to make OAuth2 sessions with discord.
 
 - **cachetools**
     Quart Discord supports caching discord objects to boost the performance when page loads.
@@ -32,12 +32,12 @@ Installing
 You can install Quart-Discord directly from PyPI using PIP and following command
 in shell or command prompt: ::
 
-    python3 -m pip install -U Quart-Discord
+    python3 -m pip install -U https://github.com/thec0sm0s/Flask-Discord.git@quart
 
 You can also install the latest development version (**maybe unstable/broken**) by
 using following command: ::
 
-    python3 -m pip install -U git+https://github.com/jnawk/Quart-Discord.git@dev
+    python3 -m pip install -U https://github.com/thec0sm0s/Flask-Discord.git@quart
 
 
 Basic Usage

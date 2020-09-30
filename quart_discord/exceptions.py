@@ -12,7 +12,7 @@ class RateLimited(HttpException):
 
     Attributes
     ----------
-    response : requests.Response
+    response : aiohttp.Response
         The actual response object received from Discord API.
     json : dict
         The actual JSON data received. Shorthand to ``response.json()``.

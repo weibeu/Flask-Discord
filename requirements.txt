@@ -1,6 +1,5 @@
 Quart
 pyjwt
-requests
 aiohttp
 oauthlib
 discord.py

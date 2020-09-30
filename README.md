@@ -1,5 +1,5 @@
 # Quart-Discord
-[![PyPI](https://img.shields.io/pypi/v/Quart-Discord?style=for-the-badge)](https://pypi.org/project/Quart-Discord/) [![Read the Docs](https://img.shields.io/readthedocs/quart-discord?style=for-the-badge)](https://quart-discord.readthedocs.io/en/latest/) 
+[![PyPI](https://img.shields.io/pypi/v/Flask-Discord?style=for-the-badge)](https://pypi.org/project/Flask-Discord/) [![Read the Docs](https://img.shields.io/readthedocs/flask-discord?style=for-the-badge)](https://flask-discord.readthedocs.io/en/latest/) [![Discord](https://img.shields.io/discord/690878977920729177?label=Discord%20Community&logo=Discord&style=for-the-badge)](https://discord.gg/7CrQEyP)
 
 Discord OAuth2 extension for Quart.
 
@@ -7,7 +7,7 @@ Discord OAuth2 extension for Quart.
 ### Installation
 To install current latest release you can use following command:
 ```sh
-python3 -m pip install Quart-Discord
+python3 -m pip install https://github.com/thec0sm0s/Flask-Discord.git@quart
 ```
 
 
