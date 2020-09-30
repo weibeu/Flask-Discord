@@ -189,7 +189,7 @@ class User(DiscordModelsBase):
 
         """
         try:
-            data = {"access_token": await current_app.discord.get_authorization_token()["access_token"]}
+            data = {"access_token": (await current_app.discord.get_authorization_token())["access_token"]}
         except KeyError:
             raise exceptions.Unauthorized
         return await self._bot_request(f"/guilds/{guild_id}/members/{self.id}", method="PUT", json=data) or dict()
