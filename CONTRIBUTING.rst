@@ -1,4 +1,4 @@
-Contributing to Flask-Discord
+Contributing to Quart-Discord
 =============================
 
 First of all, really thanks for considering this project and making contributions to improve it.
@@ -8,9 +8,9 @@ Any kind of improvements, feature additions, bug fixes, issues report or whateve
 Basic Questions
 ---------------
 
-If you're having any issue with the library itself, please do check if similar issue already exists in the `Flask Discord Issues`_ section. If you can't find any issue which helps you, then feel free to create a new one; check `Reporting New Issues`_ or just ask about it in ``#flask-discord`` channel of our `Discord community`_.
+If you're having any issue with the library itself, please do check if similar issue already exists in the `Quart Discord Issues`_ section. If you can't find any issue which helps you, then feel free to create a new one; check `Reporting New Issues`_ or just ask about it in ``#flask-discord`` channel of our `Discord community`_.
 
-.. _Flask Discord Issues: https://github.com/thec0sm0s/Flask-Discord/issues
+.. _Quart Discord Issues: https://github.com/jnawk/Quart-Discord/issues
 .. _Discord community: https://discord.gg/7CrQEyP
 .. _PEP 8: https://www.python.org/dev/peps/pep-0008/
 
