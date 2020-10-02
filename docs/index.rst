@@ -13,6 +13,7 @@ Discord's OAuth2 API easier.
 
 **Features**
 
+- Asynchronous wrapper.
 - Clean object-oriented design.
 - Covers most of the scopes provided by the API.
 - Supports various discord models and objects.

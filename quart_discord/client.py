@@ -57,7 +57,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
     def __get_state():
         return session.pop("DISCORD_OAUTH2_STATE", str())
 
-    def create_session(
+    async def create_session(
             self, scope: list = None, *, data: dict = None, prompt: bool = True,
             permissions: typing.Union[discord.Permissions, int] = 0, **params
     ):
@@ -95,7 +95,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         state = jwt.encode(data or dict(), current_app.config["SECRET_KEY"]).decode(encoding="utf-8")
 
-        discord_session = self._make_session(scope=scope, state=state)
+        discord_session = await self._make_session(scope=scope, state=state)
         authorization_url, state = discord_session.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
 
         self.__save_state(state)
@@ -117,7 +117,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         return redirect(authorization_url)
 
     @staticmethod
-    def save_authorization_token(token: dict):
+    async def save_authorization_token(token: dict):
         """A staticmethod which saves a dict containing Discord OAuth2 token and other secrets to the user's cookies.
         Meaning by default, it uses client side session handling.
 
@@ -128,7 +128,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         session["DISCORD_OAUTH2_TOKEN"] = token
 
     @staticmethod
-    def get_authorization_token() -> dict:
+    async def get_authorization_token() -> dict:
         """A static method which returns a dict containing Discord OAuth2 token and other secrets which was saved
         previously by `:py:meth:`quart_discord.DiscordOAuth2Session.save_authorization_token` from user's cookies.
 
@@ -151,8 +151,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             raise exceptions.HttpException(error)
 
         state = self.__get_state()
-        token = self._fetch_token(state)
-        self.save_authorization_token(token)
+        token = await self._fetch_token(state)
+        await self.save_authorization_token(token)
 
         return jwt.decode(state, current_app.config["SECRET_KEY"])
 
@@ -172,13 +172,12 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             except KeyError:
                 pass
 
-    @property
-    def authorized(self):
+    async def authorized(self):
         """A boolean indicating whether current session has authorization token or not."""
-        return self._make_session().authorized
+        return (await self._make_session()).authorized
 
     @staticmethod
-    def fetch_user() -> models.User:
+    async def fetch_user() -> models.User:
         """This method returns user object from the internal cache if it exists otherwise makes an API call to do so.
 
         Returns
@@ -186,10 +185,10 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         quart_discord.models.User
 
         """
-        return models.User.get_from_cache() or models.User.fetch_from_api()
+        return models.User.get_from_cache() or await models.User.fetch_from_api()
 
     @staticmethod
-    def fetch_connections() -> list:
+    async def fetch_connections() -> list:
         """This method returns list of user connection objects from internal cache if it exists otherwise
         makes an API call to do so.
 
@@ -206,10 +205,10 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         except AttributeError:
             pass
 
-        return models.UserConnection.fetch_from_api()
+        return await models.UserConnection.fetch_from_api()
 
     @staticmethod
-    def fetch_guilds() -> list:
+    async def fetch_guilds() -> list:
         """This method returns list of guild objects from internal cache if it exists otherwise makes an API
         call to do so.
 
@@ -226,4 +225,4 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         except AttributeError:
             pass
 
-        return models.Guild.fetch_from_api()
+        return await models.Guild.fetch_from_api()

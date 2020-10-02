@@ -20,9 +20,8 @@ requirements = [
     'Quart',
     'pyjwt',
     'oauthlib',
-    'requests_oauthlib',
+    'Async-OAuthlib',
     'cachetools',
-    'requests',
     'discord.py',
 ]
 

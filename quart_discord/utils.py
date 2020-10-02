@@ -44,7 +44,7 @@ def requires_authorization(view):
 
     @functools.wraps(view)
     async def wrapper(*args, **kwargs):
-        if not current_app.discord.authorized:
+        if not await current_app.discord.authorized():
             raise exceptions.Unauthorized
         return await view(*args, **kwargs)
 

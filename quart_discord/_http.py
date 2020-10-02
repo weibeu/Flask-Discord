@@ -1,7 +1,6 @@
 import cachetools
-import requests
+import aiohttp
 import typing
-import json
 import os
 import abc
 
@@ -10,7 +9,7 @@ from . import exceptions
 
 from quart import session, request
 from collections.abc import Mapping
-from requests_oauthlib import OAuth2Session
+from async_oauthlib import OAuth2Session
 
 
 class DiscordOAuth2HttpClient(abc.ABC):
@@ -56,23 +55,23 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
     @staticmethod
     @abc.abstractmethod
-    def save_authorization_token(token: dict):
+    async def save_authorization_token(token: dict):
         raise NotImplementedError
 
     @staticmethod
     @abc.abstractmethod
-    def get_authorization_token() -> dict:
+    async def get_authorization_token() -> dict:
         raise NotImplementedError
 
-    def _fetch_token(self, state):
-        discord = self._make_session(state=state)
-        return discord.fetch_token(
+    async def _fetch_token(self, state):
+        discord = await self._make_session(state=state)
+        return await discord.fetch_token(
             configs.DISCORD_TOKEN_URL,
             client_secret=self.__client_secret,
             authorization_response=request.url
         )
 
-    def _make_session(self, token: str = None, state: str = None, scope: list = None) -> OAuth2Session:
+    async def _make_session(self, token: str = None, state: str = None, scope: list = None) -> OAuth2Session:
         """A low level method used for creating OAuth2 session.
 
         Parameters
@@ -93,7 +92,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         """
         return OAuth2Session(
             client_id=self.client_id,
-            token=token or self.get_authorization_token(),
+            token=token or await self.get_authorization_token(),
             state=state or session.get("DISCORD_OAUTH2_STATE"),
             scope=scope,
             redirect_uri=self.redirect_uri,
@@ -104,7 +103,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
             auto_refresh_url=configs.DISCORD_TOKEN_URL,
             token_updater=self.save_authorization_token)
 
-    def request(self, route: str, method="GET", data=None, oauth=True, **kwargs) -> typing.Union[dict, str]:
+    async def request(self, route: str, method="GET", data=None, oauth=True, **kwargs) -> typing.Union[dict, str]:
         """Sends HTTP request to provided route or discord endpoint.
 
         Note
@@ -137,20 +136,22 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         """
         route = configs.DISCORD_API_BASE_URL + route
-        response = self._make_session(
-        ).request(method, route, data, **kwargs) if oauth else requests.request(method, route, data=data, **kwargs)
+        discord = await self._make_session()
+        async with (await discord.request(
+                method, route, data, **kwargs
+        ) if oauth else aiohttp.request(method, route, data=data, **kwargs)) as response:
 
-        if response.status_code == 401:
-            raise exceptions.Unauthorized
-        if response.status_code == 429:
-            raise exceptions.RateLimited(response)
+            if response.status == 401:
+                raise exceptions.Unauthorized
+            if response.status == 429:
+                raise exceptions.RateLimited(response)
 
-        try:
-            return response.json()
-        except json.JSONDecodeError:
-            return response.text
+            try:
+                return await response.json()
+            except aiohttp.ContentTypeError:
+                return await response.text()
 
-    def bot_request(self, route: str, method="GET", **kwargs) -> typing.Union[dict, str]:
+    async def bot_request(self, route: str, method="GET", **kwargs) -> typing.Union[dict, str]:
         """Make HTTP request to specified endpoint with bot token as authorization headers.
 
         Parameters
@@ -175,4 +176,4 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         """
         headers = {"Authorization": f"Bot {self.__bot_token}"}
-        return self.request(route, method=method, oauth=False, headers=headers, **kwargs)
+        return await self.request(route, method=method, oauth=False, headers=headers, **kwargs)

@@ -22,20 +22,20 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
         self._payload = payload
 
     @staticmethod
-    def _request(*args, **kwargs):
+    async def _request(*args, **kwargs):
         """A shorthand to :py:func:quart_discord.request`. It uses Quart current_app local proxy to get the
         Quart-Discord client.
 
         """
-        return current_app.discord.request(*args, **kwargs)
+        return await current_app.discord.request(*args, **kwargs)
 
     @staticmethod
-    def _bot_request(*args, **kwargs):
+    async def _bot_request(*args, **kwargs):
         """A shorthand to :py:func:quart_discord.bot_request`."""
-        return current_app.discord.bot_request(*args, **kwargs)
+        return await current_app.discord.bot_request(*args, **kwargs)
 
     @classmethod
-    def fetch_from_api(cls):
+    async def fetch_from_api(cls):
         """A class method which returns an instance or list of instances of this model by implicitly making an
         API call to Discord.
 
@@ -48,7 +48,7 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
 
         """
         request_method = cls._bot_request if cls.BOT else cls._request
-        payload = request_method(cls.ROUTE)
+        payload = await request_method(cls.ROUTE)
         if cls.MANY:
             return [cls(_) for _ in payload]
         return cls(payload)
