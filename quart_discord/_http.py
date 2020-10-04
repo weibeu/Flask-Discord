@@ -64,12 +64,12 @@ class DiscordOAuth2HttpClient(abc.ABC):
         raise NotImplementedError
 
     async def _fetch_token(self, state):
-        discord = await self._make_session(state=state)
-        return await discord.fetch_token(
-            configs.DISCORD_TOKEN_URL,
-            client_secret=self.__client_secret,
-            authorization_response=request.url
-        )
+        async with await self._make_session(state=state) as discord:
+            return await discord.fetch_token(
+                configs.DISCORD_TOKEN_URL,
+                client_secret=self.__client_secret,
+                authorization_response=request.url
+            )
 
     async def _make_session(self, token: str = None, state: str = None, scope: list = None) -> OAuth2Session:
         """A low level method used for creating OAuth2 session.
@@ -136,20 +136,21 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         """
         route = configs.DISCORD_API_BASE_URL + route
-        discord = await self._make_session()
-        async with (await discord.request(
-                method, route, data, **kwargs
-        ) if oauth else aiohttp.request(method, route, data=data, **kwargs)) as response:
+        async with await self._make_session() as discord:
+            async with (
+                    await discord.request(method, route, data, **kwargs)
+                    if oauth else aiohttp.request(method, route, data=data, **kwargs)
+            ) as response:
 
-            if response.status == 401:
-                raise exceptions.Unauthorized
-            if response.status == 429:
-                raise exceptions.RateLimited(response)
+                if response.status == 401:
+                    raise exceptions.Unauthorized
+                if response.status == 429:
+                    raise exceptions.RateLimited(response)
 
-            try:
-                return await response.json()
-            except aiohttp.ContentTypeError:
-                return await response.text()
+                try:
+                    return await response.json()
+                except aiohttp.ContentTypeError:
+                    return await response.text()
 
     async def bot_request(self, route: str, method="GET", **kwargs) -> typing.Union[dict, str]:
         """Make HTTP request to specified endpoint with bot token as authorization headers.

@@ -95,8 +95,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         state = jwt.encode(data or dict(), current_app.config["SECRET_KEY"]).decode(encoding="utf-8")
 
-        discord_session = await self._make_session(scope=scope, state=state)
-        authorization_url, state = discord_session.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
+        async with await self._make_session(scope=scope, state=state) as discord_:
+            authorization_url, state = discord_.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
 
         self.__save_state(state)
 
@@ -174,7 +174,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
     async def authorized(self):
         """A boolean indicating whether current session has authorization token or not."""
-        return (await self._make_session()).authorized
+        async with await self._make_session() as discord_:
+            return discord_.authorized
 
     @staticmethod
     async def fetch_user() -> models.User:
