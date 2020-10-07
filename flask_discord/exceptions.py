@@ -1,6 +1,3 @@
-import json
-
-
 class HttpException(Exception):
     """Base Exception class representing a HTTP exception."""
 
@@ -12,8 +9,6 @@ class RateLimited(HttpException):
 
     Attributes
     ----------
-    response : requests.Response
-        The actual response object received from Discord API.
     json : dict
         The actual JSON data received. Shorthand to ``response.json()``.
     message : str
@@ -25,19 +20,13 @@ class RateLimited(HttpException):
 
     """
 
-    def __init__(self, response):
-        self.response = response
-        try:
-            self.json = self.response.json()
-        except json.JSONDecodeError:
-            self.json = dict()
-            self.message = self.response.text
-        else:
-            self.message = self.json["message"]
-            self.is_global = self.json["global"]
-            self.retry_after = self.json["retry_after"]
-        finally:
-            super().__init__(self.message)
+    def __init__(self, json, headers):
+        self.json = json
+        self.headers = headers
+        self.message = self.json["message"]
+        self.is_global = self.json["global"]
+        self.retry_after = self.json["retry_after"]
+        super().__init__(self.message)
 
 
 class Unauthorized(HttpException):

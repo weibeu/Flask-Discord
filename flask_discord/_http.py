@@ -173,7 +173,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         if response.status_code == 401:
             raise exceptions.Unauthorized()
         if response.status_code == 429:
-            raise exceptions.RateLimited(response)
+            raise exceptions.RateLimited(response.json(), response.headers)
 
         try:
             return response.json()
