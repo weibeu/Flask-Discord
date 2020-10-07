@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, redirect, url_for
-from flask_discord import DiscordOAuth2Session, requires_authorization, models
+from flask_discord import DiscordOAuth2Session, requires_authorization
 
 
 app = Flask(__name__)
@@ -85,7 +85,7 @@ def me():
 
 @app.route("/me/guilds/")
 def user_guilds():
-    guilds = models.Guild.fetch_from_api(cache=False)
+    guilds = discord.fetch_guilds()
     return "<br />".join([f"[ADMIN] {g.name}" if g.permissions.administrator else g.name for g in guilds])
 
 
