@@ -11,6 +11,7 @@ __all__ = [
     "HttpException",
     "RateLimited",
     "Unauthorized",
+    "AccessDenied",
 ]
 
 
