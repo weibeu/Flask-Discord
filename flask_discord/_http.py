@@ -118,7 +118,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
         return OAuth2Session(
             client_id=self.client_id,
             token=token or self.get_authorization_token(),
-            state=state or session.get("DISCORD_OAUTH2_STATE"),
+            state=state,
             scope=scope,
             redirect_uri=self.redirect_uri,
             auto_refresh_kwargs={
