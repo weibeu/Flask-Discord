@@ -4,8 +4,8 @@ import discord
 
 from . import configs, _http, models, utils, exceptions
 
-from oauthlib.common import add_params_to_uri
 from flask import request, session, redirect, current_app
+from oauthlib.common import add_params_to_uri, generate_token
 
 
 class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
@@ -93,7 +93,10 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         if not prompt and set(scope) & set(configs.DISCORD_PASSTHROUGH_SCOPES):
             raise ValueError("You should use explicit OAuth grant for passthrough scopes like bot.")
 
-        state = jwt.encode(data or dict(), current_app.config["SECRET_KEY"]).decode(encoding="utf-8")
+        data = data or dict()
+        data["__state_secret_"] = generate_token()
+
+        state = jwt.encode(data, current_app.config["SECRET_KEY"]).decode(encoding="utf-8")
 
         discord_session = self._make_session(scope=scope, state=state)
         authorization_url, state = discord_session.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
