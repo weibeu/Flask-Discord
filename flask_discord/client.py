@@ -96,7 +96,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         data = data or dict()
         data["__state_secret_"] = generate_token()
 
-        state = jwt.encode(data, current_app.config["SECRET_KEY"]).decode(encoding="utf-8")
+        state = jwt.encode(data, current_app.config["SECRET_KEY"], algorithm="HS256")
 
         discord_session = self._make_session(scope=scope, state=state)
         authorization_url, state = discord_session.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
@@ -157,7 +157,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         token = self._fetch_token(state)
         self.save_authorization_token(token)
 
-        return jwt.decode(state, current_app.config["SECRET_KEY"])
+        return jwt.decode(state, current_app.config["SECRET_KEY"], algorithms="HS256")
 
     def revoke(self):
         """This method clears current discord token, state and all session data from flask
