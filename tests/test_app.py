@@ -20,6 +20,13 @@ discord = DiscordOAuth2Session(app)
 HYPERLINK = '<a href="{}">{}</a>'
 
 
+def welcome_user(user):
+    dm_channel = discord.bot_request("/users/@me/channels", "POST", json={"recipient_id": user.id})
+    return discord.bot_request(
+        f"/channels/{dm_channel['id']}/messages", "POST", json={"content": "Thanks for authorizing the app!"}
+    )
+
+
 @app.route("/")
 def index():
     if not discord.authorized:
@@ -62,6 +69,10 @@ def invite_oauth():
 def callback():
     data = discord.callback()
     redirect_to = data.get("redirect", "/")
+
+    user = discord.fetch_user()
+    welcome_user(user)
+
     return redirect(redirect_to)
 
 

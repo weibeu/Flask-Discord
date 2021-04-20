@@ -65,6 +65,11 @@ in exchange for fetching user's details and display them on web page.
 
     discord = DiscordOAuth2Session(app)
 
+    def welcome_user(user):
+    dm_channel = discord.bot_request("/users/@me/channels", "POST", json={"recipient_id": user.id})
+    return discord.bot_request(
+        f"/channels/{dm_channel['id']}/messages", "POST", json={"content": "Thanks for authorizing the app!"}
+    )
 
     @app.route("/login/")
     def login():
@@ -74,6 +79,8 @@ in exchange for fetching user's details and display them on web page.
     @app.route("/callback/")
     def callback():
         discord.callback()
+        user = discord.fetch_user()
+        welcome_user(user)
         return redirect(url_for(".me"))
 
 
