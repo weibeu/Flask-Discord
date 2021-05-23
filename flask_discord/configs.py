@@ -1,4 +1,8 @@
-DISCORD_API_BASE_URL = "https://discordapp.com/api"
+DISCORD_API_VERSION = 9
+
+
+DISCORD_API_BASE_URL = "https://discord.com/api/v{version}"
+DISCORD_API_BASE_URL = DISCORD_API_BASE_URL.format(version=DISCORD_API_VERSION)
 
 DISCORD_AUTHORIZATION_BASE_URL = DISCORD_API_BASE_URL + "/oauth2/authorize"
 DISCORD_TOKEN_URL = DISCORD_API_BASE_URL + "/oauth2/token"
