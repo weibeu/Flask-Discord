@@ -16,15 +16,13 @@ def __get_version():
         return re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', package_init_file.read(), re.MULTILINE).group(1)
 
 
-requirements = [
-    'Flask',
-    'pyjwt',
-    'oauthlib',
-    'requests_oauthlib',
-    'cachetools',
-    'requests',
-    'discord.py',
-]
+def __get_requirements():
+    with open("requirements.txt") as file:
+        return file.readlines()
+
+
+version = __get_version()
+requirements = __get_requirements()
 
 
 on_rtd = os.getenv('READTHEDOCS') == 'True'
@@ -41,10 +39,10 @@ extra_requirements = {
 
 setup(
     name='Flask-Discord',
-    version=__get_version(),
-    url='https://github.com/thec0sm0s/Flask-Discord',
+    version=version,
+    url='https://github.com/weibeu/Flask-Discord',
     license='MIT',
-    author='□ | The Cosmos',
+    author='Weibeu',
     author_email='deepakrajko14@gmail.com',
     description='Discord OAuth2 extension for Flask.',
     long_description=__doc__,
