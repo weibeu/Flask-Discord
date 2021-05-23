@@ -106,12 +106,12 @@ class DiscordOAuth2HttpClient(abc.ABC):
             "refresh_token": token["refresh_token"]
         }
 
-    def _make_session(self, token: str = None, state: str = None, scope: list = None) -> OAuth2Session:
+    def _make_session(self, token: dict = None, state: str = None, scope: list = None) -> OAuth2Session:
         """A low level method used for creating OAuth2 session.
 
         Parameters
         ----------
-        token : str, optional
+        token : dict, optional
             The authorization token to use which was previously received from authorization code grant.
         state : str, optional
             The state to use for OAuth2 session.
