@@ -81,12 +81,12 @@ class DiscordOAuth2HttpClient(abc.ABC):
     @staticmethod
     @abc.abstractmethod
     def save_authorization_token(token: dict):
-        raise NotImplementedError
+        raise NotImplementedError()
 
     @staticmethod
     @abc.abstractmethod
     def get_authorization_token() -> dict:
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def _fetch_token(self, state):
         discord = self._make_session(state=state)

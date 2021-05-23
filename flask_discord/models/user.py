@@ -191,7 +191,7 @@ class User(DiscordModelsBase):
         try:
             data = {"access_token": current_app.discord.get_authorization_token()["access_token"]}
         except KeyError:
-            raise exceptions.Unauthorized
+            raise exceptions.Unauthorized()
         return self._bot_request(f"/guilds/{guild_id}/members/{self.id}", method="PUT", json=data) or dict()
 
     def fetch_guilds(self) -> list:

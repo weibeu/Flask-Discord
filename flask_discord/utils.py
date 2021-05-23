@@ -23,7 +23,7 @@ class JSONBool(object):
             return cls(True)
         if value.lower() == "false":
             return cls(False)
-        raise ValueError
+        raise ValueError()
 
 
 def json_bool(value):
@@ -45,7 +45,7 @@ def requires_authorization(view):
     @functools.wraps(view)
     def wrapper(*args, **kwargs):
         if not current_app.discord.authorized:
-            raise exceptions.Unauthorized
+            raise exceptions.Unauthorized()
         return view(*args, **kwargs)
 
     return wrapper
