@@ -95,6 +95,16 @@ class DiscordOAuth2HttpClient(abc.ABC):
             authorization_response=request.url
         )
 
+    def _get_auto_refresh_kwargs(self, token):
+        if not token:
+            return dict()
+        return {
+            "client_id": self.client_id,
+            "client_secret": self.__client_secret,
+            "grant_type": "refresh_token",
+            "refresh_token": token["refresh_token"]
+        }
+
     def _make_session(self, token: str = None, state: str = None, scope: list = None) -> OAuth2Session:
         """A low level method used for creating OAuth2 session.
 
@@ -114,18 +124,17 @@ class DiscordOAuth2HttpClient(abc.ABC):
             An instance of OAuth2Session class.
 
         """
+        _token = self.get_authorization_token()
         return OAuth2Session(
             client_id=self.client_id,
-            token=token or self.get_authorization_token(),
+            token=token or _token,
             state=state,
             scope=scope,
             redirect_uri=self.redirect_uri,
-            auto_refresh_kwargs={
-                'client_id': self.client_id,
-                'client_secret': self.__client_secret,
-            },
+            auto_refresh_kwargs=self._get_auto_refresh_kwargs(token),
             auto_refresh_url=configs.DISCORD_TOKEN_URL,
-            token_updater=self.save_authorization_token)
+            token_updater=self.save_authorization_token,
+        )
 
     def request(self, route: str, method="GET", data=None, oauth=True, **kwargs) -> typing.Union[dict, str]:
         """Sends HTTP request to provided route or discord endpoint.
