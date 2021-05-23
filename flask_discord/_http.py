@@ -1,7 +1,6 @@
 import cachetools
 import requests
 import typing
-import json
 import abc
 
 from . import configs
@@ -179,9 +178,11 @@ class DiscordOAuth2HttpClient(abc.ABC):
             raise exceptions.RateLimited(response.json(), response.headers)
 
         try:
-            return response.json()
-        except json.JSONDecodeError:
+            response.raise_for_status()
+        except requests.HTTPError:
             return response.text
+
+        return response.json()
 
     def bot_request(self, route: str, method="GET", **kwargs) -> typing.Union[dict, str]:
         """Make HTTP request to specified endpoint with bot token as authorization headers.
