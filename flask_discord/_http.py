@@ -167,8 +167,11 @@ class DiscordOAuth2HttpClient(abc.ABC):
         if self.proxy_auth is not None:
             kwargs["proxy_auth"] = self.proxy_auth
 
-        response = self._make_session(
-        ).request(method, route, data, **kwargs) if oauth else requests.request(method, route, data=data, **kwargs)
+        response = self._make_session().request(
+            method, route, data, **kwargs
+        ) if oauth else requests.request(
+            method, route, data=data, **kwargs
+        )
 
         if response.status_code == 401:
             raise exceptions.Unauthorized()
