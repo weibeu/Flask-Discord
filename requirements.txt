@@ -1,5 +1,4 @@
 Flask
-pyjwt
 requests
 oauthlib
 discord.py

@@ -1,11 +1,10 @@
-import jwt
 import typing
 import discord
 
 from . import configs, _http, models, utils, exceptions
 
-from flask import request, session, redirect, current_app
-from oauthlib.common import add_params_to_uri, generate_token
+from flask import request, session, redirect
+from oauthlib.common import add_params_to_uri
 
 
 class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
