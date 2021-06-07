@@ -58,7 +58,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         return session.get("DISCORD_OAUTH2_STATE", str())
 
     def create_session(
-            self, scope: list = None, *, data: dict = None, prompt: bool = True,
+            self, scope: list = None, prompt: bool = True,
             permissions: typing.Union[discord.Permissions, int] = 0, **params
     ):
         """Primary method used to create OAuth2 session and redirect users for
@@ -69,9 +69,6 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         scope : list, optional
             An optional list of valid `Discord OAuth2 Scopes
             <https://discordapp.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
-        data : dict, optional
-            A mapping of your any custom data which you want to access after authorization grant. Use
-            `:py:meth:flask_discord.DiscordOAuth2Session.callback` to retrieve this data in your callback view.
         prompt : bool, optional
             Determines if the OAuth2 grant should be explicitly prompted and re-approved. Defaults to True.
             Specify False for implicit grant which will skip the authorization screen and redirect to redirect URI.
@@ -93,12 +90,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         if not prompt and set(scope) & set(configs.DISCORD_PASSTHROUGH_SCOPES):
             raise ValueError("You should use explicit OAuth grant for passthrough scopes like bot.")
 
-        data = data or dict()
-        data["__state_secret_"] = generate_token()
-
-        state = jwt.encode(data, current_app.config["SECRET_KEY"], algorithm="HS256")
-
-        discord_session = self._make_session(scope=scope, state=state)
+        discord_session = self._make_session(scope=scope)
         authorization_url, state = discord_session.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
 
         self.__save_state(state)
@@ -156,8 +148,6 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         state = self.__get_state()
         token = self._fetch_token(state)
         self.save_authorization_token(token)
-
-        return jwt.decode(state, current_app.config["SECRET_KEY"], algorithms="HS256")
 
     def revoke(self):
         """This method clears current discord token, state and all session data from flask
