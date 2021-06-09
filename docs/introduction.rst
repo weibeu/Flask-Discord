@@ -47,6 +47,7 @@ in exchange for fetching user's details and display them on web page.
 
 
 .. code-block:: python3
+    import os
 
     from flask import Flask, redirect, url_for
     from flask_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
@@ -66,10 +67,10 @@ in exchange for fetching user's details and display them on web page.
     discord = DiscordOAuth2Session(app)
 
     def welcome_user(user):
-    dm_channel = discord.bot_request("/users/@me/channels", "POST", json={"recipient_id": user.id})
-    return discord.bot_request(
-        f"/channels/{dm_channel['id']}/messages", "POST", json={"content": "Thanks for authorizing the app!"}
-    )
+        dm_channel = discord.bot_request("/users/@me/channels", "POST", json={"recipient_id": user.id})
+        return discord.bot_request(
+            f"/channels/{dm_channel['id']}/messages", "POST", json={"content": "Thanks for authorizing the app!"}
+        )
 
     @app.route("/login/")
     def login():
