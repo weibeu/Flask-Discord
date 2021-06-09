@@ -12,6 +12,10 @@ Discord OAuth2 Client
     :members:
     :inherited-members:
 
+.. autoclass:: flask_discord.DiscordOAuth2Scope
+    :members:
+    :inherited-members:
+
 .. autoclass:: flask_discord._http.DiscordOAuth2HttpClient
     :members:
     :inherited-members:
