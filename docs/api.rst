@@ -28,7 +28,7 @@ Models
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord.models.Bot
+.. autoclass:: flask_discord.models.Application
     :members:
     :inherited-members:
 

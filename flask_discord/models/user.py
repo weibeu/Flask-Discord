@@ -221,6 +221,6 @@ class User(DiscordModelsBase):
         return self.connections
 
 
-class Bot(User):
+class Application(User):
     """Class representing the client user itself."""
     # TODO: What is this?
