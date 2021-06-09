@@ -219,8 +219,3 @@ class User(DiscordModelsBase):
         """
         self.connections = UserConnection.fetch_from_api(cache=False)
         return self.connections
-
-
-class Application(User):
-    """Class representing the client user itself."""
-    # TODO: What is this?

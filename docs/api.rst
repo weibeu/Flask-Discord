@@ -28,10 +28,6 @@ Models
     :members:
     :inherited-members:
 
-.. autoclass:: flask_discord.models.Application
-    :members:
-    :inherited-members:
-
 .. autoclass:: flask_discord.models.Integration
     :members:
     :inherited-members:
