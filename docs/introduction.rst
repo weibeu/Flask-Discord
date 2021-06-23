@@ -47,6 +47,7 @@ in exchange for fetching user's details and display them on web page.
 
 
 .. code-block:: python3
+
     import os
 
     from flask import Flask, redirect, url_for
