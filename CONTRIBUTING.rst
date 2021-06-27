@@ -10,7 +10,7 @@ Basic Questions
 
 If you're having any issue with the library itself, please do check if similar issue already exists in the `Flask Discord Issues`_ section. If you can't find any issue which helps you, then feel free to create a new one; check `Reporting New Issues`_ or just ask about it in ``#flask-discord`` channel of our `Discord community`_.
 
-.. _Flask Discord Issues: https://github.com/thec0sm0s/Flask-Discord/issues
+.. _Flask Discord Issues: https://github.com/weibeu/Flask-Discord/issues
 .. _Discord community: https://discord.gg/7CrQEyP
 .. _PEP 8: https://www.python.org/dev/peps/pep-0008/
 
