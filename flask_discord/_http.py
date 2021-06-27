@@ -6,6 +6,7 @@ import json
 
 from . import configs
 from . import exceptions
+from . import DiscordOAuth2Scope
 
 from flask import session, request
 from collections.abc import Mapping
@@ -106,7 +107,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
             "refresh_token": token["refresh_token"]
         }
 
-    def _make_session(self, token: dict = None, state: str = None, scope: list = None) -> OAuth2Session:
+    def _make_session(self, token: dict = None, state: str = None, scopes: list = None) -> OAuth2Session:
         """A low level method used for creating OAuth2 session.
 
         Parameters
@@ -115,9 +116,8 @@ class DiscordOAuth2HttpClient(abc.ABC):
             The authorization token to use which was previously received from authorization code grant.
         state : str, optional
             The state to use for OAuth2 session.
-        scope : list, optional
-            List of valid `Discord OAuth2 Scopes
-            <https://discordapp.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
+        scopes : list, optional
+            List of valid Discord OAuth2 Scopes from :py:class:`flask_discord.DiscordOAuth2Scope`.
 
         Returns
         -------
@@ -126,11 +126,12 @@ class DiscordOAuth2HttpClient(abc.ABC):
 
         """
         _token = self.get_authorization_token()
+        scopes = {s if isinstance(s, DiscordOAuth2Scope) else DiscordOAuth2Scope(s) for s in scopes or list()}
         return OAuth2Session(
             client_id=self.client_id,
             token=token or _token,
             state=state,
-            scope=scope,
+            scope=scopes or None,
             redirect_uri=self.redirect_uri,
             auto_refresh_kwargs=self._get_auto_refresh_kwargs(token),
             auto_refresh_url=configs.DISCORD_TOKEN_URL,

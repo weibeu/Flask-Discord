@@ -1,3 +1,6 @@
+from .scopes import DiscordOAuth2Scope
+
+
 DISCORD_API_VERSION = 9
 
 
@@ -8,12 +11,14 @@ DISCORD_AUTHORIZATION_BASE_URL = DISCORD_API_BASE_URL + "/oauth2/authorize"
 DISCORD_TOKEN_URL = DISCORD_API_BASE_URL + "/oauth2/token"
 
 
-DISCORD_OAUTH_ALL_SCOPES = [
-    "bot", "connections", "email", "identify", "guilds", "guilds.join",
-    "gdm.join", "messages.read", "rpc", "rpc.api", "rpc.notifications.read", "webhook.incoming",
+DISCORD_OAUTH_DEFAULT_SCOPES = [
+    DiscordOAuth2Scope.IDENTIFY, DiscordOAuth2Scope.EMAIL,
+    DiscordOAuth2Scope.GUILDS, DiscordOAuth2Scope.JOIN_GUILDS,
 ]
-DISCORD_OAUTH_DEFAULT_SCOPES = ["identify", "email", "guilds", "guilds.join", ]
-DISCORD_PASSTHROUGH_SCOPES = ["bot", "webhook.incoming", ]
+DISCORD_PASSTHROUGH_SCOPES = [
+    DiscordOAuth2Scope.APPLICATION_COMMANDS,
+    DiscordOAuth2Scope.BOT, DiscordOAuth2Scope.INCOMING_WEBHOOK,
+]
 
 
 DISCORD_IMAGE_BASE_URL = "https://cdn.discordapp.com/"
