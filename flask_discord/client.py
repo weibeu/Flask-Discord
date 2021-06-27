@@ -1,7 +1,9 @@
 import jwt
 import typing
 import discord
+import collections.abc
 
+from . import DiscordOAuth2Scope
 from . import configs, _http, models, utils, exceptions
 
 from flask import request, session, redirect, current_app
@@ -58,7 +60,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         return session.get("DISCORD_OAUTH2_STATE", str())
 
     def create_session(
-            self, scope: list = None, *, data: dict = None, prompt: bool = True,
+            self, scopes: typing.Union[list, DiscordOAuth2Scope] = None, *,
+            data: dict = None, prompt: bool = True,
             permissions: typing.Union[discord.Permissions, int] = 0, **params
     ):
         """Primary method used to create OAuth2 session and redirect users for
@@ -66,9 +69,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         Parameters
         ----------
-        scope : list, optional
-            An optional list of valid `Discord OAuth2 Scopes
-            <https://discordapp.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
+        scopes : list, optional
+            An optional list of valid Discord OAuth2 Scopes from :py:class:`flask_discord.DiscordOAuth2Scope`.
         data : dict, optional
             A mapping of your any custom data which you want to access after authorization grant. Use
             `:py:meth:flask_discord.DiscordOAuth2Session.callback` to retrieve this data in your callback view.
@@ -88,9 +90,11 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             Flask redirect to discord authorization servers to complete authorization code grant process.
 
         """
-        scope = scope or request.args.get("scope", str()).split() or configs.DISCORD_OAUTH_DEFAULT_SCOPES
+        scopes = scopes or request.args.get("scope", str()).split() or configs.DISCORD_OAUTH_DEFAULT_SCOPES
+        if not isinstance(scopes, collections.abc.Sequence):
+            scopes = [scopes]
 
-        if not prompt and set(scope) & set(configs.DISCORD_PASSTHROUGH_SCOPES):
+        if not prompt and set(scopes) & set(configs.DISCORD_PASSTHROUGH_SCOPES):
             raise ValueError("You should use explicit OAuth grant for passthrough scopes like bot.")
 
         data = data or dict()
@@ -98,14 +102,14 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         state = jwt.encode(data, current_app.config["SECRET_KEY"], algorithm="HS256")
 
-        discord_session = self._make_session(scope=scope, state=state)
+        discord_session = self._make_session(scopes=scopes, state=state)
         authorization_url, state = discord_session.authorization_url(configs.DISCORD_AUTHORIZATION_BASE_URL)
 
         self.__save_state(state)
 
         params = params or dict()
         params["prompt"] = "consent" if prompt else "none"
-        if "bot" in scope:
+        if DiscordOAuth2Scope.BOT in scopes:
             if not isinstance(permissions, (discord.Permissions, int)):
                 raise ValueError(f"Passed permissions must be an int or discord.Permissions, not {type(permissions)}.")
             if isinstance(permissions, discord.Permissions):

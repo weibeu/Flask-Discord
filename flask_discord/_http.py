@@ -1,11 +1,12 @@
 import cachetools
 import requests
 import typing
-import json
 import abc
+import json
 
 from . import configs
 from . import exceptions
+from . import DiscordOAuth2Scope
 
 from flask import session, request
 from collections.abc import Mapping
@@ -81,12 +82,12 @@ class DiscordOAuth2HttpClient(abc.ABC):
     @staticmethod
     @abc.abstractmethod
     def save_authorization_token(token: dict):
-        raise NotImplementedError
+        raise NotImplementedError()
 
     @staticmethod
     @abc.abstractmethod
     def get_authorization_token() -> dict:
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def _fetch_token(self, state):
         discord = self._make_session(state=state)
@@ -96,18 +97,27 @@ class DiscordOAuth2HttpClient(abc.ABC):
             authorization_response=request.url
         )
 
-    def _make_session(self, token: str = None, state: str = None, scope: list = None) -> OAuth2Session:
+    def _get_auto_refresh_kwargs(self, token):
+        if not token:
+            return dict()
+        return {
+            "client_id": self.client_id,
+            "client_secret": self.__client_secret,
+            "grant_type": "refresh_token",
+            "refresh_token": token["refresh_token"]
+        }
+
+    def _make_session(self, token: dict = None, state: str = None, scopes: list = None) -> OAuth2Session:
         """A low level method used for creating OAuth2 session.
 
         Parameters
         ----------
-        token : str, optional
+        token : dict, optional
             The authorization token to use which was previously received from authorization code grant.
         state : str, optional
             The state to use for OAuth2 session.
-        scope : list, optional
-            List of valid `Discord OAuth2 Scopes
-            <https://discordapp.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
+        scopes : list, optional
+            List of valid Discord OAuth2 Scopes from :py:class:`flask_discord.DiscordOAuth2Scope`.
 
         Returns
         -------
@@ -115,18 +125,18 @@ class DiscordOAuth2HttpClient(abc.ABC):
             An instance of OAuth2Session class.
 
         """
+        _token = self.get_authorization_token()
+        scopes = {s if isinstance(s, DiscordOAuth2Scope) else DiscordOAuth2Scope(s) for s in scopes or list()}
         return OAuth2Session(
             client_id=self.client_id,
-            token=token or self.get_authorization_token(),
+            token=token or _token,
             state=state,
-            scope=scope,
+            scope=scopes or None,
             redirect_uri=self.redirect_uri,
-            auto_refresh_kwargs={
-                'client_id': self.client_id,
-                'client_secret': self.__client_secret,
-            },
+            auto_refresh_kwargs=self._get_auto_refresh_kwargs(token),
             auto_refresh_url=configs.DISCORD_TOKEN_URL,
-            token_updater=self.save_authorization_token)
+            token_updater=self.save_authorization_token,
+        )
 
     def request(self, route: str, method="GET", data=None, oauth=True, **kwargs) -> typing.Union[dict, str]:
         """Sends HTTP request to provided route or discord endpoint.
@@ -167,13 +177,21 @@ class DiscordOAuth2HttpClient(abc.ABC):
         if self.proxy_auth is not None:
             kwargs["proxy_auth"] = self.proxy_auth
 
-        response = self._make_session(
-        ).request(method, route, data, **kwargs) if oauth else requests.request(method, route, data=data, **kwargs)
+        response = self._make_session().request(
+            method, route, data, **kwargs
+        ) if oauth else requests.request(
+            method, route, data=data, **kwargs
+        )
 
         if response.status_code == 401:
             raise exceptions.Unauthorized()
         if response.status_code == 429:
             raise exceptions.RateLimited(response.json(), response.headers)
+
+        try:
+            response.raise_for_status()
+        except requests.HTTPError:
+            return response.text
 
         try:
             return response.json()

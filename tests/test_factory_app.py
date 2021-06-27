@@ -2,7 +2,7 @@ import os
 
 from tests import get_app, discord
 from flask import redirect, url_for
-from flask_discord import requires_authorization
+from flask_discord import requires_authorization, DiscordOAuth2Scope
 
 
 app = get_app()
@@ -40,12 +40,18 @@ def login_with_data():
 
 @app.route("/invite-bot/")
 def invite_bot():
-    return discord.create_session(scope=["bot"], permissions=8, guild_id=464488012328468480, disable_guild_select=True)
+    return discord.create_session(
+        scopes=DiscordOAuth2Scope.BOT,
+        permissions=8, guild_id=464488012328468480, disable_guild_select=True
+    )
 
 
 @app.route("/invite-oauth/")
 def invite_oauth():
-    return discord.create_session(scope=["bot", "identify"], permissions=8)
+    return discord.create_session(
+        scopes=[DiscordOAuth2Scope.BOT, DiscordOAuth2Scope.IDENTIFY],
+        permissions=8
+    )
 
 
 @app.route("/callback/")

@@ -12,6 +12,10 @@ Discord OAuth2 Client
     :members:
     :inherited-members:
 
+.. autoclass:: flask_discord.DiscordOAuth2Scope
+    :members:
+    :inherited-members:
+
 .. autoclass:: flask_discord._http.DiscordOAuth2HttpClient
     :members:
     :inherited-members:
@@ -25,10 +29,6 @@ Models
     :inherited-members:
 
 .. autoclass:: flask_discord.models.User
-    :members:
-    :inherited-members:
-
-.. autoclass:: flask_discord.models.Bot
     :members:
     :inherited-members:
 

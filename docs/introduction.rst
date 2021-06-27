@@ -37,7 +37,7 @@ in shell or command prompt: ::
 You can also install the latest development version (**maybe unstable/broken**) by
 using following command: ::
 
-    python3 -m pip install -U git+https://github.com/thec0sm0s/Flask-Discord.git@dev
+    python3 -m pip install -U git+https://github.com/weibeu/Flask-Discord.git@dev
 
 
 Basic Usage
