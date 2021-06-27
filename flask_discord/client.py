@@ -1,6 +1,7 @@
 import jwt
 import typing
 import discord
+import collections.abc
 
 from . import DiscordOAuth2Scope
 from . import configs, _http, models, utils, exceptions
@@ -59,7 +60,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         return session.get("DISCORD_OAUTH2_STATE", str())
 
     def create_session(
-            self, scopes: list = None, *, data: dict = None, prompt: bool = True,
+            self, scopes: typing.Union[list, DiscordOAuth2Scope] = None, *,
+            data: dict = None, prompt: bool = True,
             permissions: typing.Union[discord.Permissions, int] = 0, **params
     ):
         """Primary method used to create OAuth2 session and redirect users for
@@ -89,6 +91,8 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
         """
         scopes = scopes or request.args.get("scope", str()).split() or configs.DISCORD_OAUTH_DEFAULT_SCOPES
+        if not isinstance(scopes, collections.abc.Sequence):
+            scopes = [scopes]
 
         if not prompt and set(scopes) & set(configs.DISCORD_PASSTHROUGH_SCOPES):
             raise ValueError("You should use explicit OAuth grant for passthrough scopes like bot.")
