@@ -47,6 +47,14 @@ Utilities
 .. autodecorator:: flask_discord.requires_authorization
 
 
+Types
+-----
+
+.. autoclass:: flask_discord.types.Permissions
+    :members:
+    :inherited-members:
+
+
 Exceptions
 ----------
 

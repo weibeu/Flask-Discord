@@ -1,8 +1,7 @@
 import jwt
 import typing
-import discord
 
-from . import configs, _http, models, utils, exceptions
+from . import configs, _http, models, utils, exceptions, types
 
 from flask import request, session, redirect, current_app
 from oauthlib.common import add_params_to_uri, generate_token
@@ -59,7 +58,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
 
     def create_session(
             self, scope: list = None, *, data: dict = None, prompt: bool = True,
-            permissions: typing.Union[discord.Permissions, int] = 0, **params
+            permissions: typing.Union[types.Permissions, int] = 0, **params
     ):
         """Primary method used to create OAuth2 session and redirect users for
         authorization code grant.
@@ -75,7 +74,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         prompt : bool, optional
             Determines if the OAuth2 grant should be explicitly prompted and re-approved. Defaults to True.
             Specify False for implicit grant which will skip the authorization screen and redirect to redirect URI.
-        permissions: typing.Union[discord.Permissions, int], optional
+        permissions: typing.Union[flask_discord.types.Permissions, int], optional
             An optional parameter determining guild permissions of the bot while adding it to a guild using
             discord OAuth2 with `bot` scope. It is same as generating so called *bot invite link* which redirects
             to your callback endpoint after bot authorization flow. Defaults to 0 or no permissions.
@@ -106,9 +105,9 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         params = params or dict()
         params["prompt"] = "consent" if prompt else "none"
         if "bot" in scope:
-            if not isinstance(permissions, (discord.Permissions, int)):
+            if not isinstance(permissions, (types.Permissions, int)):
                 raise ValueError(f"Passed permissions must be an int or discord.Permissions, not {type(permissions)}.")
-            if isinstance(permissions, discord.Permissions):
+            if isinstance(permissions, types.Permissions):
                 permissions = permissions.value
             params["permissions"] = permissions
             try:
