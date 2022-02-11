@@ -2,9 +2,11 @@ formats: []
 
 build:
   image: latest
+  tools:
+    python: "3.9"
 
 python:
-  version: 3.6
+  version: "3.9"
   pip_install: true
   extra_requirements:
     - docs
