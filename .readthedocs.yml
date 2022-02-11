@@ -12,8 +12,6 @@ python:
       path: .
       extra_requirements:
         - docs
-  system_packages: true
 
 sphinx:
-  builder: dirhtml
-  fail_on_warning: true
+  builder: html
