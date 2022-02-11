@@ -1,0 +1,2 @@
+sphinx
+pallets-sphinx-themes

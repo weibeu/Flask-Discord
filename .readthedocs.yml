@@ -6,7 +6,10 @@ build:
     python: "3.9"
 
 python:
-  version: "3.8"
-  pip_install: true
-  extra_requirements:
-    - docs
+  install:
+    - requirements: docs/requirements.txt
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs
+  system_packages: true
