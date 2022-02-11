@@ -17,13 +17,29 @@ def __get_version():
 
 
 requirements = [
-    'Flask',
-    'pyjwt',
-    'oauthlib',
-    'requests_oauthlib',
-    'cachetools',
-    'requests',
-    'discord.py',
+    "aiohttp==3.7.4.post0",
+    "async-timeout==3.0.1",
+    "attrs==21.4.0",
+    "cachetools==5.0.0",
+    "certifi==2021.10.8",
+    "chardet==4.0.0",
+    "charset-normalizer==2.0.11",
+    "click==8.0.3",
+    "discord.py==1.7.3",
+    "Flask==2.0.2",
+    "idna==3.3",
+    "itsdangerous==2.0.1",
+    "Jinja2==3.0.3",
+    "MarkupSafe==2.0.1",
+    "multidict==6.0.2",
+    "oauthlib==3.2.0",
+    "PyJWT==2.3.0",
+    "requests==2.27.1",
+    "requests-oauthlib==1.3.1",
+    "typing_extensions==4.0.1",
+    "urllib3==1.26.8",
+    "Werkzeug==2.0.3",
+    "yarl==1.7.2",
 ]
 
 
@@ -53,7 +69,7 @@ setup(
     include_package_data=True,
     platforms='any',
     install_requires=requirements,
-    extra_requirements=extra_requirements,
+    extras_require=extra_requirements,
     classifiers=[
         'Framework :: Flask',
         'Environment :: Web Environment',
