@@ -22,7 +22,6 @@ requirements = [
     "requests",
     "oauthlib",
     "cachetools",
-    "setuptools",
     "requests_oauthlib",
 ]
 
