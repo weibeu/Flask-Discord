@@ -18,7 +18,7 @@ def __get_version():
 
 requirements = [
     "Flask",
-    "pyjwt>=2.0.0",
+    "pyjwt>=2.4.0",
     "requests",
     "oauthlib",
     "cachetools",
