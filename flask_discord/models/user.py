@@ -90,11 +90,11 @@ class User(DiscordModelsBase):
     def __str__(self):
         return f"{self.name}#{self.discriminator}"
 
-    def __eq__(self, user):
-        return isinstance(user, User) and user.id == self.id
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and other.id == self.id
 
-    def __ne__(self, user):
-        return not self.__eq__(user)
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     @property
     def name(self):
