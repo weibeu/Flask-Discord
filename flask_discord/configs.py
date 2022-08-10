@@ -1,7 +1,7 @@
 from .scopes import DiscordOAuth2Scope
 
 
-DISCORD_API_VERSION = 9
+DISCORD_API_VERSION = 10
 
 
 DISCORD_API_BASE_URL = "https://discord.com/api/v{version}"
