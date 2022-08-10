@@ -1,6 +1,7 @@
 """Few utility functions and decorators."""
 
 import functools
+import enum
 
 from . import exceptions
 from flask import current_app
@@ -24,6 +25,11 @@ class JSONBool(object):
         if value.lower() == "false":
             return cls(False)
         raise ValueError()
+
+
+class StringEnum(enum.Enum):
+    def __str__(self):
+        return str(self.value)
 
 
 def json_bool(value):

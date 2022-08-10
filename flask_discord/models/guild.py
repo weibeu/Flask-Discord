@@ -2,7 +2,8 @@ from .base import DiscordModelsBase
 from flask import current_app
 
 import discord
-from .. import configs
+
+from .. import configs, enums
 
 
 class Guild(DiscordModelsBase):
@@ -29,6 +30,8 @@ class Guild(DiscordModelsBase):
         Boolean determining if current user is owner of the guild or not.
     permissions : discord.Permissions
         An instance of discord.Permissions representing permissions of current user in the guild.
+    features : list
+        A list of Discord guild features enumerations instances of type :py:class:`flask_discord.enums.GuildFeature`.
 
     """
 
@@ -42,6 +45,7 @@ class Guild(DiscordModelsBase):
         self.icon_hash = self._payload.get("icon")
         self.is_owner = self._payload.get("owner")
         self.permissions = self.__get_permissions(self._payload.get("permissions"))
+        self.features = [enums.GuildFeature(f.upper()) for f in self._payload["features"]]
 
     @staticmethod
     def __get_permissions(permissions_value):

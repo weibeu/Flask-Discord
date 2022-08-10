@@ -47,6 +47,14 @@ Utilities
 .. autodecorator:: flask_discord.requires_authorization
 
 
+Enums
+-----
+
+.. autoclass:: flask_discord.enums.GuildFeature
+    :members:
+    :inherited-members:
+
+
 Exceptions
 ----------
 

@@ -1,8 +1,10 @@
+from .utils import StringEnum
+
 import enum
 
 
 @enum.unique
-class DiscordOAuth2Scope(enum.Enum):
+class DiscordOAuth2Scope(StringEnum):
     """These are a `list of all the OAuth2 scopes that Discord supports
     <https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_. Some scopes require
     approval from Discord to use. Requesting them from a user without approval from Discord may cause
