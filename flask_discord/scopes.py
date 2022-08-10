@@ -27,6 +27,11 @@ class DiscordOAuth2Scope(enum.Enum):
         `Slash Commands <https://discord.com/developers/docs/interactions/slash-commands>`_
         via this bearer token -
         `client credentials grant only <https://discord.com/developers/docs/topics/oauth2#client-credentials-grant>`_.
+    UPDATE_APPLICATION_COMMANDS_PERMISSIONS
+        Allows your app to update
+        `permissions for its commands
+        <https://discord.com/developers/docs/interactions/application-commands#permissions>`_.
+        in a guild a user has permissions to.
     READ_APPLICATION_ENTITLEMENTS
         Allows your app to read entitlements for a user's applications.
     READ_UPDATE_APPLICATION_STORE
@@ -37,6 +42,8 @@ class DiscordOAuth2Scope(enum.Enum):
     CONNECTIONS
         Allows `/users/@me/connections <https://discord.com/developers/docs/resources/user#get-user-connections>`_
         to return linked third-party accounts.
+    READ_DM_CHANNELS
+        Allows your app to see information about the user's DMs and group DMs - requires Discord approval.
     EMAIL
         Enables `/users/@me <https://discord.com/developers/docs/resources/user#get-current-user>`_ to return an email.
     JOIN_GROUP_DM
@@ -49,6 +56,11 @@ class DiscordOAuth2Scope(enum.Enum):
         Allows
         `/guilds/{guild.id}/members/{user.id} <https://discord.com/developers/docs/resources/guild#add-guild-member>`_
         to be used for joining users to a guild.
+    READ_GUILD_MEMBERS
+        Allows
+        `/users/@me/guilds/{guild.id}/member
+        <https://discord.com/developers/docs/resources/user#get-current-user-guild-member>`_ to return a user's
+        member information in a guild.
     IDENTIFY
         Allows `/users/@me <https://discord.com/developers/docs/resources/user#get-current-user>`_ without email.
     READ_MESSAGES
@@ -67,8 +79,10 @@ class DiscordOAuth2Scope(enum.Enum):
     READ_RPC_VOICE
         For local rpc server access, this allows you to read a user's voice settings and listen for voice events
         - requires Discord approval.
-    READ_RPC_VOICE
+    WRITE_RPC_VOICE
         For local rpc server access, this allows you to update a user's voice settings - requires Discord approval.
+    VOICE
+        Allows your app to connect to voice on user's behalf and see all the voice members - requires Discord approval.
     INCOMING_WEBHOOK
         This generates a webhook that is returned in the oauth token response for authorization code grants.
 
@@ -82,15 +96,18 @@ class DiscordOAuth2Scope(enum.Enum):
 
     APPLICATION_COMMANDS = "applications.commands"
     UPDATE_APPLICATION_COMMANDS = "applications.commands.update"
+    UPDATE_APPLICATION_COMMANDS_PERMISSIONS = "applications.commands.permissions.update"
     READ_APPLICATION_ENTITLEMENTS = "applications.entitlements"
     READ_UPDATE_APPLICATION_STORE = "applications.store.update"
 
     BOT = "bot"
     CONNECTIONS = "connections"
+    READ_DM_CHANNELS = "dm_channels.read"
     EMAIL = "email"
     JOIN_GROUP_DM = "gdm.join"
     GUILDS = "guilds"
     JOIN_GUILDS = "guilds.join"
+    READ_GUILD_MEMBERS = "guilds.members.read"
     IDENTIFY = "identify"
     READ_MESSAGES = "messages.read"
     READ_RELATIONSHIPS = "relationships.read"
@@ -101,6 +118,7 @@ class DiscordOAuth2Scope(enum.Enum):
     READ_RPC_VOICE = "rpc.voice.read"
     WRITE_RPC_VOICE = "rpc.voice.write"
 
+    VOICE = "voice"
     INCOMING_WEBHOOK = "webhook.incoming"
 
     def __str__(self):
