@@ -4,6 +4,7 @@ import functools
 
 from . import exceptions
 from flask import current_app
+import asyncio
 
 
 class JSONBool(object):
