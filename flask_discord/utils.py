@@ -41,11 +41,18 @@ def requires_authorization(view):
     """
 
     # TODO: Add support to validate scopes.
-
-    @functools.wraps(view)
-    def wrapper(*args, **kwargs):
-        if not current_app.discord.authorized:
-            raise exceptions.Unauthorized
-        return view(*args, **kwargs)
-
-    return wrapper
+    if asyncio.iscoroutinefunction(view):
+        
+        @functools.wraps(view)
+        async def wrapper(*args, **kwargs):
+            if not current_app.discord.authorized:
+                raise exceptions.Unauthorized
+            return await view(*args, **kwargs)
+        return wrapper
+    else:
+        @functools.wraps(view)
+        def wrapper(*args, **kwargs):
+            if not current_app.discord.authorized:
+                raise exceptions.Unauthorized
+            return view(*args, **kwargs)
+        return wrapper
